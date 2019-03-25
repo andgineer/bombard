@@ -9,79 +9,110 @@ from queue import Queue
 from urllib.parse import urlparse
 import ssl
 import json
+import yaml
+import os.path
 
 
-concurrent = 200
-token = None
+THREADS_NUM = 50
+queue: Queue= None
 
 
 def do_work():
     while True:
-        job = q.get()
-        status = send_request(job)
+        job = queue.get()
+        status = make_request(job['request'])['status']
         report(status, job)
-        q.task_done()
-
-
-def send_request(job):
-    try:
-        url = urlparse(job['url'])
-        print(job['id'], '>'*6)
-        conn = http.client.HTTPSConnection(
-            url.netloc,
-            context=ssl._create_unverified_context()
-        )
-        conn.request(
-            job['method'],
-            url.path,
-            headers={
-                'Content-Type': "application/json",
-                'Authorization': f"Bearer {token}"
-            }
-        )
-        res = conn.getresponse()
-        return res.status
-    except Exception as e:
-        return f'{e}', job['id']
+        queue.task_done()
 
 
 def report(status, job):
-    print(job['id'], '...', '<' * 6, status)
+    print(job['id'], '<' * 6, status)
 
 
-def get_token(ourl):
-    auth_body = {
-        'email': 'Andrei_Sorokin2@epam.com',
-        'password': 'admin',
-    }
-    url = urlparse(ourl)
+def apply_context(request: dict, context: dict) -> dict:
+    """
+    Use context to substitute all {name} in request strings.
+    """
+    for name in request:
+        if isinstance(request[name], dict):
+            request[name] = apply_context(request[name], context)
+        if isinstance(request[name], str):
+            request[name] = request[name].format(**context)
+    return request
+
+
+def make_request(request: dict) -> dict:
+    """
+    Make HTTP request described in request.
+    Returns dict with names extracted from request result if 'extract' part is specified in the request.
+    And place 'status' or the response to the dict.
+    """
+    url = urlparse(request['url'])
     conn = http.client.HTTPSConnection(
         url.netloc,
         context=ssl._create_unverified_context()
     )
     conn.request(
-        'POST',
+        request['method'],
         url.path,
-        body=json.dumps(auth_body),
-        headers={
-            'Content-Type': "application/json"
-        }
+        body=json.dumps(request['body']) if 'body' in request else None,
+        headers=request['headers'] if 'headers' in request else {}
     )
-    return json.loads(conn.getresponse().read())['token']
+    resp = conn.getresponse()
+    result = {'status': resp.status}
+    if 'extract' in request:
+        data = json.loads(resp.read())
+        for name, val in request['extract'].items():
+            if not val:
+                val = name
+            result[name] = data[val]
+    return result
 
 
-token = get_token('https://localhost/api/auth')
-print(token)
+def set_up(play_book: dict):
+    """
+    Execute HTTP requests from play book (presumably loaded from setUp section of yaml definitions).
+    Returns dict with names extracted from the requests results
+    """
+    result = {}
+    for request in play_book.values():
+        result.update(make_request(request))
+    return result
 
 
-q = Queue(concurrent * 2)
-for i in range(concurrent):
-    t = Thread(target=do_work)
-    t.daemon = True
-    t.start()
-try:
-    for url in ['https://localhost/api/users', 'https://localhost/api/projects'] * 10:
-        q.put({'id': q.qsize(), 'url': url.strip(), 'method': 'GET'})
-    q.join()
-except KeyboardInterrupt:
-    sys.exit(1)
+def main(requests_file_name: str):
+    global queue
+    play_book = yaml.full_load(open(requests_file_name, 'r'))
+    context = play_book['vars']
+    set_up_requests = apply_context(play_book['setUp'], context)
+    context.update(set_up(set_up_requests))
+    bombard_requests = apply_context(play_book['bombard'], context)
+
+    queue = Queue(THREADS_NUM)
+    for i in range(THREADS_NUM):
+        t = Thread(target=do_work)
+        t.daemon = True
+        t.start()
+
+    try:
+        for request in bombard_requests.values():
+            for _ in range(request.get('repeat', 1)):
+                queue.put({'id': queue.qsize(), 'request': request})
+        queue.join()
+    except KeyboardInterrupt:
+        sys.exit(1)
+
+
+if __name__ == '__main__':
+    if len(sys.argv) > 1:
+        if not os.path.isfile(sys.argv[1]):
+            print(f'''bombard: utility to bombard with HTTP-requests.
+Usage: bombard <requests-file> (default bombard.yaml in current folder).
+
+(!) Cannot find requests file "{sys.argv[1]}."            
+''')
+
+            exit(1)
+        main(sys.argv[1])
+    else:
+        main('bombard.yaml')

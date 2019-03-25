@@ -1,0 +1,28 @@
+vars:
+  host: https://localhost/api/
+setUp:
+  getToken:
+    url: "{host}auth"
+    method: POST
+    headers:
+      Content-Type: application/json
+    body:
+      email: Andrei_Sorokin2@epam.com
+      password: admin
+    extract:
+      token:  # what name we should extract from request result - in bombrd definitions we can use it as {name}
+bombard:
+  getUsers:
+    repeat: 10  # how many requests of this type to bombard
+    url: "{host}users"
+    method: GET
+    headers:
+      Content-Type: application/json
+      Authorization: "Bearer {token}"
+  getProjects:
+    repeat: 10  # how many requests of this type to bombard
+    url: "{host}projects"
+    method: GET
+    headers:
+      Content-Type: application/json
+      Authorization: "Bearer {token}"
