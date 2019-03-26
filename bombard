@@ -2,18 +2,20 @@
 """
 Send stress requests to show multi-processing Db problem
 """
+import sys
+import os.path
+from urllib.parse import urlparse
 from threading import Thread
 import http.client
-import sys
 from queue import Queue
-from urllib.parse import urlparse
 import ssl
 import json
+import argparse
 import yaml
-import os.path
 
 
 THREADS_NUM = 50
+REQUESTS_FILE_NAME = 'bombard.yaml'
 queue: Queue= None
 
 
@@ -80,16 +82,48 @@ def set_up(play_book: dict):
     return result
 
 
-def main(requests_file_name: str):
+def get_args():
+    parser = argparse.ArgumentParser(
+        description='bombard: utility to bombard with HTTP-requests.'
+    )
+    parser.add_argument(
+        dest='file_name', type=str, nargs='?',
+        default=REQUESTS_FILE_NAME,
+        help=f'requests file name (default "{REQUESTS_FILE_NAME}")'
+    )
+    parser.add_argument(
+        '--threads', dest='threads', type=int,
+        default=THREADS_NUM,
+        help=f'number of threads (default {THREADS_NUM})'
+    )
+    parser.add_argument(
+        '--var', dest='vars', type=str, nargs='*',
+        help='vars as "name=val"'
+    )
+    return parser.parse_args()
+
+
+def main():
     global queue
-    play_book = yaml.full_load(open(requests_file_name, 'r'))
-    context = play_book['vars']
+    args = get_args()
+    if not os.path.isfile(args.file_name):
+            print(f'(!) Cannot find requests file "{args.file_name}."')
+            exit(1)
+    play_book = yaml.full_load(open(args.file_name, 'r'))
+    if args.vars:
+        context = dict([var.split('=') for var in args.vars])
+    else:
+        context = {}
+    for var, val in play_book['vars'].items():
+        if var not in context:
+            context[var] = val.format(**context)
+    print(f'Use vars: {context}')
     set_up_requests = apply_context(play_book['setUp'], context)
     context.update(set_up(set_up_requests))
     bombard_requests = apply_context(play_book['bombard'], context)
 
-    queue = Queue(THREADS_NUM)
-    for i in range(THREADS_NUM):
+    queue = Queue(args.threads)
+    for i in range(args.threads):
         t = Thread(target=do_work)
         t.daemon = True
         t.start()
@@ -104,15 +138,4 @@ def main(requests_file_name: str):
 
 
 if __name__ == '__main__':
-    if len(sys.argv) > 1:
-        if not os.path.isfile(sys.argv[1]):
-            print(f'''bombard: utility to bombard with HTTP-requests.
-Usage: bombard <requests-file> (default bombard.yaml in current folder).
-
-(!) Cannot find requests file "{sys.argv[1]}."            
-''')
-
-            exit(1)
-        main(sys.argv[1])
-    else:
-        main('bombard.yaml')
+        main()

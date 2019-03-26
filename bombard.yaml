@@ -1,8 +1,9 @@
 vars:
-  host: https://localhost/api/
+  host: localhost
+  base: "https://{host}/api/"
 setUp:
   getToken:
-    url: "{host}auth"
+    url: "{base}auth"
     method: POST
     headers:
       Content-Type: application/json
@@ -14,14 +15,14 @@ setUp:
 bombard:
   getUsers:
     repeat: 10  # how many requests of this type to bombard
-    url: "{host}users"
+    url: "{base}users"
     method: GET
     headers:
       Content-Type: application/json
       Authorization: "Bearer {token}"
   getProjects:
     repeat: 10  # how many requests of this type to bombard
-    url: "{host}projects"
+    url: "{base}projects"
     method: GET
     headers:
       Content-Type: application/json
