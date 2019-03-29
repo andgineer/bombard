@@ -14,21 +14,25 @@ import argparse
 import yaml
 
 
-THREADS_NUM = 50
+THREADS_NUM = 200
 REQUESTS_FILE_NAME = 'bombard.yaml'
 queue: Queue= None
 
 
-def do_work():
+def do_work(thread_id):
+    def green(s: str) -> str:
+        return f'\033[1;32;40m{s}\033[0;37;40m'
+
+    def red(s: str) -> str:
+        return f'\033[1;31;40m{s}\033[0;37;40m'
+
     while True:
         job = queue.get()
         status = make_request(job['request'])['status']
-        report(status, job)
+        print(
+            f'{job["id"]} (thread {thread_id}) ', '<' * 6,
+            green(status) if status == 200 else red(status))
         queue.task_done()
-
-
-def report(status, job):
-    print(job['id'], '<' * 6, status)
 
 
 def apply_context(request: dict, context: dict) -> dict:
@@ -97,9 +101,10 @@ def get_args():
         help=f'number of threads (default {THREADS_NUM})'
     )
     parser.add_argument(
-        '--var', dest='vars', type=str, nargs='*',
+        '--var', '-v', dest='vars', type=str, nargs='*',
         help='vars as "name=val"'
     )
+    --repeat
     return parser.parse_args()
 
 
@@ -124,17 +129,21 @@ def main():
 
     queue = Queue(args.threads)
     for i in range(args.threads):
-        t = Thread(target=do_work)
+        t = Thread(target=do_work, args=[i])
         t.daemon = True
         t.start()
 
     try:
+        request_id = 0
         for request in bombard_requests.values():
             for _ in range(request.get('repeat', 1)):
-                queue.put({'id': queue.qsize(), 'request': request})
+                queue.put({'id': request_id, 'request': request})
+                request_id += 1
         queue.join()
     except KeyboardInterrupt:
         sys.exit(1)
+
+    app/transport/ok report
 
 
 if __name__ == '__main__':
