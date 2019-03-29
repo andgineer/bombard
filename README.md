@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/masterandrey/bombard.png)](https://travis-ci.org/masterandrey/bombard)
 Bombards target server with simultaneous requests 
 to reveal any problems under the stress.
 

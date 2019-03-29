@@ -14,15 +14,21 @@ setUp:
       token:  # what name we should extract from request result - in bombrd definitions we can use it as {name}
 bombard:
   getUsers:
-    repeat: 1000  # how many requests of this type to bombard
     url: "{base}users"
     method: GET
     headers:
       Content-Type: application/json
       Authorization: "Bearer {token}"
   getProjects:
-    repeat: 1000  # how many requests of this type to bombard
+    repeat: 3  # how many requests of this type in each repeat session (see --repeat)
     url: "{base}projects"
+    method: GET
+    headers:
+      Content-Type: application/json
+      Authorization: "Bearer {token}"
+  getAccounts:
+    repeat: 1  # how many requests of this type in each repeat session (see --repeat)
+    url: "{base}accounts"
     method: GET
     headers:
       Content-Type: application/json

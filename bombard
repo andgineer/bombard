@@ -14,9 +14,14 @@ import argparse
 import yaml
 
 
-THREADS_NUM = 200
+THREADS_NUM = 100
 REQUESTS_FILE_NAME = 'bombard.yaml'
-queue: Queue= None
+REPEAT = 100
+OK = [200]
+OVERLOAD_ERROR = [502, 504]
+
+
+semaphore: Queue= None
 
 
 def do_work(thread_id):
@@ -26,13 +31,22 @@ def do_work(thread_id):
     def red(s: str) -> str:
         return f'\033[1;31;40m{s}\033[0;37;40m'
 
+    def dark_red(s: str) -> str:
+        return f'\033[0;31;40m{s}\033[0;37;40m'
+
+    def status_coloured(status: int) -> str:
+        if status in OK:
+            return green(str(status))
+        elif status in OVERLOAD_ERROR:
+            return dark_red(str(status))
+        else:
+            return red(str(status))
+
     while True:
-        job = queue.get()
+        job = semaphore.get()
         status = make_request(job['request'])['status']
-        print(
-            f'{job["id"]} (thread {thread_id}) ', '<' * 6,
-            green(status) if status == 200 else red(status))
-        queue.task_done()
+        print(f'{job["id"]} (thread {thread_id}) ', '<' * 6, status_coloured(status))
+        semaphore.task_done()
 
 
 def apply_context(request: dict, context: dict) -> dict:
@@ -104,12 +118,15 @@ def get_args():
         '--var', '-v', dest='vars', type=str, nargs='*',
         help='vars as "name=val"'
     )
-    --repeat
+    parser.add_argument(
+        '--repeat', '-r', dest='repeat', type=int, default=REPEAT,
+        help=f'how many times to repeat (by defaul {REPEAT})'
+    )
     return parser.parse_args()
 
 
 def main():
-    global queue
+    global semaphore
     args = get_args()
     if not os.path.isfile(args.file_name):
             print(f'(!) Cannot find requests file "{args.file_name}."')
@@ -127,7 +144,7 @@ def main():
     context.update(set_up(set_up_requests))
     bombard_requests = apply_context(play_book['bombard'], context)
 
-    queue = Queue(args.threads)
+    semaphore = Queue(args.threads)
     for i in range(args.threads):
         t = Thread(target=do_work, args=[i])
         t.daemon = True
@@ -135,15 +152,14 @@ def main():
 
     try:
         request_id = 0
-        for request in bombard_requests.values():
-            for _ in range(request.get('repeat', 1)):
-                queue.put({'id': request_id, 'request': request})
-                request_id += 1
-        queue.join()
+        for counter in range(args.repeat):
+            for request in bombard_requests.values():
+                for _ in range(request.get('repeat', 1)):
+                    semaphore.put({'id': request_id, 'request': request})
+                    request_id += 1
+        semaphore.join()
     except KeyboardInterrupt:
         sys.exit(1)
-
-    app/transport/ok report
 
 
 if __name__ == '__main__':
