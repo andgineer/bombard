@@ -1,6 +1,8 @@
 vars:
   host: localhost
   base: "https://{host}/api/"
+scripts:
+  name1: !include script_1.py
 setUp:
   getToken:
     url: "{base}auth"
