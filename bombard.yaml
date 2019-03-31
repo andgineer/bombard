@@ -24,14 +24,14 @@ ammo:
       <<: *auth_headers
     script: |  # if projects list is not empty then schedule request to get 1st project from the list
       if len(resp['data']) > 0:
-        reload(ammo['getProject'], id=resp['data'][0]['id'])
+        reload(ammo.getProject, id=resp['data'][0]['id'])
   accountsList:
     url: "{base}accounts"
     headers:
       <<: *auth_headers
   getProject:
     repeat: 3
-    url: "{base}projects/{id}/"
+    url: "{base}projects/{id}"
     headers:
       <<: *auth_headers
 

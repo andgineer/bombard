@@ -27,7 +27,7 @@ def apply_supply(request: dict, supply: dict) -> dict:
     return request
 
 
-class Supply(dict):
+class AttrDict(dict):
     """
     You can access all dict values as attributes.
     All changes immediately repeated in master_dict.
@@ -108,18 +108,18 @@ class Bombardier:
                             val = name
                         self.supply[name] = data[val]
                 except Exception as e:
-                    print(f'Cannot extract {request["extract"]} from {resp}:\n{e}')
+                    log.error(f'Cannot extract {request["extract"]} from {resp}:\n{e}', exc_info=True)
             if 'script' in request:
                 try:
                     # Supply immediately repeats all changes in the self.supply so if the script spawns new
                     # requests they already get new values
-                    supply = Supply(self.supply, **ammo['supply'])
+                    supply = AttrDict(self.supply, **ammo['supply'])
                     context = {
                         'reload': self.reload,
                         'resp': json.loads(resp),
                         'args': self.args,
                         'supply': supply,
-                        'ammo': self.campaign['ammo']
+                        'ammo': AttrDict(self.campaign['ammo'])
                     }
                     exec(request["script"], context)
                     exit()
@@ -136,9 +136,9 @@ class Bombardier:
         while True:
             ammo = deepcopy(self.queue.get())
             ammo = apply_supply(ammo, dict(self.supply, **ammo['supply']))
-            log.debug(f'Bomb to drop:\n{ammo["request"]}')
-
             request = ammo['request']
+            log.debug(f'Bomb to drop:\n{request}')
+
             url = request['url']
             method = request['method'] if 'method' in request else 'GET'
             body = json.dumps(request['body']) if 'body' in request else None

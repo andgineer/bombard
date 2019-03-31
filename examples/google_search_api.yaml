@@ -8,7 +8,7 @@ prepare:  # Get links from search results.
       Content-Type: application/json
     script: |
       for link in resp[organic_results.sitelinks.inline.]['link']:
-        reload(ammo['visitLink'], link=link)
+        reload(ammo.visitLink, link=link)
 ammo:
   visitLink:
     url: "{base}users"
