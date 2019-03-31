@@ -2,48 +2,32 @@
 Bombard's main code
 """
 import argparse
+from src.yaml_includes import yaml
+from src.bombardier import Bombardier
+import logging
 import sys
-import argparse
-from src import yaml_loader
-from src.requestor import Requestor, make_request
+import os.path
+from src.terminal_colours import red
+
+
+log = logging.getLogger()
+logging.basicConfig(format='%(asctime)s - %(message)s')
 
 
 THREADS_NUM = 100
-REQUESTS_FILE_NAME = 'bombard.yaml'
+CAMPAIGN_FILE_NAME = 'bombard.yaml'
 REPEAT = 100
-
-
-def apply_context(request: dict, context: dict) -> dict:
-    """
-    Use context to substitute all {name} in request strings.
-    """
-    for name in request:
-        if isinstance(request[name], dict):
-            request[name] = apply_context(request[name], context)
-        if isinstance(request[name], str):
-            request[name] = request[name].format(**context)
-    return request
-
-
-def set_up(play_book: dict):
-    """
-    Execute HTTP requests from play book (presumably loaded from setUp section of yaml definitions).
-    Returns dict with names extracted from the requests results
-    """
-    result = {}
-    for request in play_book.values():
-        result.update(make_request(request))
-    return result
 
 
 def get_args():
     parser = argparse.ArgumentParser(
-        description='bombard: utility to bombard with HTTP-requests.'
+        description='bombard: utility to bombard with HTTP-requests.',
+        epilog='See examples of requests files (yaml or py) on https://github.com/masterandrey/bombard'
     )
     parser.add_argument(
         dest='file_name', type=str, nargs='?',
-        default=REQUESTS_FILE_NAME,
-        help=f'requests file name (default "{REQUESTS_FILE_NAME}")'
+        default=CAMPAIGN_FILE_NAME,
+        help=f'file name with bombing campaign plan (default "{CAMPAIGN_FILE_NAME}")'
     )
     parser.add_argument(
         '--threads', dest='threads', type=int,
@@ -51,42 +35,56 @@ def get_args():
         help=f'number of threads (default {THREADS_NUM})'
     )
     parser.add_argument(
-        '--var', '-v', dest='vars', type=str, nargs='*',
-        help='vars as "name=val"'
+        '--supply', '-s', dest='supply', type=str, nargs='*',
+        help='supply as separate pairs "-c name=val" or many pairs at once "-c name1=val1,name2=val2,.."'
     )
     parser.add_argument(
         '--repeat', '-r', dest='repeat', type=int, default=REPEAT,
-        help=f'how many times to repeat (by defaul {REPEAT})'
+        help=f'how many times to repeat (by default {REPEAT})'
     )
-    return parser.parse_args()
+    parser.add_argument(
+        '--verbose', '-v', dest='verbose', default=False, action='store_true',
+        help=f'verbose output (by default False)'
+    )
+    args = parser.parse_args()
+    if not os.path.isfile(args.file_name):
+        print(red(f'\nCannot find campaign file "{args.file_name}"\n'))
+        parser.print_help(sys.stderr)
+        exit(1)
+    return args
+
+
+def campaign(args):
+    log.setLevel(logging.DEBUG if args.verbose else logging.INFO)
+
+    # get supply vars from command line
+    supply = {}
+    if args.supply:
+        for vars in args.supply:
+            for var in vars.split(','):
+                supply.update(dict([var.split('=')]))
+    log.debug(f'Starting bombard campaign with args\n' + ' '*4 + f'{args.__dict__}')
+    campaign_book = yaml.load(open(args.file_name, 'r'))
+    log.debug(f'Loaded bombard campaign from "{args.file_name}": {len(campaign_book["ammo"])} ammo.')
+
+    # add supply from campaign file
+    for var, val in campaign_book['supply'].items():
+        if var not in supply:  # dbombardiero not redefine if already defined from command line
+            supply[var] = val.format(**supply)
+    log.debug(f'Supply: {supply}')
+
+    bombardier = Bombardier(supply, args, campaign_book)
+    if 'prepare' in campaign_book:
+        requests = campaign_book['prepare']
+    else:
+        requests = campaign_book['ammo']
+    for ammo in requests.values():
+        bombardier.reload(ammo)
+    bombardier.bombard()
 
 
 def main():
-    args = get_args()
-    play_book = yaml_loader.load(args.file_name)
-    if args.vars:
-        context = dict([var.split('=') for var in args.vars])
-    else:
-        context = {}
-    for var, val in play_book['vars'].items():
-        if var not in context:
-            context[var] = val.format(**context)
-    print(f'Use vars: {context}')
-    set_up_requests = apply_context(play_book['setUp'], context)
-    context.update(set_up(set_up_requests))
-    bombard_requests = apply_context(play_book['bombard'], context)
-
-    requestor = Requestor(args.threads)
-    try:
-        request_id = 0
-        for counter in range(args.repeat):
-            for request in bombard_requests.values():
-                for _ in range(request.get('repeat', 1)):
-                    requestor.add({'id': request_id, 'request': request})
-                    request_id += 1
-        requestor.start()
-    except KeyboardInterrupt:
-        sys.exit(1)
+    campaign(get_args())
 
 
 if __name__ == '__main__':

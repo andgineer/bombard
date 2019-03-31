@@ -1,37 +1,37 @@
-vars:
+supply:  # you can redefine it from command line (--supply)
   host: localhost
   base: "https://{host}/api/"
-scripts:
-  name1: !include script_1.py
-setUp:
+prepare:  # Initial requests. Usually this is setup/authorization.
   getToken:
     url: "{base}auth"
-    method: POST
-    headers:
-      Content-Type: application/json
+    method: POST  # default GET
+    headers: json  # means Content-Type: application/json
     body:
       email: Andrei_Sorokin2@epam.com
       password: admin
-    extract:
-      token:  # what name we should extract from request result - in bombrd definitions we can use it as {name}
-bombard:
-  getUsers:
+    script: !include examples/get_token.py  # in this script we get auth token and schedule next requests
+ammo:
+  usersList:
+    repeat: 2  # how many requests of this type in each repeat session (see --repeat)
     url: "{base}users"
-    method: GET
-    headers:
-      Content-Type: application/json
+    headers: &auth_headers
+      json:
       Authorization: "Bearer {token}"
-  getProjects:
-    repeat: 3  # how many requests of this type in each repeat session (see --repeat)
+  projectsList:
+    repeat: 4
     url: "{base}projects"
-    method: GET
     headers:
-      Content-Type: application/json
-      Authorization: "Bearer {token}"
-  getAccounts:
-    repeat: 1  # how many requests of this type in each repeat session (see --repeat)
+      <<: *auth_headers
+    script: |  # if projects list is not empty then schedule request to get 1st project from the list
+      if len(resp['data']) > 0:
+        reload(ammo['getProject'], id=resp['data'][0]['id'])
+  accountsList:
     url: "{base}accounts"
-    method: GET
     headers:
-      Content-Type: application/json
-      Authorization: "Bearer {token}"
+      <<: *auth_headers
+  getProject:
+    repeat: 3
+    url: "{base}projects/{id}/"
+    headers:
+      <<: *auth_headers
+
