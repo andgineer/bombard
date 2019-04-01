@@ -166,24 +166,27 @@ class Bombardier:
         resp = conn.getresponse()
         return resp.status, resp.read()
 
-    def reload(self, requests, **kwargs):
+    def reload(self, requests, repeat=None, **kwargs):
         """
-        Add request(s) to the bombardier queue.
-        If 'repeat' field exists in the request repeats it as defined by it.
+        Add request(s) to the bombardier queue `repeat`-times (args.repeat if None).
+        If `repeat` field exists in the request additionally repeats as defined by it.
 
         Requests can be one request or list of requests.
         If supply specified it'll be used in addition to self.supply
         """
         if not isinstance(requests, list):
             requests = [requests]
+        if repeat is None:
+            repeat = self.args.repeat
         for request in requests:
-            for _ in range(request.get('repeat', 1)):
-                self.job_count += 1
-                self.queue.put({
-                    'id': self.job_count,
-                    'request': request,
-                    'supply': kwargs
-                })
+            for _ in range(repeat):
+                for __ in range(request.get('repeat', 1)):
+                    self.job_count += 1
+                    self.queue.put({
+                        'id': self.job_count,
+                        'request': request,
+                        'supply': kwargs
+                    })
 
     def bombard(self):
         self.queue.join()

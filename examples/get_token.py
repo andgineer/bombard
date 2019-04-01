@@ -1,8 +1,11 @@
-resp = {}; reload = lambda *x, **y: x; supply = args = ammo = object()  # just to have valid code. this line will be removed before exec
 """
 Executed after getToken Bombard request (see bombard.yaml).
 Get auth token and after that schedule requests.
 """
+from bombard.examples.mock_globals import *; mock(os.path.join(os.path.dirname(bombard.__file), '.yaml'))
+# to have code autocomplete to work. lines with `bombard.examples.mock_globals` (including this one) will be removed before execution
+
+
 supply.add(token=resp['token'])
 for _ in range(args.repeat):
     reload(ammo['projectsList'])

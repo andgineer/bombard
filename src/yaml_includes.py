@@ -4,6 +4,7 @@ Yaml loader extended with loading external files `!include file.ext`
 import os.path
 import yaml as original_yaml
 import io
+from examples import mock_globals
 
 
 class Yaml:
@@ -36,8 +37,9 @@ class IncludesLoader(original_yaml.SafeLoader):
         Converts multi-line msg to yaml document that we can insert into yaml
         """
         result = []
-        for line in msg.split('\n')[1:]:  # skip first line with fake vars
-            result.append(' '*4 + line)
+        for line in msg.split('\n')[1:]:
+            if mock_globals.SIGNATURE not in line:  # skip line that mocks globals
+                result.append(' '*4 + line)
         return '|\n' + '\n'.join(result)
 
     def include(self, node):
