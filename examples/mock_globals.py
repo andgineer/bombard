@@ -40,11 +40,14 @@ def mock(yaml_file_name: str):
     Add names from the yaml file to the unit globals.
     To make code autocomplete to work in bombard script.
     """
-    campaign_book = yaml.load(open(yaml_file_name, 'r'))
-    for name in campaign_book['ammo']:
-        setattr(ammo, name, None)
-    for name in campaign_book['supply']:
-        setattr(supply, name, None)
+    try:
+        campaign_book = yaml.load(open(yaml_file_name, 'r'))
+        for name in campaign_book['ammo']:
+            setattr(ammo, name, None)
+        for name in campaign_book['supply']:
+            setattr(supply, name, None)
+    except Exception:
+        pass  # ignore if the file is not completed at the moment
     args.file_name = None
     args.repeat = None
     args.verbose = None
