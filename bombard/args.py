@@ -5,12 +5,26 @@ import sys
 import os.path
 from bombard.terminal_colours import red
 import argparse
+import bombard
+# from pkg_resources import resource_string
 
 
+RELATIVE_PREFIX = '@'  # replaced with path to package folder
 THREADS_NUM = 100
-CAMPAIGN_FILE_NAME = 'bombard.yaml'
+CAMPAIGN_FILE_NAME = RELATIVE_PREFIX+'examples/bombard.yaml'
 REPEAT = 100
 THRESHOLD = 1000
+
+
+def expand_relative_file_name(file_name):
+    """
+    Replace RELATIVE_PREFIX with package folder so bombard script can use internal examples without full path spec
+    """
+    if file_name.strip().startswith(RELATIVE_PREFIX):
+        # resource_string(__name__, args.file_name[1:])  # recommended use resource to be zipfile compatible. but this is a pain for !include
+        return os.path.join(os.path.dirname(bombard.__file__), file_name[len(RELATIVE_PREFIX):])
+    else:
+        return file_name
 
 
 def get_args():
@@ -21,7 +35,8 @@ def get_args():
     parser.add_argument(
         dest='file_name', type=str, nargs='?',
         default=CAMPAIGN_FILE_NAME,
-        help=f'file name with bombing campaign plan (default "{CAMPAIGN_FILE_NAME}")'
+        help=f'''file name with bombing campaign plan (default "#{CAMPAIGN_FILE_NAME}").
+To use bombard examples prefix filename with "@".'''
     )
     parser.add_argument(
         '--parallel', '-p', dest='threads', type=int,
@@ -54,6 +69,8 @@ def get_args():
     )
 
     args = parser.parse_args()
+    args.file_name = expand_relative_file_name(args.file_name)
+
     if not os.path.isfile(args.file_name):
         print(red(f'\nCannot find campaign file "{args.file_name}"\n'))
         parser.print_help(sys.stderr)

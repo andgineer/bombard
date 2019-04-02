@@ -7,6 +7,7 @@ That defines globals so you have valid code and code autocomplete in your IDE ed
 All strings with `bombard.examples.mock_globals` will be automatically removed before running bombard scripts.
 """
 from bombard.campaign_yaml import yaml
+from bombard.args import expand_relative_file_name
 import os.path  # we use it to simplify import lines in examples
 
 
@@ -39,7 +40,7 @@ def master(yaml_file_name: str):
     That makes code autocomplete work in bombard script.
     """
     try:
-        campaign_book = yaml.load(open(yaml_file_name, 'r'))
+        campaign_book = yaml.load(open(expand_relative_file_name(yaml_file_name), 'r'))
         for name in campaign_book['ammo']:
             setattr(ammo, name, None)
         for name in campaign_book['supply']:

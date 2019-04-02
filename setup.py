@@ -6,7 +6,7 @@ with open("README.rst", "r") as fh:
 
 setuptools.setup(
     name='bombard',
-    version='0.8',
+    version='0.9',
     # scripts=['bin/bombard'],
     entry_points={
         'console_scripts': [
@@ -20,6 +20,7 @@ setuptools.setup(
     long_description_content_type="text/x-rst",
     url="https://github.com/masterandrey/bombard",
     packages=setuptools.find_packages(),
+    include_package_data=True,
     install_requires=[
         'pyyaml>=5.1',
     ],

@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 # Install locally to test before uploading to PyPi
 sudo python3 -m pip install -r requirements.txt --ignore-installed
-sudo python3 -m pip install dist/bombard-0.8-py3-none-any.whl --upgrade
+sudo python3 -m pip install dist/bombard-0.9-py3-none-any.whl --upgrade
