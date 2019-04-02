@@ -7,7 +7,9 @@ And loads from folder bombard/examples if filename prefixed with '#'.
 import os.path
 import yaml as original_yaml
 import io
-from bombard import mock_globals
+
+
+SIGNATURE = 'bombard.mock_globals'
 
 
 class Yaml:
@@ -41,7 +43,7 @@ class IncludesLoader(original_yaml.SafeLoader):
         """
         result = []
         for line in msg.split('\n')[1:]:
-            if mock_globals.SIGNATURE not in line:  # skip line that mocks globals
+            if SIGNATURE not in line:  # skip line that mocks globals
                 result.append(' '*4 + line)
         return '|\n' + '\n'.join(result)
 

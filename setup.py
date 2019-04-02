@@ -6,7 +6,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name='bombard',
-    version='0.4',
+    version='0.6',
     scripts=['bin/bombard'],
     author="Andrey Sorokin",
     author_email="filbert@yandex.ru",

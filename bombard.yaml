@@ -9,7 +9,7 @@ prepare:  # Initial requests. Usually this is setup/authorization.
     body:
       email: Andrei_Sorokin2@epam.com
       password: admin
-    script: !include examples/get_token.py  # in this script we get auth token and schedule next requests
+    script: !include bombard/examples/get_token.py  # in this script we get auth token and schedule next requests
 ammo:
   usersList:
     repeat: 2  # how many requests of this type in each repeat session (see --repeat)

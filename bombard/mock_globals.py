@@ -1,7 +1,7 @@
 """
 If you use include files for scripts add into them
 
-    from bombard.examples.mock_globals import *; mock(<your yaml>)
+    from bombard.mock_globals import *; mock(<your yaml>)
 
 That defines globals so you have valid code and code autocomplete in your IDE editor.
 All strings with `bombard.examples.mock_globals` will be automatically removed before running bombard scripts.
@@ -9,8 +9,6 @@ All strings with `bombard.examples.mock_globals` will be automatically removed b
 from bombard.campaign_yaml import yaml
 import os.path  # we use it to simplify import lines in examples
 
-
-SIGNATURE = 'bombard.examples.mock_globals'
 
 resp = {}
 
