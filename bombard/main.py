@@ -1,7 +1,7 @@
 """
 Bombard's main code
 """
-from bombard.yaml_includes import yaml
+from bombard.campaign_yaml import yaml
 from bombard.bombardier import Bombardier
 import logging
 from bombard.args import get_args

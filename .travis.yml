@@ -4,9 +4,10 @@
     - "3.6"
     - "3.7-dev"
   install:
-    - pip install -r requirements.txt
-    - pip install --upgrade pytest
+    - python3 -m pip install -r requirements.txt
   script:
-    - pytest -s -v --doctest-modules
+    - python3 -m unittest discover --start-directory bombard --verbose
+    - rm -rf bombard/__pycache__
+    - python3 -m doctest -v bombard/*.py
   after_success:
     - coveralls

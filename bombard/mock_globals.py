@@ -6,7 +6,7 @@ If you use include files for scripts add into them
 That defines globals so you have valid code and code autocomplete in your IDE editor.
 All strings with `bombard.examples.mock_globals` will be automatically removed before running bombard scripts.
 """
-import yaml  # from ..src.yaml_includes 
+from bombard.campaign_yaml import yaml
 import os.path  # we use it to simplify import lines in examples
 
 

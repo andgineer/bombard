@@ -1,10 +1,13 @@
 """
-Yaml loader extended with loading external files `!include file.ext`
+Bombard campaign loader.
+
+Extends yaml loader with loading external files `!include file.ext`.
+And loads from folder bombard/examples if filename prefixed with '#'.
 """
 import os.path
 import yaml as original_yaml
 import io
-from examples import mock_globals
+from bombard import mock_globals
 
 
 class Yaml:

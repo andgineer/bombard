@@ -1,3 +1,6 @@
+"""
+Parse command line args
+"""
 import sys
 import os.path
 from bombard.terminal_colours import red
