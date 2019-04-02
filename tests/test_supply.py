@@ -1,8 +1,4 @@
-from unittest.mock import MagicMock
-from importlib.machinery import SourceFileLoader
-from src import main
-from src import bombardier
-# bombard = SourceFileLoader('bombard', 'bombard').load_module()
+from bombard import bombardier
 
 
 TEST_REQUEST = {
@@ -20,4 +16,4 @@ TEST_SUPPLY = {'a': '4'}
 
 
 def test_apply_supply():
-    assert main.apply_supply(TEST_REQUEST_TEMPLATE, TEST_SUPPLY)['1']['2'] == '4'
+    assert bombardier.apply_supply(TEST_REQUEST_TEMPLATE, TEST_SUPPLY)['1']['2'] == '4'

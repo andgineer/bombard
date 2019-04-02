@@ -1,10 +1,10 @@
 """
 Bombard's main code
 """
-from src.yaml_includes import yaml
-from src.bombardier import Bombardier
+from bombard.yaml_includes import yaml
+from bombard.bombardier import Bombardier
 import logging
-from src.args import get_args
+from bombard.args import get_args
 
 
 log = logging.getLogger()

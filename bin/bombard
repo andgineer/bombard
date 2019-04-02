@@ -2,8 +2,9 @@
 """
 Send stress requests to show multi-processing Db problem
 """
-from src.main import main
+from bombard.main import main
 
 
 if __name__ == '__main__':
+        print('$'*20)
         main()

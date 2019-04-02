@@ -1,6 +1,6 @@
 import sys
 import os.path
-from src.terminal_colours import red
+from bombard.terminal_colours import red
 import argparse
 
 

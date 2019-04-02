@@ -7,6 +7,6 @@
     - pip install -r requirements.txt
     - pip install --upgrade pytest
   script:
-    - pytest -s -v
+    - pytest -s -v --doctest-modules
   after_success:
     - coveralls

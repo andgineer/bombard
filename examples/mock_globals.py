@@ -6,7 +6,7 @@ If you use include files for scripts add into them
 That defines globals so you have valid code and code autocomplete in your IDE editor.
 All strings with `bombard.examples.mock_globals` will be automatically removed before running bombard scripts.
 """
-from src.yaml_includes import yaml
+import yaml  # from ..src.yaml_includes 
 import os.path  # we use it to simplify import lines in examples
 
 
@@ -35,10 +35,10 @@ supply = _Supply()
 args = _Args()
 
 
-def mock(yaml_file_name: str):
+def master(yaml_file_name: str):
     """
     Add names from the yaml file to the unit globals.
-    To make code autocomplete to work in bombard script.
+    That makes code autocomplete work in bombard script.
     """
     try:
         campaign_book = yaml.load(open(yaml_file_name, 'r'))

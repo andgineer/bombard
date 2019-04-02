@@ -1,6 +1,7 @@
 from threading import Thread
 from queue import Queue
-from src.terminal_colours import red, dark_red, green
+from bombard.terminal_colours import red, dark_red, green
+from bombard.attr_dict import AttrDict
 from urllib.parse import urlparse
 import http.client
 import ssl
@@ -27,27 +28,11 @@ def apply_supply(request: dict, supply: dict) -> dict:
     return request
 
 
-class AttrDict(dict):
-    """
-    You can access all dict values as attributes.
-    All changes immediately repeated in master_dict.
-    """
-    def __init__(self, master_dict: dict, **kwargs):
-        super().__init__(master_dict, **kwargs)
-        self.__dict__ = self
-        self.master_dict = master_dict
-
-    def add(self, **kwargs):
-        for name, val in kwargs.items():
-            self.master_dict[name] = val
-            self[name] = val  # add to __dict__ too?
-
-
 class Bombardier:
     """
     Use horde of threads to make HTTP-requests
     """
-    def __init__(self, supply: dict, args, campaign_book: dict, ok_statuses=None,
+    def __init__(self, supply: dict=None, args=None, campaign_book: dict=None, ok_statuses=None,
                  overload_statuses=None):
         """
         :param args.threads: number of threads to use to request
@@ -151,7 +136,7 @@ class Bombardier:
             self.queue.task_done()
 
     @staticmethod
-    def make_request(url: str, method: str, headers: dict, body: str) -> (int, dict):
+    def make_request(url: str, method: str, headers: dict, body: str=None) -> (int, dict):
         """
         Make HTTP request described in request.
         Returns dict with names extracted from request result if 'extract' part is specified in the request.
