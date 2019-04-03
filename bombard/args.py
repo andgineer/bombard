@@ -14,6 +14,7 @@ THREADS_NUM = 100
 CAMPAIGN_FILE_NAME = RELATIVE_PREFIX+'examples/bombard.yaml'
 REPEAT = 100
 THRESHOLD = 1000
+TIMEOUT = 10
 
 
 def expand_relative_file_name(file_name):
@@ -66,6 +67,10 @@ To use bombard examples prefix filename with "@".'''
     parser.add_argument(
         '--threshold', '-t', dest='threshold', type=int, default=THRESHOLD,
         help=f'threshold in ms. all times greater than that will be shown in red (default {THRESHOLD})'
+    )
+    parser.add_argument(
+        '--timeout', dest='timeout', type=int, default=TIMEOUT,
+        help=f'http timeout in seconds (default {TIMEOUT})'
     )
 
     args = parser.parse_args()

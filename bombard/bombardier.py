@@ -1,6 +1,6 @@
 from threading import Thread
 from queue import Queue
-from bombard.terminal_colours import red, dark_red, green
+from bombard.terminal_colours import red, dark_red, green, gray
 from bombard.attr_dict import AttrDict
 from urllib.parse import urlparse
 import http.client
@@ -113,6 +113,16 @@ class Bombardier:
         else:
             log.error(f'{status} reply\n{resp}')
 
+    @staticmethod
+    def beautify_url(url, method, body):
+        urlparts = urlparse(url)
+        path = urlparts.path if len(urlparts.path) < 15 else '...' + urlparts.path[:-15]
+        query = '?' + urlparts.query if urlparts.query else ''
+        if urlparts.fragment:
+            query += '#' + urlparts.fragment
+        query = query if len(query) < 15 else '?...' + query[:-15]
+        return f"""{method} {urlparts.netloc}{path}{query}"""
+
     def strike(self, thread_id):
         """
         Thread callable.
@@ -122,21 +132,24 @@ class Bombardier:
             ammo = deepcopy(self.queue.get())
             ammo = apply_supply(ammo, dict(self.supply, **ammo['supply']))
             request = ammo['request']
-            log.debug(f'Bomb to drop:\n{request}')
 
             url = request['url']
             method = request['method'] if 'method' in request else 'GET'
             body = json.dumps(request['body']) if 'body' in request else None
             headers = self.get_headers(request)
+            pretty_url = self.beautify_url(url, method, body)
+
+            log.debug(f'Bomb to drop:\n{pretty_url}\n{body}')
+            print(gray(f'{ammo["id"]:>4} (thread {thread_id:>3}) ' + '>' * 6 + ' ' + pretty_url))
 
             status, resp = self.make_request(url, method, headers, body)
             self.process_resp(ammo, status, resp)
 
-            print(f'{ammo["id"]} (thread {thread_id}) ', '<' * 6, self.status_coloured(status))
+            print(f'{ammo["id"]:>4} (thread {thread_id:>3}) ', '<' * 6,
+                  self.status_coloured(status), pretty_url)
             self.queue.task_done()
 
-    @staticmethod
-    def make_request(url: str, method: str, headers: dict, body: str=None) -> (int, dict):
+    def make_request(self, url: str, method: str, headers: dict, body: str=None) -> (int, dict):
         """
         Make HTTP request described in request.
         Returns dict with names extracted from request result if 'extract' part is specified in the request.
@@ -145,7 +158,8 @@ class Bombardier:
         url = urlparse(url)
         conn = http.client.HTTPSConnection(
             url.netloc,
-            context=ssl._create_unverified_context()
+            context=ssl._create_unverified_context(),
+            timeout=self.args.timeout,
         )
         conn.request(method, url.path, body=body, headers=headers)
         resp = conn.getresponse()

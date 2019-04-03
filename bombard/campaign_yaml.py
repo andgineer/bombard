@@ -33,7 +33,6 @@ yaml = Yaml()
 class IncludesLoader(original_yaml.SafeLoader):
     def __init__(self, stream):
         self._root = os.path.split(stream.name)[0]
-        print('*'*8, self._root)
         super(IncludesLoader, self).__init__(stream)
 
     @staticmethod
@@ -42,14 +41,13 @@ class IncludesLoader(original_yaml.SafeLoader):
         Converts multi-line msg to yaml document that we can insert into yaml
         """
         result = []
-        for line in msg.split('\n')[1:]:
+        for line in msg.split('\n'):
             if SIGNATURE not in line:  # skip line that mocks globals
                 result.append(' '*4 + line)
         return '|\n' + '\n'.join(result)
 
     def include(self, node):
         filename = os.path.join(self._root, self.construct_scalar(node))
-        print('*' * 8, self.construct_scalar(node))
         with open(filename, 'r') as f:
             wrapped = io.StringIO(self.wrap_in_yaml_document(f.read()))
             wrapped.name = f.name  # to please owe own __init__

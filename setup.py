@@ -6,13 +6,13 @@ with open("README.rst", "r") as fh:
 
 setuptools.setup(
     name='bombard',
-    version='0.9',
-    # scripts=['bin/bombard'],
-    entry_points={
-        'console_scripts': [
-            'bombard=bombard.main:main',
-        ],
-    },
+    version='1.0',
+    scripts=['bin/bombard'],
+    # entry_points={
+    #     'console_scripts': [
+    #         'bombard=bombard.main:main',
+    #     ],
+    # },
     author="Andrey Sorokin",
     author_email="filbert@yandex.ru",
     description="Bombards target server with simultaneous requests",

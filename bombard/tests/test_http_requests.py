@@ -12,6 +12,7 @@ TEST_REQUEST = {
 
 class FakeArgs:
     threads = 1
+    timeout = 3
 
 
 class TestHttpRequests(unittest.TestCase):
