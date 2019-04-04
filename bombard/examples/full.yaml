@@ -1,0 +1,32 @@
+supply:  # you can redefine it from command line (--supply host=http://localhost/,iters=10)
+  host: https://jsonplaceholder.typicode.com/
+  iters: 2
+prepare:  # Get ids from lists
+  postsList:
+    url: "{host}posts"
+    headers: json
+    script: |
+      for post in resp[:supply.iters]:
+        reload(ammo.getPost, id=post['id'])
+  commentsList:
+    url: "{host}comments"
+    headers: json
+    script: |
+      for comment in resp[:supply.iters]:
+        reload(ammo.getComment, id=comment['id'])
+  todosList:
+    url: "{host}todos"
+    headers: json
+    script: |
+      for todo in resp[:supply.iters]:
+        reload(ammo.getTodo, id=todo['id'])
+ammo:  # Request resources by id we see in lists
+  getPost:
+    url: "{host}posts/{id}"
+    headers: json
+  getComment:
+    url: "{host}comments/{id}"
+    headers: json
+  getTodo:
+    url: "{host}todos/{id}"
+    headers: json

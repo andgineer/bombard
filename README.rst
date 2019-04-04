@@ -1,5 +1,5 @@
 Bombard
-====
+=======
 
 |build_status| |pypi_version| |pypi_license|
 
@@ -10,10 +10,10 @@ Requests can contain JSON described in yaml file.
 
 You can get security token before bombarding and use the token in requests.
 
-Please see `bombard.yaml` it's pretty straightforward and is commented.
+Please see ``examples/`` it's pretty straightforward and is commented.
 
 You can change number of threads, requests file name and vars from command
-line (see `--help`).
+line (see ``--help``).
 
 
 .. |build_status| image:: https://travis-ci.org/masterandrey/bombard.png

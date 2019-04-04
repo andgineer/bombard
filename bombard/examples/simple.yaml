@@ -3,9 +3,8 @@ supply:  # you can redefine it from command line (--supply)
 prepare:  # Get ids from posts and comments.
   postsList:
     url: "{host}posts"
-    headers: json
     script: |
-      for post in resp[:10]:  # add getPost requests for 1st ten posts in the list
+      for post in resp[:3]:  # add getPost requests for 1st ten posts in the list
         reload(ammo.getPost, id=post['id'])
 ammo:
   getPost:
