@@ -9,9 +9,9 @@ import bombard
 # from pkg_resources import resource_string
 
 
-RELATIVE_PREFIX = '@'  # replaced with path to package folder
+EXAMPLES_PREFIX = ':examples:'  # replaced with path to package folder
 THREADS_NUM = 100
-CAMPAIGN_FILE_NAME = RELATIVE_PREFIX+'examples/bombard.yaml'
+CAMPAIGN_FILE_NAME = 'bombard.yaml'
 REPEAT = 100
 THRESHOLD = 1000
 TIMEOUT = 10
@@ -21,9 +21,9 @@ def expand_relative_file_name(file_name):
     """
     Replace RELATIVE_PREFIX with package folder so bombard script can use internal examples without full path spec
     """
-    if file_name.strip().startswith(RELATIVE_PREFIX):
+    if file_name.strip().startswith(EXAMPLES_PREFIX):
         # resource_string(__name__, args.file_name[1:])  # recommended use resource to be zipfile compatible. but this is a pain for !include
-        return os.path.join(os.path.dirname(bombard.__file__), file_name[len(RELATIVE_PREFIX):])
+        return os.path.join(os.path.dirname(bombard.__file__), file_name[len(EXAMPLES_PREFIX):])
     else:
         return file_name
 
@@ -31,7 +31,10 @@ def expand_relative_file_name(file_name):
 def get_args():
     parser = argparse.ArgumentParser(
         description='bombard: utility to bombard with HTTP-requests.',
-        epilog='See examples of requests files (yaml or py) on https://github.com/masterandrey/bombard'
+        epilog='''See examples of requests files (yaml or py) on https://github.com/masterandrey/bombard.
+To use example prefix it with ':examples:' like
+    bombard :examples:/simple.yaml
+'''
     )
     parser.add_argument(
         dest='file_name', type=str, nargs='?',

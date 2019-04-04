@@ -1,41 +1,52 @@
 """
-Colourizes text in terminal output
+Colourize text in terminal
+source https://en.wikipedia.org/wiki/ANSI_escape_code#Colors
+
+You can use it function style
+green('Hello!')
+
+Or include style
+f'{YELLOW}Hello{OFF}, {RED}world{OFF}!'
 """
 
-COLOURS = {
-    'green': '\033[1;32;40m',
-    'red': '\033[1;31;40m',
-    'dark_red': '\033[0;31;40m',
-    'gray': '\033[1;30;40m',
-    'brown': '\033[0;33;40m',
-    'yellow': '\033[1;33;40m',
-}
+GREEN = '\033[1;32;40m'
+RED = '\033[1;31;40m'
+DARK_RED = '\033[0;31;40m'
+GRAY = '\033[1;30;40m'
+BROWN = '\033[0;33;40m'
+YELLOW = '\033[1;33;40m'
 
-OFF = '\033[0;37;40m'
+OFF = '\033[0m'
 
-def colour_it(msg: str, colour: str) -> str:
-    return f'{COLOURS[colour]}{msg}{OFF}'
+
+def paint_it(msg: str, colour: str) -> str:
+    return f'{colour}{msg}{OFF}'
+
 
 def green(s: str) -> str:
-    return colour_it(s, 'green')
+    return paint_it(s, GREEN)
 
 
 def red(s: str) -> str:
-    return colour_it(s, 'red')
+    return paint_it(s, RED)
 
 
 def dark_red(s: str) -> str:
-    return colour_it(s, 'dark_red')
+    return paint_it(s, DARK_RED)
 
 
 def gray(s: str) -> str:
-    return colour_it(s, 'gray')
+    return paint_it(s, GRAY)
 
 
 def brown(s: str) -> str:
-    return colour_it(s, 'brown')
+    return paint_it(s, BROWN)
 
 
 def yellow(s: str) -> str:
-    return colour_it(s, 'yellow')
+    return paint_it(s, YELLOW)
 
+
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod()

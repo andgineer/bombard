@@ -33,7 +33,7 @@ def campaign(args):
     log.debug(f'Loaded bombard campaign from "{args.file_name}": {len(campaign_book["ammo"])} ammo.')
 
     # add supply from campaign file
-    for var, val in campaign_book['supply'].items():
+    for var, val in campaign_book.get('supply', {}).items():
         if var not in supply:  # dbombardiero not redefine if already defined from command line
             supply[var] = val.format(**supply)
     log.debug(f'Supply: {supply}')
