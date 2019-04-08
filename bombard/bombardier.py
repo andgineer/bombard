@@ -8,7 +8,7 @@ import ssl
 import json
 from copy import deepcopy
 import logging
-from bombard.time_ns import time_ns
+from bombard.pretty_ns import time_ns, pretty_ns
 from bombard.show_descr import show_descr
 from array import array
 import statistics
@@ -141,24 +141,6 @@ class Bombardier:
         query = query if len(query) < 15 else '?...' + query[:-15]
         return f"""{method} {urlparts.netloc}{path}{query}"""
 
-    @staticmethod
-    def beautify_elapsed(elapsed_ns: int):
-        dividers = {
-            'mks': 1000,
-            'ms': 1000,
-            's': 1000,
-            'minutes': 60,
-            'hours': 60,
-            'days': 24
-        }
-        result = elapsed_ns
-        for unit, divider in dividers.items():
-            result /= divider
-            if result > 99:
-                result = round(result)
-            else:
-                return f'{result:.1f}{unit}'
-
     def log_stat(self, success: bool, elapsed: int):
         if success:
             self.stat_success_time.append(elapsed)
@@ -198,7 +180,7 @@ class Bombardier:
                     print(f'{self.show_response[ammo_id].format(id=ammo_id):>15}\r', end='')
             else:
                 log.info(f'{ammo_id:>4} (thread {thread_id:>3}) ' + '<' * 6
-                      + self.status_coloured(status) + pretty_url)
+                      + ' ' + self.status_coloured(status) + ' ' + pretty_url)
             self.queue.task_done()
 
     def make_request(self, url: str, method: str, headers: dict, body: str=None) -> (int, dict):
@@ -252,9 +234,9 @@ class Bombardier:
             stat = self.stat_fail_time
             if len(stat) == 0:
                 return '`...no fails...`'
-        return f'''Mean: {self.beautify_elapsed(statistics.mean(stat))}
-Min: {self.beautify_elapsed(min(stat))}
-Max: {self.beautify_elapsed(max(stat))}'''
+        return f'''Mean: {pretty_ns(statistics.mean(stat))}
+Min: {pretty_ns(min(stat))}
+Max: {pretty_ns(max(stat))}'''
 
     def report(self):
         print()

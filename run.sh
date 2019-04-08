@@ -2,4 +2,5 @@
 #
 # debug
 #
-python3 -m bombard.main
+python3 -m bombard.main $@
+

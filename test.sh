@@ -7,7 +7,7 @@ if [[ -z "$@" ]]; then  # if selected specific test we do not run doctests
     echo
     echo "##### Doc tests #####"
     rm -rf bombard/__pycache__
-    python3 -m doctest -v bombard/attr_dict.py
+    python3 -m doctest -v bombard/attr_dict.py bombard/pretty_ns.py
 fi
 echo
 echo "##### Unittest tests #####"

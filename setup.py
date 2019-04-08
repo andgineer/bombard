@@ -6,7 +6,7 @@ with open("README.rst", "r") as fh:
 
 setuptools.setup(
     name='bombard',
-    version='1.0',
+    version='1.1',
     # scripts=['bin/bombard'],
     entry_points={
         'console_scripts': [
