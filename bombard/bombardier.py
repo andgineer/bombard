@@ -8,6 +8,10 @@ import ssl
 import json
 from copy import deepcopy
 import logging
+from bombard.time_ns import time_ns
+from bombard.show_descr import show_descr
+from array import array
+import statistics
 
 
 log = logging.getLogger()
@@ -44,10 +48,24 @@ class Bombardier:
         self.overload = overload_statuses if overload_statuses is not None else DEFAULT_OVERLOAD
         self.queue = Queue(args.threads)
         self.job_count = 0
+        self.show_request = {
+            1: 'Sent 1st request..'
+        }
+        self.show_response = {
+            1: 'Got 1st response..'
+        }
+        self.start = time_ns()
+
+        self.stat_success_time = array('Q')
+        self.stat_fail_time = array('Q')
+
         for i in range(args.threads):
             t = Thread(target=self.strike, args=[i])
             t.daemon = True
             t.start()
+
+    def campaign_elapsed(self):
+        return self.beautify_elapsed(time_ns() - self.start)
 
     def status_coloured(self, status: int) -> str:
         if status in self.ok:
@@ -81,9 +99,10 @@ class Bombardier:
                 result.update({name: val})
         return result
 
-    def process_resp(self, ammo: dict, status: int, resp: str):
+    def process_resp(self, ammo: dict, status: int, resp: str, elapsed: int):
         request = ammo['request']
         if status in self.ok:
+            self.log_stat(elapsed, elapsed)
             log.debug(f'{status} reply\n{resp}')
             if 'extract' in request:
                 try:
@@ -107,7 +126,6 @@ class Bombardier:
                         'ammo': AttrDict(self.campaign['ammo'])
                     }
                     exec(request["script"], context)
-                    exit()
                 except Exception as e:
                     log.error(f'Script fail\n{e}\n\n{request["script"]}\n\n{supply}\n', exc_info=True)
         else:
@@ -122,6 +140,30 @@ class Bombardier:
             query += '#' + urlparts.fragment
         query = query if len(query) < 15 else '?...' + query[:-15]
         return f"""{method} {urlparts.netloc}{path}{query}"""
+
+    @staticmethod
+    def beautify_elapsed(elapsed_ns: int):
+        dividers = {
+            'mks': 1000,
+            'ms': 1000,
+            's': 1000,
+            'minutes': 60,
+            'hours': 60,
+            'days': 24
+        }
+        result = elapsed_ns
+        for unit, divider in dividers.items():
+            result /= divider
+            if result > 99:
+                result = round(result)
+            else:
+                return f'{result:.1f}{unit}'
+
+    def log_stat(self, success: bool, elapsed: int):
+        if success:
+            self.stat_success_time.append(elapsed)
+        else:
+            self.stat_fail_time.append(elapsed)
 
     def strike(self, thread_id):
         """
@@ -139,14 +181,24 @@ class Bombardier:
             headers = self.get_headers(request)
             pretty_url = self.beautify_url(url, method, body)
 
+            ammo_id = ammo["id"]
             log.debug(f'Bomb to drop:\n{pretty_url}\n{body}')
-            print(gray(f'{ammo["id"]:>4} (thread {thread_id:>3}) ' + '>' * 6 + ' ' + pretty_url))
+            if self.args.quiet:
+                if ammo_id in self.show_request:
+                    print(f'{self.show_request[ammo_id].format(id=ammo_id):>15}\r', end='')
+            else:
+                log.info(gray(f'{ammo_id:>4} (thread {thread_id:>3}) ' + '>' * 6 + ' ' + pretty_url))
 
+            start_ns = time_ns()
             status, resp = self.make_request(url, method, headers, body)
-            self.process_resp(ammo, status, resp)
+            self.process_resp(ammo, status, resp, time_ns() - start_ns)
 
-            print(f'{ammo["id"]:>4} (thread {thread_id:>3}) ', '<' * 6,
-                  self.status_coloured(status), pretty_url)
+            if self.args.quiet:
+                if ammo_id in self.show_response:
+                    print(f'{self.show_response[ammo_id].format(id=ammo_id):>15}\r', end='')
+            else:
+                log.info(f'{ammo_id:>4} (thread {thread_id:>3}) ' + '<' * 6
+                      + self.status_coloured(status) + pretty_url)
             self.queue.task_done()
 
     def make_request(self, url: str, method: str, headers: dict, body: str=None) -> (int, dict):
@@ -181,14 +233,39 @@ class Bombardier:
             for _ in range(repeat):
                 for __ in range(request.get('repeat', 1)):
                     self.job_count += 1
+                    if self.job_count % self.args.threads == 0 \
+                            or self.job_count < self.args.threads and self.job_count % 10 == 0:
+                        # show each 10th response before queue is full and then each time it's full
+                        self.show_response[self.job_count] = f'Got {self.job_count} responses...'
                     self.queue.put({
                         'id': self.job_count,
                         'request': request,
                         'supply': kwargs
                     })
 
+    def report_type(self, success: bool):
+        if success:
+            stat = self.stat_success_time
+        else:
+            stat = self.stat_fail_time
+        return f'''Mean: {self.beautify_elapsed(statistics.mean(stat))}
+Min: {self.beautify_elapsed(min(stat))}
+Max: {self.beautify_elapsed(max(stat))}
+'''
+
+    def report(self):
+        print()
+        print(show_descr(f'''Sent `{self.job_count}` requests in `{self.campaign_elapsed()}`
+## success:
+{self.report_type(True) if len(self.stat_success_time) > 0 else '`...no success...`'}
+
+## fail:
+{self.report_type(False) if len(self.stat_fail_time) > 0 else '`...no fails...`'}
+'''))
+
     def bombard(self):
         self.queue.join()
+        self.report()
 
 
 
