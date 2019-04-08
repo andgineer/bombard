@@ -51,6 +51,11 @@ def campaign(args):
             supply[var] = val.format(**supply) if isinstance(val, str) else val
     log.debug(f'Supply: {supply}')
 
+    for request_set in ['prepare', 'ammo']:  # de-normalize so name is inside request and can be used to collect stat
+        if request_set in campaign_book:
+            for name, request in campaign_book[request_set].items():
+                request['name'] = name
+
     bombardier = Bombardier(supply, args, campaign_book)
     if 'prepare' in campaign_book:
         requests = campaign_book['prepare']

@@ -58,6 +58,7 @@ class Bombardier:
 
         self.stat_success_time = array('Q')
         self.stat_fail_time = array('Q')
+        self.stat_by_name = {}
 
         for i in range(args.threads):
             t = Thread(target=self.strike, args=[i])
@@ -65,7 +66,7 @@ class Bombardier:
             t.start()
 
     def campaign_elapsed(self):
-        return self.beautify_elapsed(time_ns() - self.start)
+        return pretty_ns(time_ns() - self.start)
 
     def status_coloured(self, status: int) -> str:
         if status in self.ok:
@@ -102,7 +103,7 @@ class Bombardier:
     def process_resp(self, ammo: dict, status: int, resp: str, elapsed: int):
         request = ammo['request']
         if status in self.ok:
-            self.log_stat(elapsed, elapsed)
+            self.log_stat(True, elapsed, request.get('name'))
             log.debug(f'{status} reply\n{resp}')
             if 'extract' in request:
                 try:
@@ -129,6 +130,7 @@ class Bombardier:
                 except Exception as e:
                     log.error(f'Script fail\n{e}\n\n{request["script"]}\n\n{supply}\n', exc_info=True)
         else:
+            self.log_stat(False, elapsed, request.get('name'))
             log.error(f'{status} reply\n{resp}')
 
     @staticmethod
@@ -141,7 +143,9 @@ class Bombardier:
         query = query if len(query) < 15 else '?...' + query[:-15]
         return f"""{method} {urlparts.netloc}{path}{query}"""
 
-    def log_stat(self, success: bool, elapsed: int):
+    def log_stat(self, success: bool, elapsed: int, request_name):
+        if request_name is not None:
+            self.stat_by_name[request_name].append(elapsed)
         if success:
             self.stat_success_time.append(elapsed)
         else:
@@ -169,7 +173,7 @@ class Bombardier:
                 if ammo_id in self.show_request:
                     print(f'{self.show_request[ammo_id].format(id=ammo_id):>15}\r', end='')
             else:
-                log.info(gray(f'{ammo_id:>4} (thread {thread_id:>3}) ' + '>' * 6 + ' ' + pretty_url))
+                log.info(gray(f'{ammo_id:>4} (thread {thread_id:>3}) ' + '>' * 6 + f' {request.get("name", "")} ' + pretty_url))
 
             start_ns = time_ns()
             status, resp = self.make_request(url, method, headers, body)
@@ -180,7 +184,7 @@ class Bombardier:
                     print(f'{self.show_response[ammo_id].format(id=ammo_id):>15}\r', end='')
             else:
                 log.info(f'{ammo_id:>4} (thread {thread_id:>3}) ' + '<' * 6
-                      + ' ' + self.status_coloured(status) + ' ' + pretty_url)
+                      + f' {request.get("name", "")} ' + self.status_coloured(status) + ' ' + pretty_url)
             self.queue.task_done()
 
     def make_request(self, url: str, method: str, headers: dict, body: str=None) -> (int, dict):
@@ -212,6 +216,8 @@ class Bombardier:
         if repeat is None:
             repeat = self.args.repeat
         for request in requests:
+            if 'name' in request:
+                self.stat_by_name[request['name']] = array('Q')
             for _ in range(repeat):
                 for __ in range(request.get('repeat', 1)):
                     self.job_count += 1
@@ -225,7 +231,14 @@ class Bombardier:
                         'supply': kwargs
                     })
 
-    def report_type(self, success: bool):
+    def report_dimension(self, a: array):
+        result = []
+        result.append(f'Mean: {pretty_ns(statistics.mean(a))}')
+        result.append(f'Min: {pretty_ns(min(a))}')
+        result.append(f'Max: {pretty_ns(max(a))}')
+        return ' '.join(result)
+
+    def report_section(self, success: bool):
         if success:
             stat = self.stat_success_time
             if len(stat) == 0:
@@ -234,18 +247,23 @@ class Bombardier:
             stat = self.stat_fail_time
             if len(stat) == 0:
                 return '`...no fails...`'
-        return f'''Mean: {pretty_ns(statistics.mean(stat))}
-Min: {pretty_ns(min(stat))}
-Max: {pretty_ns(max(stat))}'''
+        return self.report_dimension(stat)
 
     def report(self):
+        by_name = []
+        for name, stat in self.stat_by_name.items():
+            by_name.append(f'### {name}\n'+self.report_dimension(stat))
+        by_name = '\n'.join(by_name)
         print()
         print(show_descr(f'''Sent `{self.job_count}` requests in `{self.campaign_elapsed()}`
 ## success:
-{self.report_type(True)}
+{self.report_section(True)}
 
 ## fail:
-{self.report_type(False)}
+{self.report_section(False)}
+
+## by request name:
+{by_name}
 '''))
 
     def bombard(self):
