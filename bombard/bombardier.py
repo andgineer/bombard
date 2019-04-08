@@ -246,21 +246,24 @@ class Bombardier:
     def report_type(self, success: bool):
         if success:
             stat = self.stat_success_time
+            if len(stat) == 0:
+                return '`...no success...`'
         else:
             stat = self.stat_fail_time
+            if len(stat) == 0:
+                return '`...no fails...`'
         return f'''Mean: {self.beautify_elapsed(statistics.mean(stat))}
 Min: {self.beautify_elapsed(min(stat))}
-Max: {self.beautify_elapsed(max(stat))}
-'''
+Max: {self.beautify_elapsed(max(stat))}'''
 
     def report(self):
         print()
         print(show_descr(f'''Sent `{self.job_count}` requests in `{self.campaign_elapsed()}`
 ## success:
-{self.report_type(True) if len(self.stat_success_time) > 0 else '`...no success...`'}
+{self.report_type(True)}
 
 ## fail:
-{self.report_type(False) if len(self.stat_fail_time) > 0 else '`...no fails...`'}
+{self.report_type(False)}
 '''))
 
     def bombard(self):
