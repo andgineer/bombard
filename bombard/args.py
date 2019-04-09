@@ -1,5 +1,5 @@
 """
-Parse command line args
+Parse bombard command line args
 """
 import sys
 import os.path

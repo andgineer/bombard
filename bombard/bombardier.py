@@ -1,14 +1,13 @@
 from bombard.terminal_colours import red, dark_red, green, gray
 from bombard.attr_dict import AttrDict
 from urllib.parse import urlparse
-import http.client
-import ssl
 import json
 import logging
 from bombard.weaver_mill import WeaverMill
 from bombard.report import Reporter
 from bombard.pretty_ns import time_ns
 from bombard.show_descr import markdown_for_terminal
+from bombard.http_request import http_request
 
 
 log = logging.getLogger()
@@ -117,7 +116,6 @@ class Bombardier(WeaverMill):
                     log.error(f'Script fail\n{e}\n\n{request["script"]}\n\n{supply}\n', exc_info=True)
         else:
             self.reporter.log(False, elapsed, request.get('name'), size)
-            log.error(f'{status} reply\n{resp}')
 
     @staticmethod
     def beautify_url(url, method, body):
@@ -148,45 +146,24 @@ class Bombardier(WeaverMill):
             if self.args.quiet:
                 if ammo_id in self.show_request:
                     print(f'{self.show_request[ammo_id].format(id=ammo_id):>15}\r', end='')
-            else:
-                log.info(gray(f'{ammo_id:>4} (thread {thread_id:>3}) ' + '>' * 6 + f' {request.get("name", "")} ' + pretty_url))
+            log.info(gray(f'{ammo_id:>4} (thread {thread_id:>3}) ' + '>' * 6 + f' {request.get("name", "")} ' + pretty_url))
 
             start_ns = time_ns()
-            status, resp = self.make_request(url, method, headers, body)
+            status, resp = http_request(url, method, headers, body, self.args.timeout)
 
             self.process_resp(ammo, status, resp, time_ns() - start_ns, len(resp))
 
             if self.args.quiet:
                 if ammo_id in self.show_response:
                     print(f'{self.show_response[ammo_id].format(id=ammo_id):>15}\r', end='')
-            else:
-                log.info(f'{ammo_id:>4} (thread {thread_id:>3}) ' + '<' * 6
-                      + f' {request.get("name", "")} ' + self.status_coloured(status) + ' ' + pretty_url)
+            log.info(f'{ammo_id:>4} (thread {thread_id:>3}) ' + '<' * 6
+                  + f' {request.get("name", "")} ' + self.status_coloured(status) + ' ' + pretty_url
+                  + ' ' + (red(resp) if status == '!!!' else '')  # show exception
+            )
         except Exception as e:
             log.info(gray(
                 f'{ammo_id:>4} (thread {thread_id:>3}) ' + red('!' * 6) + f' {request.get("name", "")} ' + pretty_url)
                 + ' ' + red(str(e)))
-
-    def make_request(self, url: str, method: str, headers: dict, body: str=None) -> (int, dict):
-        """
-        Make HTTP request described in request.
-        Returns dict with names extracted from request result if 'extract' part is specified in the request.
-        And place 'status' or the response to the dict.
-        """
-        url = urlparse(url)
-        conn = http.client.HTTPSConnection(
-            url.netloc,
-            context=ssl._create_unverified_context(),
-            timeout=self.args.timeout,
-        )
-        conn.request(method, url.path, body=body, headers=headers)
-        try:
-            resp = conn.getresponse()
-            resp_body = resp.read()
-        except Exception as e:
-            log.error(f'Error reading response:\n{e}')
-            return 999, None
-        return resp.status, resp_body
 
     def reload(self, requests, repeat=None, **kwargs):
         """
