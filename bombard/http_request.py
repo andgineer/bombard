@@ -4,6 +4,9 @@ from urllib.parse import urlparse
 from typing import Optional
 
 
+EXCEPTION_STATUS = '!!!'
+
+
 def http_request(url: str, method: str='GET', headers: Optional[dict]=None,
                  body: Optional[str]=None, timeout: Optional[int]=None) -> (int, dict):
     """
@@ -29,6 +32,6 @@ def http_request(url: str, method: str='GET', headers: Optional[dict]=None,
         resp = conn.getresponse()
         resp_body = resp.read()
     except Exception as e:
-        return '!!!', str(e)
+        return EXCEPTION_STATUS, str(e)
     return resp.status, resp_body
 

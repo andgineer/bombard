@@ -1,4 +1,4 @@
-from bombard.terminal_colours import red, dark_red, green, gray
+from bombard.terminal_colours import red, dark_red, green, gray, GRAY, OFF
 from bombard.attr_dict import AttrDict
 from urllib.parse import urlparse
 import json
@@ -7,7 +7,8 @@ from bombard.weaver_mill import WeaverMill
 from bombard.report import Reporter
 from bombard.pretty_ns import time_ns
 from bombard.show_descr import markdown_for_terminal
-from bombard.http_request import http_request
+from bombard.http_request import http_request, EXCEPTION_STATUS
+from bombard import request_logging
 
 
 log = logging.getLogger()
@@ -132,38 +133,39 @@ class Bombardier(WeaverMill):
         Thread callable.
         Strike ammo from queue.
         """
+        ammo_id = ammo['id']
+        request = ammo['request']
+        ammo_name = request.get('name', '')
+        request_logging.sending(thread_id, ammo_id, ammo_name)
         ammo = apply_supply(ammo, dict(self.supply, **ammo['supply']))
-        ammo_id = ammo.get('id')
-        request = ammo.get('request', {})
+
         url = request.get('url', '')
         method = request['method'] if 'method' in request else 'GET'
         body = json.dumps(request['body']) if 'body' in request else None
         headers = self.get_headers(request)
         pretty_url = self.beautify_url(url, method, body)
-
         try:
             log.debug(f'Bomb to drop:\n{pretty_url}\n{body}')
             if self.args.quiet:
                 if ammo_id in self.show_request:
                     print(f'{self.show_request[ammo_id].format(id=ammo_id):>15}\r', end='')
-            log.info(gray(f'{ammo_id:>4} (thread {thread_id:>3}) ' + '>' * 6 + f' {request.get("name", "")} ' + pretty_url))
+            log.info(pretty_url)
 
             start_ns = time_ns()
             status, resp = http_request(url, method, headers, body, self.args.timeout)
+
+            request_logging.receiving()
 
             self.process_resp(ammo, status, resp, time_ns() - start_ns, len(resp))
 
             if self.args.quiet:
                 if ammo_id in self.show_response:
                     print(f'{self.show_response[ammo_id].format(id=ammo_id):>15}\r', end='')
-            log.info(f'{ammo_id:>4} (thread {thread_id:>3}) ' + '<' * 6
-                  + f' {request.get("name", "")} ' + self.status_coloured(status) + ' ' + pretty_url
-                  + ' ' + (red(resp) if status == '!!!' else '')  # show exception
+            log.info(self.status_coloured(status) + ' ' + pretty_url
+                  + ' ' + (red(resp) if status == EXCEPTION_STATUS else '')
             )
         except Exception as e:
-            log.info(gray(
-                f'{ammo_id:>4} (thread {thread_id:>3}) ' + red('!' * 6) + f' {request.get("name", "")} ' + pretty_url)
-                + ' ' + red(str(e)))
+            log.info(pretty_url + ' ' + red(str(e)))
 
     def reload(self, requests, repeat=None, **kwargs):
         """

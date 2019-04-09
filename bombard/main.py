@@ -27,7 +27,6 @@ def guess_type(value: str):
 
 
 def setup_logging(level: int, log_file_name: Optional[str]):
-    logging.basicConfig(format='%(asctime)s %(message)s', datefmt='%-d %b %H:%M:%S')  # %a weekday abbr
     log.setLevel(level)
     if log_file_name is not None:
         log.addHandler(
