@@ -1,5 +1,3 @@
-from threading import Thread
-from queue import Queue
 from bombard.terminal_colours import red, dark_red, green, gray
 from bombard.attr_dict import AttrDict
 from urllib.parse import urlparse
@@ -12,6 +10,7 @@ from bombard.pretty_ns import time_ns, pretty_ns
 from bombard.show_descr import show_descr
 from array import array
 import statistics
+from bombard.weaver_mill import WeaverMill
 
 
 log = logging.getLogger()
@@ -32,7 +31,7 @@ def apply_supply(request: dict, supply: dict) -> dict:
     return request
 
 
-class Bombardier:
+class Bombardier(WeaverMill):
     """
     Use horde of threads to make HTTP-requests
     """
@@ -46,15 +45,14 @@ class Bombardier:
         self.campaign = campaign_book
         self.ok = ok_statuses if ok_statuses is not None else DEFAULT_OK
         self.overload = overload_statuses if overload_statuses is not None else DEFAULT_OVERLOAD
-        self.queue = Queue(args.threads)
-        self.job_count = 0
+
         self.show_request = {
             1: 'Sent 1st request..'
         }
         self.show_response = {
             1: 'Got 1st response..'
         }
-        self.start = time_ns()
+        self.start_ns = time_ns()
 
         self.stat_success_time = array('Q')
         self.stat_fail_time = array('Q')
@@ -63,16 +61,10 @@ class Bombardier:
         self.stat_success_size = array('Q')
         self.stat_fail_size = array('Q')
 
-        self.threads = []
-
-        for i in range(args.threads):
-            t = Thread(target=self.strike, args=[i])
-            t.daemon = True
-            t.start()
-            self.threads.append(t)
+        super().__init__()
 
     def campaign_elapsed_ns(self):
-        return time_ns() - self.start
+        return time_ns() - self.start_ns
 
     def status_coloured(self, status: int) -> str:
         if status in self.ok:
@@ -159,48 +151,44 @@ class Bombardier:
             self.stat_fail_time.append(elapsed)
             self.stat_fail_size.append(size)
 
-    def strike(self, thread_id):
+    def worker(self, thread_id, ammo):
         """
         Thread callable.
         Strike ammo from queue.
         """
-        while True:
-            ammo = deepcopy(self.queue.get())
-            if ammo is None:
-                break
-            ammo = apply_supply(ammo, dict(self.supply, **ammo['supply']))
-            ammo_id = ammo.get('id')
-            request = ammo.get('request', {})
-            url = request.get('url', '')
-            method = request['method'] if 'method' in request else 'GET'
-            body = json.dumps(request['body']) if 'body' in request else None
-            headers = self.get_headers(request)
-            pretty_url = self.beautify_url(url, method, body)
-            try:
+        ammo = apply_supply(ammo, dict(self.supply, **ammo['supply']))
+        ammo_id = ammo.get('id')
+        request = ammo.get('request', {})
+        url = request.get('url', '')
+        method = request['method'] if 'method' in request else 'GET'
+        body = json.dumps(request['body']) if 'body' in request else None
+        headers = self.get_headers(request)
+        pretty_url = self.beautify_url(url, method, body)
 
-                log.debug(f'Bomb to drop:\n{pretty_url}\n{body}')
-                if self.args.quiet:
-                    if ammo_id in self.show_request:
-                        print(f'{self.show_request[ammo_id].format(id=ammo_id):>15}\r', end='')
-                else:
-                    log.info(gray(f'{ammo_id:>4} (thread {thread_id:>3}) ' + '>' * 6 + f' {request.get("name", "")} ' + pretty_url))
+        try:
+            log.debug(f'Bomb to drop:\n{pretty_url}\n{body}')
+            if self.args.quiet:
+                if ammo_id in self.show_request:
+                    print(f'{self.show_request[ammo_id].format(id=ammo_id):>15}\r', end='')
+            else:
+                log.info(gray(f'{ammo_id:>4} (thread {thread_id:>3}) ' + '>' * 6 + f' {request.get("name", "")} ' + pretty_url))
 
-                start_ns = time_ns()
-                status, resp = self.make_request(url, method, headers, body)
+            start_ns = time_ns()
+            status, resp = self.make_request(url, method, headers, body)
 
-                self.process_resp(ammo, status, resp, time_ns() - start_ns, len(resp))
+            self.process_resp(ammo, status, resp, time_ns() - start_ns, len(resp))
 
-                if self.args.quiet:
-                    if ammo_id in self.show_response:
-                        print(f'{self.show_response[ammo_id].format(id=ammo_id):>15}\r', end='')
-                else:
-                    log.info(f'{ammo_id:>4} (thread {thread_id:>3}) ' + '<' * 6
-                          + f' {request.get("name", "")} ' + self.status_coloured(status) + ' ' + pretty_url)
-            except Exception as e:
-                log.info(gray(
-                    f'{ammo_id:>4} (thread {thread_id:>3}) ' + red('!' * 6) + f' {request.get("name", "")} ' + pretty_url)
-                    + ' ' + red(str(e)))
-            self.queue.task_done()
+            if self.args.quiet:
+                if ammo_id in self.show_response:
+                    print(f'{self.show_response[ammo_id].format(id=ammo_id):>15}\r', end='')
+            else:
+                log.info(f'{ammo_id:>4} (thread {thread_id:>3}) ' + '<' * 6
+                      + f' {request.get("name", "")} ' + self.status_coloured(status) + ' ' + pretty_url)
+        except Exception as e:
+            log.info(gray(
+                f'{ammo_id:>4} (thread {thread_id:>3}) ' + red('!' * 6) + f' {request.get("name", "")} ' + pretty_url)
+                + ' ' + red(str(e)))
+
 
     def make_request(self, url: str, method: str, headers: dict, body: str=None) -> (int, dict):
         """
@@ -290,14 +278,18 @@ class Bombardier:
     def report(self):
         by_name = []
         for name, stat in self.stat_by_name.items():
-            by_name.append(f'### {name}\n'+self.report_dimension(stat))
+            by_name.append(f'### {name}\n' + self.report_dimension(stat) + '\n')
         by_name = '\n'.join(by_name)
         size_sum = sum(self.stat_success_size) + sum(self.stat_fail_size)
-        size = self.pretty_sz(size_sum)
-        elapsed = self.campaign_elapsed_ns()
-        per_sec = self.pretty_sz(size_sum // (elapsed // 10 ** 9))
+        elapsed_sec = self.campaign_elapsed_ns() / (10 ** 9)
+        total_line = ' '.join([
+            f'Sent `{self.job_count}` requests',
+            f'in `{pretty_ns(self.campaign_elapsed_ns())}`,',
+            f'{self.pretty_sz(size_sum)},',
+            f'{self.pretty_sz(size_sum // elapsed_sec) if elapsed_sec > 0 else 0}/sec',
+        ])
         print()
-        print(show_descr(f'''Sent `{self.job_count}` requests in `{pretty_ns(elapsed)}`, {size}, {per_sec}/sec
+        print(show_descr(f'''{total_line}
 ## success:
 {self.report_section(True)}
 
@@ -309,13 +301,6 @@ class Bombardier:
 '''))
 
     def bombard(self):
-        self.queue.join()
-        for i in range(self.args.threads):
-            self.queue.put(None)
-        for t in self.threads:
-            t.join()
-
+        self.start()  # lock until queue is not empty
+        self.stop()  # stop all threads
         self.report()
-
-
-
