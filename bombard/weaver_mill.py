@@ -1,8 +1,9 @@
 """
-Multi-thread processor abstraction.
+Multi-threaded jobs processor abstraction.
 
-Override method worker in descendant.
-
+Override method worker in descendant to do a job.
+Add jobs with `put`.
+Start processing with `start`.
 """
 from threading import Thread
 from queue import Queue
@@ -53,6 +54,10 @@ class WeaverMill:
         :param job: job from queue
         """
         pass
+
+    def put(self, job):
+        """ Add job to queue. To start processing jobs in queue use `start` """
+        self.queue.put(job)
 
     def start(self):
         """ Starts all threads and lock until queue is not empty """

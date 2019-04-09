@@ -233,7 +233,7 @@ class Bombardier(WeaverMill):
                             or self.job_count < self.args.threads and self.job_count % 10 == 0:
                         # show each 10th response before queue is full and then each time it's full
                         self.show_response[self.job_count] = f'Got {self.job_count} responses...'
-                    self.queue.put({
+                    self.put({
                         'id': self.job_count,
                         'request': request,
                         'supply': kwargs
