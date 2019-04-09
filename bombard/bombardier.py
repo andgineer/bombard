@@ -4,13 +4,11 @@ from urllib.parse import urlparse
 import http.client
 import ssl
 import json
-from copy import deepcopy
 import logging
-from bombard.pretty_ns import time_ns, pretty_ns
-from bombard.show_descr import show_descr
-from array import array
-import statistics
 from bombard.weaver_mill import WeaverMill
+from bombard.report import Reporter
+from bombard.pretty_ns import time_ns
+from bombard.show_descr import markdown_for_terminal
 
 
 log = logging.getLogger()
@@ -52,19 +50,9 @@ class Bombardier(WeaverMill):
         self.show_response = {
             1: 'Got 1st response..'
         }
-        self.start_ns = time_ns()
-
-        self.stat_success_time = array('Q')
-        self.stat_fail_time = array('Q')
-        self.stat_by_name = {}
-
-        self.stat_success_size = array('Q')
-        self.stat_fail_size = array('Q')
+        self.reporter = Reporter()
 
         super().__init__()
-
-    def campaign_elapsed_ns(self):
-        return time_ns() - self.start_ns
 
     def status_coloured(self, status: int) -> str:
         if status in self.ok:
@@ -101,7 +89,7 @@ class Bombardier(WeaverMill):
     def process_resp(self, ammo: dict, status: int, resp: str, elapsed: int, size: int):
         request = ammo['request']
         if status in self.ok:
-            self.log_stat(True, elapsed, request.get('name'), size)
+            self.reporter.log(True, elapsed, request.get('name'), size)
             log.debug(f'{status} reply\n{resp}')
             if 'extract' in request:
                 try:
@@ -128,7 +116,7 @@ class Bombardier(WeaverMill):
                 except Exception as e:
                     log.error(f'Script fail\n{e}\n\n{request["script"]}\n\n{supply}\n', exc_info=True)
         else:
-            self.log_stat(False, elapsed, request.get('name'), size)
+            self.reporter.log(False, elapsed, request.get('name'), size)
             log.error(f'{status} reply\n{resp}')
 
     @staticmethod
@@ -140,16 +128,6 @@ class Bombardier(WeaverMill):
             query += '#' + urlparts.fragment
         query = query if len(query) < 15 else '?...' + query[:-15]
         return f"""{method} {urlparts.netloc}{path}{query}"""
-
-    def log_stat(self, success: bool, elapsed: int, request_name: str, size: int):
-        if request_name is not None:
-            self.stat_by_name[request_name].append(elapsed)
-        if success:
-            self.stat_success_time.append(elapsed)
-            self.stat_success_size.append(size)
-        else:
-            self.stat_fail_time.append(elapsed)
-            self.stat_fail_size.append(size)
 
     def worker(self, thread_id, ammo):
         """
@@ -189,7 +167,6 @@ class Bombardier(WeaverMill):
                 f'{ammo_id:>4} (thread {thread_id:>3}) ' + red('!' * 6) + f' {request.get("name", "")} ' + pretty_url)
                 + ' ' + red(str(e)))
 
-
     def make_request(self, url: str, method: str, headers: dict, body: str=None) -> (int, dict):
         """
         Make HTTP request described in request.
@@ -224,8 +201,6 @@ class Bombardier(WeaverMill):
         if repeat is None:
             repeat = self.args.repeat
         for request in requests:
-            if 'name' in request:
-                self.stat_by_name[request['name']] = array('Q')
             for _ in range(repeat):
                 for __ in range(request.get('repeat', 1)):
                     self.job_count += 1
@@ -239,68 +214,8 @@ class Bombardier(WeaverMill):
                         'supply': kwargs
                     })
 
-    def report_dimension(self, a: array):
-        if len(a) == 0:
-            return '`...no requests...`'
-        result = []
-        result.append(f'Mean: {pretty_ns(statistics.mean(a))}')
-        result.append(f'Min: {pretty_ns(min(a))}')
-        result.append(f'Max: {pretty_ns(max(a))}')
-        return ' '.join(result)
-
-    def report_section(self, success: bool):
-        if success:
-            stat = self.stat_success_time
-            if len(stat) == 0:
-                return '`...no success...`'
-        else:
-            stat = self.stat_fail_time
-            if len(stat) == 0:
-                return '`...no fails...`'
-        return self.report_dimension(stat)
-
-    def pretty_sz(self, size):
-        dividers = {
-            'bytes': 1,
-            'kb': 1024,
-            'mb': 1024,
-            'gb': 1024,
-            'pb': 1024,
-        }
-        result = size
-        for unit, divider in dividers.items():
-            result /= divider
-            if result < 100:
-                return f'{result:.1f} {unit}'
-            else:
-                result = round(result)
-
-    def report(self):
-        by_name = []
-        for name, stat in self.stat_by_name.items():
-            by_name.append(f'### {name}\n' + self.report_dimension(stat) + '\n')
-        by_name = '\n'.join(by_name)
-        size_sum = sum(self.stat_success_size) + sum(self.stat_fail_size)
-        elapsed_sec = self.campaign_elapsed_ns() / (10 ** 9)
-        total_line = ' '.join([
-            f'Sent `{self.job_count}` requests',
-            f'in `{pretty_ns(self.campaign_elapsed_ns())}`,',
-            f'{self.pretty_sz(size_sum)},',
-            f'{self.pretty_sz(size_sum // elapsed_sec) if elapsed_sec > 0 else 0}/sec',
-        ])
-        print()
-        print(show_descr(f'''{total_line}
-## success:
-{self.report_section(True)}
-
-## fail:
-{self.report_section(False)}
-
-## by request name:
-{by_name}
-'''))
-
     def bombard(self):
         self.start()  # lock until queue is not empty
         self.stop()  # stop all threads
-        self.report()
+        print('\n' + '='*100)
+        print(markdown_for_terminal(self.reporter.report()) + '='*100, '\n')

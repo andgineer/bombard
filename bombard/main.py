@@ -8,7 +8,7 @@ from bombard.args import get_args
 
 
 log = logging.getLogger()
-logging.basicConfig(format='%(asctime)s - %(message)s')
+logging.basicConfig(format='%(asctime)s %(message)s', datefmt='%-d %b %H:%M:%S')  # %a weekday abbr
 
 
 def guess_type(s: str):

@@ -27,7 +27,7 @@ def pretty_ns(elapsed_ns: int):
         'us': 1,
         'mks': 1000,
         'ms': 1000,
-        's': 1000,
+        'sec': 1000,
         'minutes': 60,
         'hours': 60,
         'days': 24

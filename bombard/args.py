@@ -6,15 +6,15 @@ import os.path
 from bombard.terminal_colours import red, BROWN, OFF
 import argparse
 import bombard
-from bombard.show_descr import show_descr
+from bombard.show_descr import markdown_for_terminal
 # from pkg_resources import resource_string
 
 
 EXAMPLES_PREFIX = 'bombard://'  # replaced with path to package folder
 DIR_DESC_FILE_NAME = 'README.md'  # if directory as campaign file then show content of this file from the directory
-THREADS_NUM = 100
+THREADS_NUM = 10
 CAMPAIGN_FILE_NAME = 'bombard.yaml'
-REPEAT = 100
+REPEAT = 10
 THRESHOLD = 1000
 TIMEOUT = 10
 
@@ -32,10 +32,10 @@ def expand_relative_file_name(file_name):
 
 def get_args():
     parser = argparse.ArgumentParser(
-        description=show_descr(f'''bombard: utility to bombard with HTTP-requests.
+        description=markdown_for_terminal(f'''bombard: utility to bombard with HTTP-requests.
 
 {BROWN}[GitHub](https://github.com/masterandrey/bombard){OFF}'''),
-        epilog=show_descr('''To show available examples use `bombard --examples`''')
+        epilog=markdown_for_terminal('''To show available examples use `bombard --examples`''')
     )
     parser.add_argument(
         dest='file_name', type=str, nargs='?',
@@ -115,7 +115,7 @@ to list all available examples use `--examples`.'''
                 print(name)
         else:
             print(f'\n{args.file_name}:\n')
-            print(show_descr(open(file_name, 'r').read()))
+            print(markdown_for_terminal(open(file_name, 'r').read()))
     print(args.file_name)
 
     if not os.path.isfile(args.file_name):
