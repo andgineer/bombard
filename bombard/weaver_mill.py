@@ -49,7 +49,7 @@ class WeaverMill:
         """
         Implement your job processor, runs in thread.
 
-        :param thread_id: just sequencial number of the thread we work into
+        :param thread_id: just sequential number of the thread we work into
         :param job: job from queue
         """
         pass
@@ -59,7 +59,7 @@ class WeaverMill:
         self.queue.join()
 
     def stop(self):
-        """ Stops all theads - send stop signal to queue """
+        """ Stops all threads - send stop signal to queue and lock until they stop """
         for _ in range(self.threads_num):
             self.queue.put(None)
         for thread in self.threads:
