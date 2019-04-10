@@ -39,7 +39,7 @@ class Bombardier(WeaverMill):
         """
         :param args.threads: number of threads to use to request
         """
-        self.supply = supply
+        self.supply = supply if supply is not None else {}
         self.args = args
         self.campaign = campaign_book
         self.ok = ok_statuses if ok_statuses is not None else DEFAULT_OK
@@ -177,7 +177,7 @@ class Bombardier(WeaverMill):
                   + ' ' + (red(resp) if status == EXCEPTION_STATUS else '')
             )
         except Exception as e:
-            log.info(pretty_url + ' ' + red(str(e)))
+            log.info(pretty_url + ' ' + red(str(e)), exc_info=True)
 
     def reload(self, requests, repeat=None, **kwargs):
         """

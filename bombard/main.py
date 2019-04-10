@@ -26,7 +26,7 @@ def guess_type(value: str):
     return value
 
 
-def setup_logging(level: int, log_file_name: Optional[str]):
+def setup_logging(level: int, log_file_name: Optional[str] = None):
     log.setLevel(level)
     if log_file_name is not None:
         log.addHandler(
