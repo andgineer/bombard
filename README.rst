@@ -1,7 +1,7 @@
 Bombard
 =======
 
-|build_status| |pypi_version| |pypi_license|
+|build_status| |pypi_version| |pypi_license| |readthedocs|
 
 Bombards target server with simultaneous requests 
 to reveal any problems under the stress.
@@ -27,4 +27,8 @@ line (see ``--help``).
 .. |pypi_license| image:: https://img.shields.io/pypi/l/bombard.svg?style=flat-square
     :target: https://pypi.python.org/pypi/bombard
     :alt: MIT license
+
+.. |readthedocs| image:: https://readthedocs.org/projects/bombard/badge/?version=latest
+:target: https://bombard.readthedocs.io/en/latest/?badge=latest
+:alt: Documentation Status
 
