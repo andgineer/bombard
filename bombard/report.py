@@ -9,14 +9,23 @@ from bombard.pretty_ns import time_ns, pretty_ns
 from array import array
 import statistics
 from bombard.pretty_sz import pretty_sz
+from typing import Optional
+from bombard.terminal_colours import red
 
 
 class Reporter:
     """
     Report bombard's result
     """
-    def __init__(self):
+    def __init__(self, time_units: Optional[str] = None, time_threshold_ms: Optional[int] = None):
+        """
+        :param time_units: fix all time in the units (see names in pretty_ns)
+        :param time_threshold_ms: show times bigger than that in red
+        """
         self.start_ns = time_ns()
+
+        self.time_units = time_units
+        self.time_threshold_ns = time_threshold_ms * 10**6
 
         self.stat_success_time = array('Q')
         self.stat_fail_time = array('Q')
@@ -54,15 +63,21 @@ class Reporter:
         """ How many responses added to the reporter """
         return len(self.stat_success_time) + len(self.stat_fail_time)
 
-    @staticmethod
-    def report_dimension(a: array):
+    def report_dimension(self, a: array):
         if len(a) == 0:
             return '`...no requests...`'
         return ', '.join([
-            f'Mean: {pretty_ns(statistics.mean(a))}',
-            f'min: {pretty_ns(min(a))}',
-            f'max: {pretty_ns(max(a))}',
+            f'Mean: {self.pretty_ns(statistics.mean(a))}',
+            f'min: {self.pretty_ns(min(a))}',
+            f'max: {self.pretty_ns(max(a))}',
         ])
+
+    def pretty_ns(self, elapsed_ns: int):
+        result = pretty_ns(elapsed_ns, self.time_units)
+        if elapsed_ns > self.time_threshold_ns:
+            return red(result)
+        else:
+            return result
 
     def report_section(self, success: bool):
         if success:
@@ -81,10 +96,11 @@ class Reporter:
             by_name.append(f'### {name}\n' + self.report_dimension(stat))
         by_name = '\n\n'.join(by_name)
         size_sum = sum(self.stat_success_size) + sum(self.stat_fail_size)
-        elapsed_sec = self.total_elapsed_ns / (10 ** 9)
+        total_ns = self.total_elapsed_ns
+        elapsed_sec = total_ns / (10 ** 9)
         total_line = ' '.join([
             f'Got `{self.count}` responses',
-            f'in `{pretty_ns(self.total_elapsed_ns)}`,',
+            f'in `{self.pretty_ns(total_ns)}`,',
             f'`{round(self.count / elapsed_sec)} op/sec`,',
             f'{pretty_sz(size_sum)},',
             f'{pretty_sz(size_sum // elapsed_sec) if elapsed_sec > 0 else 0}/sec',

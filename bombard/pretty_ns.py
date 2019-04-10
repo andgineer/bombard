@@ -22,7 +22,7 @@ time_ns = None  # for Python3.7+ this is function from system library time
 # for earlier Python versions this is emulation of the Python3.7 time_ns
 
 
-def pretty_ns(elapsed_ns: int):
+def pretty_ns(elapsed_ns: int, fixed_units=None):
     dividers = {
         'us': 1,
         'mks': 1000,
@@ -35,7 +35,7 @@ def pretty_ns(elapsed_ns: int):
     result = elapsed_ns
     for unit, divider in dividers.items():
         result /= divider
-        if result < 100:
+        if result < 100 or unit.lower() == fixed_units:
             return f'{result:.1f} {unit}'
         else:
             result = round(result)

@@ -9,6 +9,7 @@ from bombard.pretty_ns import time_ns
 from bombard.show_descr import markdown_for_terminal
 from bombard.http_request import http_request, EXCEPTION_STATUS
 from bombard import request_logging
+from collections import Mapping
 
 
 log = logging.getLogger()
@@ -50,7 +51,10 @@ class Bombardier(WeaverMill):
         self.show_response = {
             1: 'Got 1st response..'
         }
-        self.reporter = Reporter()
+        self.reporter = Reporter(
+            time_units=('ms' if args.ms else None),
+            time_threshold_ms=int(args.threshold)
+        )
 
         super().__init__()
 
@@ -133,19 +137,27 @@ class Bombardier(WeaverMill):
         Thread callable.
         Strike ammo from queue.
         """
-        ammo_id = ammo['id']
-        request = ammo['request']
-        ammo_name = request.get('name', '')
+        # setup logging ASAP and as safe as possible
+        if isinstance(ammo, Mapping):
+            request = ammo.get('request', {})
+            ammo_id = ammo.get('id', '')
+            ammo_name = request.get('name', '')
+        else:
+            request = {}
+            ammo_id = None
+            ammo_name = None
         request_logging.sending(thread_id, ammo_id, ammo_name)
-        ammo = apply_supply(ammo, dict(self.supply, **ammo['supply']))
-
-        url = request.get('url', '')
-        method = request['method'] if 'method' in request else 'GET'
-        body = json.dumps(request['body']) if 'body' in request else None
-        headers = self.get_headers(request)
-        pretty_url = self.beautify_url(url, method, body)
+        pretty_url = ''  # we use it in `except`
         try:
-            log.debug(f'Bomb to drop:\n{pretty_url}\n{body}')
+            ammo = apply_supply(ammo, dict(self.supply, **ammo['supply']))
+
+            url = request.get('url', '')
+            method = request['method'] if 'method' in request else 'GET'
+            body = json.dumps(request['body']) if 'body' in request else None
+            headers = self.get_headers(request)
+            pretty_url = self.beautify_url(url, method, body)
+
+            log.debug(f'Bomb to drop:\n{pretty_url}' + ('\n{body}' if body is not None else ''))
             if self.args.quiet:
                 if ammo_id in self.show_request:
                     print(f'{self.show_request[ammo_id].format(id=ammo_id):>15}\r', end='')
