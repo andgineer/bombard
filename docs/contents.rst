@@ -1,41 +1,12 @@
-bombard your app
-================
-Bombard is a pure Python application to bombard with
-hundreds of HTTP-requests.
+bombard
+=======
 
-This is tool for stress-testing with extremely simple
-configuration.
-
-You write requests in simple yaml-file (`bombard campaign book`).
-And can include a couple of Python lines in it.
-
-If you need more logic you can include external Python file and debug
-it in your IDE.
-
-The simplest (but not very useful) example
-
-   ammo:
-      postsList:
-         url: "https://jsonplaceholder.typicode.com/posts"
-
-More complex example
-
-   supply:  # you can redefine it from command line (--supply)
-     host: https://jsonplaceholder.typicode.com/
-   prepare:
-     postsList:
-       url: "{host}posts"
-       script: |
-         for post in resp[:3]:  # add getPost requests for 1st ten posts in the list
-           reload(ammo.getPost, id=post['id'])
-   ammo:
-     getPost:
-       url: "{host}posts/{id}"
-       headers: json
 
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
+
+   index
 
 
 

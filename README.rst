@@ -29,6 +29,6 @@ line (see ``--help``).
     :alt: MIT license
 
 .. |readthedocs| image:: https://readthedocs.org/projects/bombard/badge/?version=latest
-:target: https://bombard.readthedocs.io/en/latest/?badge=latest
-:alt: Documentation Status
+    :target: https://bombard.readthedocs.io/en/latest/?badge=latest
+    :alt: Documentation Status
 
