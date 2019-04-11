@@ -38,9 +38,10 @@ More complex example
        headers: json
 
 Example above is included into bombard internal examples that you can use with
-option `--example` like that::
+option `--example` like that (we also set repeatition number to 2 and
+threshhold to color in red to 100ms)::
 
-    python3 -m bombard.main --example simple --repeat 2 --threshold 100
+    bombard --example simple --repeat 2 --threshold 100
 
 And you will get something like this:
 
