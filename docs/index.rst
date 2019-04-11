@@ -37,6 +37,13 @@ More complex example
        url: "{host}posts/{id}"
        headers: json
 
+Example above is included into bombard internal examples that you can use with
+option `--example` like that::
+
+    python3 -m bombard.main --example simple --repeat 2 --threshold 100
+
+And you will get something like this:
+
 .. image:: _static/simple_stdout.png
 
 Source code: `GitHub <https://github.com/masterandrey/bombard/>`_.
