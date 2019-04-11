@@ -38,12 +38,14 @@ More complex example
        headers: json
 
 Example above is included into bombard internal examples that you can use with
-option `--example` like that (we also set repeatition number to 2 and
-threshhold to color in red to 100ms)::
+option `--example` like that::
 
     bombard --example simple --repeat 2 --threshold 100
 
-And you will get something like this:
+Above we also set repetition number to 2 and threshold to 100ms
+so anything equal and above that will be in red.
+
+You will get something like this:
 
 .. image:: _static/simple_stdout.png
 
