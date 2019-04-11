@@ -14,11 +14,15 @@ it in your IDE.
 
 The simplest (but not very useful) example
 
+.. code-block:: yaml
+
    ammo:
       postsList:
          url: "https://jsonplaceholder.typicode.com/posts"
 
 More complex example
+
+.. code-block:: yaml
 
    supply:  # you can redefine it from command line (--supply)
      host: https://jsonplaceholder.typicode.com/
@@ -33,6 +37,8 @@ More complex example
        url: "{host}posts/{id}"
        headers: json
 
+[github](https://github.com/masterandrey/bombard)
+
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
@@ -40,7 +46,7 @@ More complex example
 
 
 Indices and tables
-------------------
+==================
 
 * :ref:`genindex`
 * :ref:`modindex`

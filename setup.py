@@ -18,7 +18,7 @@ setuptools.setup(
     description="Bombards target server with simultaneous requests",
     long_description=long_description,
     long_description_content_type="text/x-rst",
-    url="https://github.com/masterandrey/bombard",
+    url="https://bombard.readthedocs.io/en/latest/",
     packages=setuptools.find_packages(),
     include_package_data=True,
     install_requires=[
