@@ -24,6 +24,7 @@ class FakeArgs:
     ms = False
     threshold = 1000
     quiet = False
+    dry = False
 
 
 class TestHttpRequests(unittest.TestCase):
