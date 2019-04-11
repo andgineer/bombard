@@ -98,10 +98,19 @@ class Bombardier(WeaverMill):
             if 'extract' in request:
                 try:
                     data = json.loads(resp)
-                    for name, val in request['extract'].items():
-                        if not val:
-                            val = name
-                        self.supply[name] = data[val]
+                    if not hasattr(request['extract'], 'items'):
+                        request['extract'] = {request['extract']: request['extract']}
+                    for name, extractor in request['extract'].items():
+                        if not extractor:
+                            extractor = name
+                        if '[' in extractor:
+                            self.supply[name] = eval('data' + extractor)
+                        else:
+                            self.supply[name] = data[extractor]
+                    if not isinstance(request['reload'], list):
+                        request['reload'] = [request['reload']]
+                    for ammo in request['reload']:
+                        self.reload(self.campaign['ammo'][ammo])
                 except Exception as e:
                     log.error(f'Cannot extract {request["extract"]} from {resp}:\n{e}', exc_info=True)
             if 'script' in request:
@@ -164,7 +173,10 @@ class Bombardier(WeaverMill):
             log.info(pretty_url)
 
             start_ns = time_ns()
-            status, resp = http_request(url, method, headers, body, self.args.timeout)
+            if self.args.dry:
+                status, resp = self.ok[0], json.dumps(request.get('dry'))
+            else:
+                status, resp = http_request(url, method, headers, body, self.args.timeout)
 
             request_logging.receiving()
 

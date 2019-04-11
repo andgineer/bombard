@@ -89,6 +89,10 @@ to list all available examples use `--examples`.'''
         '--examples', '-x', dest='examples', default=False, action='store_true',
         help=f'''show all available examples description.'''
     )
+    parser.add_argument(
+        '--dry', '-d', dest='dry', default=False, action='store_true',
+        help=f'without actual HTTP requests. if there is "dry" parameter in an ammo use it as fake request result.'
+    )
 
     args = parser.parse_args()
 

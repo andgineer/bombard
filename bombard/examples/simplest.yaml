@@ -1,0 +1,13 @@
+supply:  # you can redefine it from command line (--supply)
+  host: https://jsonplaceholder.typicode.com/
+prepare:
+  postsList:
+    url: "{host}posts"  # use {host} from global supply
+    extract:  # what to extract and place to global supply
+      id: "[0]['id']"
+    reload: getPost  # schedule getPost request after this one
+    dry: [id: 1]  # result of postsList if --dry mode
+ammo:
+  getPost:
+    url: "{host}posts/{id}"  # use {host} and {id} from global supply
+    headers: json

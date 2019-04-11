@@ -11,6 +11,7 @@ import statistics
 from bombard.pretty_sz import pretty_sz
 from typing import Optional
 from bombard.terminal_colours import red
+from collections import Sequence
 
 
 class Reporter:
@@ -90,10 +91,13 @@ class Reporter:
                 return '`...no fails...`'
         return self.report_dimension(stat)
 
+    def parenthesized(self, seq: Sequence):
+        return '(' + str(len(seq)) + ')' if seq else ''
+
     def report(self):
         by_name = []
         for name, stat in self.stat_by_name.items():
-            by_name.append(f'### {name}\n' + self.report_dimension(stat))
+            by_name.append(f'### {name} {self.parenthesized(stat)}\n' + self.report_dimension(stat))
         by_name = '\n\n'.join(by_name)
         size_sum = sum(self.stat_success_size) + sum(self.stat_fail_size)
         total_ns = self.total_elapsed_ns
@@ -107,10 +111,10 @@ class Reporter:
         ])
         return f'''{total_line}
         
-## success:
+## success {self.parenthesized(self.stat_success_time)}
 {self.report_section(True)}
 
-## fail:
+## fail {self.parenthesized(self.stat_fail_time)}
 {self.report_section(False)}
 
 ## by request name:
