@@ -15,6 +15,8 @@ Please see ``examples/`` it's pretty straightforward and is commented.
 You can change number of threads, requests file name and vars from command
 line (see ``--help``).
 
+`Documentation on Read the Docs <https://bombard.readthedocs.io/en/latest/>`_
+
 
 .. |build_status| image:: https://travis-ci.org/masterandrey/bombard.png
     :target: https://travis-ci.org/masterandrey/bombard
