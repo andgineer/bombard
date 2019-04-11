@@ -6,6 +6,7 @@ import logging
 from bombard.weaver_mill import WeaverMill
 from bombard.report import Reporter
 from bombard.pretty_ns import time_ns
+from bombard.pretty_sz import pretty_sz
 from bombard.show_descr import markdown_for_terminal
 from bombard.http_request import http_request, EXCEPTION_STATUS
 from bombard import request_logging
@@ -55,6 +56,7 @@ class Bombardier(WeaverMill):
             time_units=('ms' if args.ms else None),
             time_threshold_ms=int(args.threshold)
         )
+        request_logging.pretty_ns = self.reporter.pretty_ns
 
         super().__init__()
 
@@ -125,7 +127,9 @@ class Bombardier(WeaverMill):
                         'supply': supply,
                         'ammo': AttrDict(self.campaign['ammo'])
                     }
-                    exec(request["script"], context)
+                    if 'compiled' not in request:
+                        request['compiled'] = compile(request['script'], 'script', 'exec')
+                    exec(request['compiled'], context)
                 except Exception as e:
                     log.error(f'Script fail\n{e}\n\n{request["script"]}\n\n{supply}\n', exc_info=True)
         else:
@@ -146,50 +150,53 @@ class Bombardier(WeaverMill):
         Thread callable.
         Strike ammo from queue.
         """
-        # setup logging ASAP and as safe as possible
-        if isinstance(ammo, Mapping):
-            request = ammo.get('request', {})
-            ammo_id = ammo.get('id', '')
-            ammo_name = request.get('name', '')
-        else:
-            request = {}
-            ammo_id = None
-            ammo_name = None
-        request_logging.sending(thread_id, ammo_id, ammo_name)
-        pretty_url = ''  # we use it in `except`
         try:
-            ammo = apply_supply(ammo, dict(self.supply, **ammo['supply']))
-
-            url = request.get('url', '')
-            method = request['method'] if 'method' in request else 'GET'
-            body = json.dumps(request['body']) if 'body' in request else None
-            headers = self.get_headers(request)
-            pretty_url = self.beautify_url(url, method, body)
-
-            log.debug(f'Bomb to drop:\n{pretty_url}' + ('\n{body}' if body is not None else ''))
-            if self.args.quiet:
-                if ammo_id in self.show_request:
-                    print(f'{self.show_request[ammo_id].format(id=ammo_id):>15}\r', end='')
-            log.info(pretty_url)
-
-            start_ns = time_ns()
-            if self.args.dry:
-                status, resp = self.ok[0], json.dumps(request.get('dry'))
+            # setup logging ASAP and as safe as possible
+            if isinstance(ammo, Mapping):
+                request = ammo.get('request', {})
+                ammo_id = ammo.get('id', '')
+                ammo_name = request.get('name', '')
             else:
-                status, resp = http_request(url, method, headers, body, self.args.timeout)
+                request = {}
+                ammo_id = None
+                ammo_name = None
+            request_logging.sending(thread_id, ammo_id, ammo_name)
+            pretty_url = ''  # we use it in `except`
+            try:
+                ammo = apply_supply(ammo, dict(self.supply, **ammo['supply']))
 
-            request_logging.receiving()
+                url = request.get('url', '')
+                method = request['method'] if 'method' in request else 'GET'
+                body = json.dumps(request['body']) if 'body' in request else None
+                headers = self.get_headers(request)
+                pretty_url = self.beautify_url(url, method, body)
 
-            self.process_resp(ammo, status, resp, time_ns() - start_ns, len(resp))
+                log.debug(f'Bomb to drop:\n{pretty_url}' + ('\n{body}' if body is not None else ''))
+                if self.args.quiet:
+                    if ammo_id in self.show_request:
+                        print(f'{self.show_request[ammo_id].format(id=ammo_id):>15}\r', end='')
+                log.info(pretty_url)
 
-            if self.args.quiet:
-                if ammo_id in self.show_response:
-                    print(f'{self.show_response[ammo_id].format(id=ammo_id):>15}\r', end='')
-            log.info(self.status_coloured(status) + ' ' + pretty_url
-                  + ' ' + (red(resp) if status == EXCEPTION_STATUS else '')
-            )
-        except Exception as e:
-            log.info(pretty_url + ' ' + red(str(e)), exc_info=True)
+                start_ns = time_ns()
+                if self.args.dry:
+                    status, resp = self.ok[0], json.dumps(request.get('dry'))
+                else:
+                    status, resp = http_request(url, method, headers, body, self.args.timeout)
+
+                request_logging.receiving()
+
+                self.process_resp(ammo, status, resp, time_ns() - start_ns, len(resp))
+
+                if self.args.quiet:
+                    if ammo_id in self.show_response:
+                        print(f'{self.show_response[ammo_id].format(id=ammo_id):>15}\r', end='')
+                log.info(self.status_coloured(status) + f' ({pretty_sz(len(resp))}) ' + pretty_url
+                        + ' ' + (red(resp) if status == EXCEPTION_STATUS else '')
+                )
+            except Exception as e:
+                log.info(pretty_url + ' ' + red(str(e)), exc_info=True)
+        finally:
+            request_logging.main_thread()
 
     def reload(self, requests, repeat=None, **kwargs):
         """
@@ -220,5 +227,11 @@ class Bombardier(WeaverMill):
     def bombard(self):
         self.start()  # lock until queue is not empty
         self.stop()  # stop all threads
-        print('\n' + '='*100)
-        print(markdown_for_terminal(self.reporter.report()) + '='*100, '\n')
+        log.warning(
+            '\n'
+            + '='*100
+            + '\n'
+            + markdown_for_terminal(self.reporter.report())
+            + '='*100
+            + '\n'
+        )

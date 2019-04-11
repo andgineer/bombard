@@ -6,9 +6,7 @@ from bombard.bombardier import Bombardier
 import logging
 from bombard.args import get_args
 from typing import Optional
-
-
-log = logging.getLogger()
+from bombard.request_logging import setup_logging, log
 
 
 def guess_type(value: str):
@@ -24,14 +22,6 @@ def guess_type(value: str):
     except ValueError:
         pass
     return value
-
-
-def setup_logging(level: int, log_file_name: Optional[str] = None):
-    log.setLevel(level)
-    if log_file_name is not None:
-        log.addHandler(
-            logging.FileHandler(log_file_name)
-        )
 
 
 def get_supply_from_cli(supply: Optional[list]):
@@ -66,7 +56,7 @@ def add_names_to_requests(campaign_book):
 
 def campaign(args):
     if args.quiet:
-        level = logging.ERROR
+        level = logging.WARNING
     elif args.verbose:
         level = logging.DEBUG
     else:
