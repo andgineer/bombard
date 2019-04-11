@@ -37,7 +37,10 @@ More complex example
        url: "{host}posts/{id}"
        headers: json
 
-[github](https://github.com/masterandrey/bombard)
+.. image:: _static/simple_stdout.png
+
+Source code: `GitHub <https://github.com/masterandrey/bombard/>`_.
+
 
 .. toctree::
    :maxdepth: 2
