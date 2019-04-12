@@ -1,13 +1,17 @@
-bombard your app
+bombard your API
 ================
+
+Introduction
+------------
+
 Bombard is a pure Python application to bombard with
 hundreds of HTTP-requests.
 
-This is tool for stress-testing with extremely simple
+This is a tool for stress-testing with extremely simple
 configuration.
 
-You write requests in simple yaml-file (`bombard campaign book`).
-And can include a couple of Python lines in it.
+You write requests in simple yaml-file (``bombard campaign book``).
+And you can use a couple of Python lines in it.
 
 If you need more logic you can include external Python file and debug
 it in your IDE.
@@ -38,7 +42,7 @@ More complex example
        headers: json
 
 Example above is included into bombard internal examples that you can use with
-option `--example` like that::
+option ``--example`` like that::
 
     bombard --example simple --repeat 2 --threshold 100
 
@@ -49,12 +53,17 @@ You will get something like this:
 
 .. image:: _static/simple_stdout.png
 
-Source code: `GitHub <https://github.com/masterandrey/bombard/>`_.
+Source code
+-----------
+
+`GitHub <https://github.com/masterandrey/bombard/>`_.
 
 
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
+
+   quickstart.rst
 
 
 
