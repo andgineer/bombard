@@ -1,5 +1,5 @@
 """
-Parse bombard command line args
+Parse bombard command line args.
 """
 import sys
 import os.path
@@ -14,20 +14,10 @@ EXAMPLES_PREFIX = 'bombard://'  # replaced with path to package folder
 DIR_DESC_FILE_NAME = 'README.md'  # if directory as campaign file then show content of this file from the directory
 THREADS_NUM = 10
 CAMPAIGN_FILE_NAME = 'bombard.yaml'
+INIT_EXAMPLE = 'easy.yaml'
 REPEAT = 10
 THRESHOLD = 1000
 TIMEOUT = 10
-
-
-def expand_relative_file_name(file_name):
-    """
-    Replace RELATIVE_PREFIX with package folder so bombard script can use internal examples without full path spec
-    """
-    if file_name.strip().startswith(EXAMPLES_PREFIX):
-        # resource_string(__name__, args.file_name[1:])  # recommended use resource to be zipfile compatible. but this is a pain for !include
-        return os.path.join(os.path.dirname(bombard.__file__), 'examples', file_name[len(EXAMPLES_PREFIX):])
-    else:
-        return file_name
 
 
 def get_args():
@@ -91,41 +81,18 @@ to list all available examples use `--examples`.'''
     )
     parser.add_argument(
         '--dry', '-d', dest='dry', default=False, action='store_true',
-        help=f'without actual HTTP requests. if there is "dry" parameter in an ammo use it as fake request result.'
+        help=f'run without actual HTTP requests. if there is "dry" parameter in an ammo use it as fake request result.'
+    )
+    parser.add_argument(
+        '--init', '-i', dest='init', default=False, action='store_true',
+        help=f'''copy `{INIT_EXAMPLE}` example to current folder with the name {CAMPAIGN_FILE_NAME} 
+so it will be used as default with `bombard` command. If you want to copy different example add option
+`--example <the name you want>`. For full list of examples use `--examples` option.
+'''
     )
 
     args = parser.parse_args()
-
-    if args.example is not None:
-        if args.file_name != CAMPAIGN_FILE_NAME:
-            print(red(f'--example option found - ignoring campaign file name "{args.file_name}".'))
-        args.file_name = EXAMPLES_PREFIX + args.example
-        if not args.file_name.endswith('.yaml'):
-            args.file_name += '.yaml'
-    if args.examples:
-        if args.file_name != CAMPAIGN_FILE_NAME:
-            print(red(f'--examples option found - ignoring campaign file name "{args.file_name}".'))
-        if args.example is not None:
-            print(red('Please do not use --example and --examples options simultaneously.'))
-        args.file_name = EXAMPLES_PREFIX
-
-    args.file_name = expand_relative_file_name(args.file_name)
-
-    if os.path.isdir(args.file_name):
-        file_name = os.path.join(args.file_name, DIR_DESC_FILE_NAME)
-        if not os.path.isfile(file_name):
-            print(f'\nNo {DIR_DESC_FILE_NAME} in folder {args.file_name}. \nFolder content:\n')
-            for name in os.listdir(args.file_name):
-                print(name)
-        else:
-            print(f'\n{args.file_name}:\n')
-            print(markdown_for_terminal(open(file_name, 'r').read()))
-    print(args.file_name)
-
-    if not os.path.isfile(args.file_name):
-        print(red(f'\nCannot find campaign file "{args.file_name}"\n'))
-        parser.print_help(sys.stderr)
-        exit(1)
+    args.parser = parser
 
     return args
 
