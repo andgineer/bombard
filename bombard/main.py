@@ -4,14 +4,14 @@ Bombard's main
 from bombard.campaign_yaml import yaml
 from bombard.bombardier import Bombardier
 import logging
-from bombard.args import get_args, CAMPAIGN_FILE_NAME, INIT_EXAMPLE
+from bombard.args import get_args, CAMPAIGN_FILE_NAME, INIT_EXAMPLE, EXAMPLES_PREFIX
 from typing import Optional
 from bombard.request_logging import setup_logging, log
 import os.path
 from shutil import copyfile
 from bombard.expand_file_name import get_campaign_file_name, show_folder, expand_relative_file_name
 import sys
-from bombard.terminal_colours import red
+from bombard.terminal_colours import red, RED, OFF
 
 
 def guess_type(value: str):
@@ -64,47 +64,23 @@ def init(args):
     Copies the example to current folder as bombard.yaml
     """
     if args.example is None:
-        src = expand_relative_file_name(f'bombard://{INIT_EXAMPLE}')
+        src = expand_relative_file_name(f'{EXAMPLES_PREFIX}{INIT_EXAMPLE}')
     else:
         src = get_campaign_file_name(args)  # actually it will be from ==example
     if os.path.isfile(CAMPAIGN_FILE_NAME):
-        log.error(f'File {CAMPAIGN_FILE_NAME} already exists.')
-        exit(1)
+        print(f'Cannot init from {src}:\n{RED}File {CAMPAIGN_FILE_NAME} already exists.{OFF}')
+        return
     copyfile(src, CAMPAIGN_FILE_NAME)
     #todo copy external python scripts if it is included into the example (create yaml CopyLoader)
 
 
-def campaign(args):
-    if args.quiet:
-        level = logging.WARNING
-    elif args.verbose:
-        level = logging.DEBUG
-    else:
-        level = logging.INFO
-
-    setup_logging(level=level, log_file_name=args.log)
-
-    if args.init:
-        init(args)
-        exit(0)
-
+def start_campaign(args, campaign_file_name):
     log.debug(f'Starting bombard campaign with args\n' + ' '*4 + f'{args.__dict__}')
-    campaign_file_name = get_campaign_file_name(args)
-
-    if os.path.isdir(campaign_file_name):
-        show_folder(campaign_file_name)
-        exit(0)
-
-    supply = get_supply_from_cli(args.supply)
-
-    if not os.path.isfile(campaign_file_name) and not args.init:
-        print(red(f'\nCannot find campaign file "{args.file_name}"\n'))
-        args.parser.print_help(sys.stderr)
-        exit(1)
 
     campaign_book = yaml.load(open(campaign_file_name, 'r'))
     log.debug(f'Loaded bombard campaign from "{args.file_name}": {len(campaign_book["ammo"])} ammo.')
 
+    supply = get_supply_from_cli(args.supply)
     load_book_supply(supply, campaign_book.get('supply', {}))
     log.debug(f'Supply: {supply}')
 
@@ -120,6 +96,29 @@ def campaign(args):
     for ammo in requests.values():
         bombardier.reload(ammo, repeat=repeat)
     bombardier.bombard()
+
+
+def campaign(args):
+    if args.quiet:
+        level = logging.WARNING
+    elif args.verbose:
+        level = logging.DEBUG
+    else:
+        level = logging.INFO
+
+    setup_logging(level=level, log_file_name=args.log)
+
+    if args.init:
+        init(args)
+        return
+
+    campaign_file_name = get_campaign_file_name(args)
+    if os.path.isdir(campaign_file_name):
+        show_folder(campaign_file_name)
+    elif not os.path.isfile(campaign_file_name) and not args.init:
+        print(red(f'\nCannot find campaign file "{args.file_name}"\n'))
+    else:
+        start_campaign(args, campaign_file_name)
 
 
 def main():

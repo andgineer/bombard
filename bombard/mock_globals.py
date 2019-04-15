@@ -7,7 +7,7 @@ That defines globals so you have valid code and code autocomplete in your IDE ed
 All strings with `bombard.examples.mock_globals` will be automatically removed before running bombard scripts.
 """
 from bombard.campaign_yaml import yaml
-from bombard.args import expand_relative_file_name
+from bombard.expand_file_name import expand_relative_file_name
 import os.path  # we use it to simplify import lines in examples
 
 

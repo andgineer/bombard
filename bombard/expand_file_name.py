@@ -41,6 +41,7 @@ def show_folder(folder_path):
             print(name)
     else:
         print(f'\n{folder_path}:\n')
-        print(markdown_for_terminal(open(file_name, 'r').read()))
+        with open(file_name, 'r') as desc:
+            print(markdown_for_terminal(desc.read()))
 
 

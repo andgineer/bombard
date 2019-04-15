@@ -4,6 +4,7 @@ from bombard import bombardier
 from bombard import http_request
 from bombard.main import setup_logging
 import logging
+from tests.fake_args import FakeArgs
 
 
 TEST_AMMO = {
@@ -16,15 +17,6 @@ TEST_AMMO = {
     'name': 'request',
     'supply': {},
 }
-
-
-class FakeArgs:
-    threads = 1
-    timeout = 3
-    ms = False
-    threshold = 1000
-    quiet = False
-    dry = False
 
 
 class TestHttpRequests(unittest.TestCase):
