@@ -6,8 +6,8 @@
   install:
     - python3 -m pip install -r requirements.txt
   script:
-    - python3 -m unittest discover --start-directory bombard --verbose
+    - python3 -m unittest discover --start-directory tests --verbose
     - rm -rf bombard/__pycache__
-    - python3 -m doctest -v bombard/*.py
+    - python3 -m doctest -v bombard/*.py tests/*.py
   after_success:
     - coveralls
