@@ -1,8 +1,8 @@
 """
 Capture stdout and stderr.
 
-Since Python 3.4 they have (redirect_stdout, redirect_stderr) in contextlib
-but my context manager is simpler to use.
+Since Python 3.4 we have redirect_std* in contextlib.
+But I still prefer my context manager as simpler to use.
 
 Usage:
 >>> with CaptureOutput() as captured:

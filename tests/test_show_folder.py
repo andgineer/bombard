@@ -3,7 +3,6 @@ import unittest
 from bombard.main import campaign
 from tests.fake_args import FakeArgs
 from bombard.args import INIT_EXAMPLE, DIR_DESC_FILE_NAME, CAMPAIGN_FILE_NAME
-import os.path
 from bombard.show_descr import markdown_for_terminal
 
 
