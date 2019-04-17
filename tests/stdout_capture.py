@@ -29,20 +29,20 @@ class CaptureOutput:
     @property
     def stdout(self):
         if self.capture:
-            return self.out.getvalue().strip()
+            return self.out.getvalue()
         else:
             return ''
 
     @property
     def stderr(self):
         if self.capture:
-            return self.err.getvalue().strip()
+            return self.err.getvalue()
         else:
             return ''
 
     @property
     def output(self):
-        return self.stdout + self.stderr
+        return '\n'.join([self.stdout, self.stderr])
 
     def __exit__(self, *args):
         if self.capture:
