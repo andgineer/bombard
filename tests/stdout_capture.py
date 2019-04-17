@@ -6,7 +6,7 @@ but my context manager is simpler to use.
 
 Usage:
 >>> with CaptureOutput() as captured:
-...     print('3')
+...     print('3', end='')
 >>> captured.output
 '3'
 """
@@ -42,7 +42,10 @@ class CaptureOutput:
 
     @property
     def output(self):
-        return '\n'.join([self.stdout, self.stderr])
+        if self.stderr:
+            return '\n'.join([self.stdout, self.stderr])
+        else:
+            return self.stdout
 
     def __exit__(self, *args):
         if self.capture:
