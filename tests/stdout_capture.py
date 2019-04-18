@@ -28,25 +28,33 @@ class CaptureOutput:
 
     @property
     def stdout(self):
-        if self.capture:
+        if self.capture and self.out.getvalue():
             return self.out.getvalue()
         else:
-            return ''
+            return None
 
     @property
     def stderr(self):
-        if self.capture:
+        if self.capture and self.err.getvalue():
             return self.err.getvalue()
         else:
-            return ''
+            return None
 
     @property
     def output(self):
-        if self.stderr:
+        """ stdout and strerr separated by new line """
+        if self.stdout is not None and self.stderr is not None:
             return '\n'.join([self.stdout, self.stderr])
-        else:
+        elif self.stdout is not None:
             return self.stdout
+        else:
+            return self.stderr
 
     def __exit__(self, *args):
         if self.capture:
             sys.stdout, sys.stderr = self.old_out, self.old_err
+
+
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod()
