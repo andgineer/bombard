@@ -9,6 +9,10 @@ Usage:
 ...     print('3', end='')
 >>> captured.output
 '3'
+
+>>> with CaptureOutput(capture=False) as captured:
+...     captured.output is None
+True
 """
 import sys
 from io import StringIO
