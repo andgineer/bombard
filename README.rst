@@ -3,10 +3,25 @@ Bombard
 
 |build_status| |pypi_version| |pypi_license| |readthedocs|
 
-Bombards target server with simultaneous requests 
-to reveal any problems under the stress.
+Bombard is a tool for stress test and benchmarking your HTTP server.
+It is designed to give you an impression of how your server
+performs under stress.
 
-Install with pip
+This especially shows you how many requests per second your server
+is capable of serving and with what latency.
+
+Also it can be used for load test functional behavior and measure
+performance. Thanks to Python scripts includes
+you can implement complex logic for the tests.
+
+Especially it's good to simulate a heavy load and initial burst of
+simultaneous HTTP requests with complex logic.
+
+Requests description are extremely simple yaml declarations with
+optional Python inlines.
+
+Installation
+------------
 
 .. code-block:: bash
 
@@ -18,14 +33,17 @@ After that use ``bombard`` (``bombard.exe`` in Windows) executable:
 
     bombard --help
 
-Requests can contain JSON described in yaml file like this
+Requests description
+--------------------
+
+Requests can be just URL or contain JSON described like this
 
 .. code-block:: yaml
 
     getToken:
-        url: "{base}auth"
+        url: "{base}auth"  # use custom {base} variable to stay DRY
         method: POST
-        body:
+        body:  # below is JSON object for request body
             email: name@example.com
             password: admin
         extract:  # get token for next requests
@@ -33,16 +51,18 @@ Requests can contain JSON described in yaml file like this
 
 In first request you can get security token as in example above.
 
-And use it in next requests. Python in-line supported:
+And use it in next requests:
 
 .. code-block:: yaml
 
      postsList:
         url: "{host}posts"
         headers:
-            Authorization: "Bearer {token}"
+            Authorization: "Bearer {token}"  # we get {token} in 1st request
         script: |
-            for post in resp[:3]:  # add getPost requests for 1st ten posts in the list
+            for post in resp[:3]:  # for 1st three posts from response
+                # schedule getPost request (from ammo section)
+                # and provide it with id we got from the response
                 reload(ammo.getPost, id=post['id'])
 
 Included examples. To list examples
@@ -51,8 +71,19 @@ Included examples. To list examples
 
     bombard --examples
 
+Command line
+------------
+
 From command line you can change number of threads, loop count,
 supply vars, customize report and so on.
+
+Also you can bootstrap your own ``bombard.yaml`` file from any example you
+like::
+
+    bombard --init --example simple
+
+Report
+------
 
 Example of report for the command::
 
