@@ -56,7 +56,7 @@ supply vars, customize report and so on.
 
 Example of report:
 
-.. image:: _static/simple_stdout.png
+.. image:: docs/_static/simple_stdout.png
 
 Documentation
 -------------
