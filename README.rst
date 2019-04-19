@@ -6,16 +6,61 @@ Bombard
 Bombards target server with simultaneous requests 
 to reveal any problems under the stress.
 
-Requests can contain JSON described in yaml file.
+Install with pip
 
-You can get security token before bombarding and use the token in requests.
+.. code-block:: bash
 
-Please see ``examples/`` it's pretty straightforward and is commented.
+    pip install bombard --upgrade
 
-You can change number of threads, requests file name and vars from command
-line (see ``--help``).
+After that use ``bombard`` (``bombard.exe`` in Windows) executable:
 
-`Documentation on Read the Docs <https://bombard.readthedocs.io/en/latest/>`_
+.. code-block:: bash
+
+    bombard --help
+
+Requests can contain JSON described in yaml file like this
+
+.. code-block:: yaml
+
+    getToken:
+        url: "{base}auth"
+        method: POST
+        body:
+            email: name@example.com
+            password: admin
+        extract:  # get token for next requests
+            token:
+
+In first request you can get security token as in example above.
+
+And use it in next requests. Python in-line supported:
+
+.. code-block:: yaml
+
+     postsList:
+        url: "{host}posts"
+        headers:
+            Authorization: "Bearer {token}"
+        script: |
+            for post in resp[:3]:  # add getPost requests for 1st ten posts in the list
+                reload(ammo.getPost, id=post['id'])
+
+Included examples. To list examples
+
+.. code-block:: bash
+
+    bombard --examples
+
+From command line you can change number of threads, loop count,
+supply vars, customize report and so on.
+
+Example of report:
+
+.. image:: _static/simple_stdout.png
+
+Documentation
+-------------
+`Bombard documentation <https://bombard.readthedocs.io/en/latest/>`_
 
 
 .. |build_status| image:: https://travis-ci.org/masterandrey/bombard.png
