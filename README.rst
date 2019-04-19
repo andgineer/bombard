@@ -54,7 +54,9 @@ Included examples. To list examples
 From command line you can change number of threads, loop count,
 supply vars, customize report and so on.
 
-Example of report:
+Example of report for the command::
+
+    bombard --example simple --repeat 2 --threshold 100
 
 .. image:: docs/_static/simple_stdout.png
 
