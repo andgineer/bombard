@@ -4,21 +4,17 @@ Bombard
 |build_status| |pypi_version| |pypi_license| |readthedocs|
 
 Bombard is a tool for stress test and benchmarking your HTTP server.
-It is designed to give you an impression of how your server
-performs under stress.
-
-This especially shows you how many requests per second your server
-is capable of serving and with what latency.
-
-Also it can be used for load test functional behavior and measure
-performance. Thanks to Python scripts includes
-you can implement complex logic for the tests.
-
 Especially it's good to simulate a heavy load and initial burst of
 simultaneous HTTP requests with complex logic.
 
-Requests description are extremely simple yaml declarations with
-optional Python inlines.
+It is designed to be extremely simple yet powerful tool to
+load test functional behavior.
+
+Thanks to optional Python inlines you can fast and easy describe
+complex logic for the tests.
+
+Test report shows you how many requests per second your server
+is capable of serving and with what latency.
 
 Installation
 ------------
