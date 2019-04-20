@@ -13,8 +13,8 @@ If you want to use specific Python version you can use something like that
 
     python3.7 -m pip install bombard --upgrade
 
-Quick start
------------
+Bootstrapping
+-------------
 
 To create template yaml file you place your requests in use command ``--init``.
 By default it copy example ``easy.yaml`` into the current folder, with the name

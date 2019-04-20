@@ -1,55 +1,77 @@
-bombard your API
-================
+bombard
+=======
 
 Introduction
 ------------
 
-Bombard is a pure Python application to bombard with
-hundreds of HTTP-requests.
+Bombard is a tool for stress test and benchmarking your HTTP server.
+Especially it's good to simulate a heavy load and initial burst of
+simultaneous HTTP requests with complex logic.
 
-This is a tool for stress-testing with extremely simple
-configuration.
+It is designed to be extremely simple yet powerful tool to
+load test functional behavior.
 
-You write requests in simple yaml-file (``bombard campaign book``).
-And you can use a couple of Python lines in it.
+Thanks to optional Python inlines you can fast and easy describe
+complex logic for the tests.
 
-If you need more logic you can include external Python file and debug
-it in your IDE.
+Test report shows you how many requests per second your server
+is capable of serving and with what latency.
 
-The simplest (but not very useful) example
+Requests description
+--------------------
 
-.. code-block:: yaml
-
-   ammo:
-      postsList:
-         url: "https://jsonplaceholder.typicode.com/posts"
-
-More complex example
+Requests can be just URL or contain JSON described like this
 
 .. code-block:: yaml
 
-   supply:  # you can redefine it from command line (--supply)
-     host: https://jsonplaceholder.typicode.com/
-   prepare:
+    getToken:
+        url: "{base}auth"  # use custom {base} variable to stay DRY
+        method: POST
+        body:  # below is JSON object for request body
+            email: name@example.com
+            password: admin
+        extract:  # get token for next requests
+            token:
+
+In first request you can get security token as in example above.
+
+And use it in next requests:
+
+.. code-block:: yaml
+
      postsList:
-       url: "{host}posts"
-       script: |
-         for post in resp[:3]:  # add getPost requests for 1st ten posts in the list
-           reload(ammo.getPost, id=post['id'])
-   ammo:
-     getPost:
-       url: "{host}posts/{id}"
-       headers: json
+        url: "{host}posts"
+        headers:
+            Authorization: "Bearer {token}"  # we get {token} in 1st request
+        script: |
+            for post in resp[:3]:  # for 1st three posts from response
+                # schedule getPost request (from ammo section)
+                # and provide it with id we got from the response
+                reload(ammo.getPost, id=post['id'])
 
-Example above is included into bombard internal examples that you can use with
-option ``--example`` like that::
+Included examples. To list examples
+
+.. code-block:: bash
+
+    bombard --examples
+
+Command line
+------------
+
+From command line you can change number of threads, loop count,
+supply vars, customize report and so on.
+
+Also you can bootstrap your own ``bombard.yaml`` file from any example you
+like::
+
+    bombard --init --example simple
+
+Report
+------
+
+Example of report for the command::
 
     bombard --example simple --repeat 2 --threshold 100
-
-Above we also set repetition number to 2 and threshold to 100ms
-so anything equal and above that will be in red.
-
-You will get something like this:
 
 .. image:: _static/simple_stdout.png
 
@@ -59,17 +81,12 @@ Source code
 `GitHub <https://github.com/masterandrey/bombard/>`_.
 
 
+Documentation
+-------------
+
 .. toctree::
-   :maxdepth: 2
-   :caption: Contents:
 
-   quickstart.rst
+   quickstart
+   campaign
+   report
 
-
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`

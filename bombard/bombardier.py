@@ -98,6 +98,12 @@ class Bombardier(WeaverMill):
             self.reporter.log(True, elapsed, request.get('name'), size)
             log.debug(f'{status} reply\n{resp}')
             if 'extract' in request:
+                #todo: auto fire ammo after prepare if no reload
+                # now extract option is not so useful - you extract something but do not add
+                # requests that use that. you cannot just have this requests in the same
+                # section because of unpredictable requests order
+                # so we wait prepare section scripts to finish and fire ammo section IF no reload
+                # was registered
                 try:
                     data = json.loads(resp)
                     if not hasattr(request['extract'], 'items'):
