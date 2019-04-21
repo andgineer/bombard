@@ -85,8 +85,11 @@ Documentation
 -------------
 
 .. toctree::
+   :glob:
+   :maxdepth: 3
 
-   quickstart
+   quickstart/install
+   quickstart/bootstrap
    campaign
    report
 

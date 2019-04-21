@@ -58,6 +58,12 @@ author = 'Andrey Sorokin'
 # built documents.
 #
 # The short X.Y version.
+import sys
+sys.path.insert(0, '../')
+import bombard
+version = bombard.version()
+
+
 version = '1.2'
 # The full version, including alpha/beta/rc tags.
 release = '1.2'
@@ -86,7 +92,7 @@ todo_include_todos = False
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = 'alabaster'
+html_theme = 'default'  #'alabaster'
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
