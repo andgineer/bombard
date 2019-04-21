@@ -5,7 +5,6 @@ prepare:
     url: "{host}posts"  # use {host} from global supply
     extract:  # what to extract and place to global supply
       id: "[0]['id']"
-    reload: getPost  # schedule getPost request after this one
     dry: [id: 1]  # result of postsList if --dry mode
 ammo:
   getPost:

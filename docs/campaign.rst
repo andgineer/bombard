@@ -100,17 +100,20 @@ Also you can use any custom indices you want like that
 
 so ``name: ['name']`` is the same as ``name:``.
 
+dry
+___
+
+If you run Bombard with ``--dry`` it do not make actual HTTP requests.
+And if you have ``dry`` section in request Bombard will use it as
+result of this ``dry`` request.
+
 prepare
 -------
 
-If campaign file has this section, Bombard will fire only requests from
-this section.
+If campaign file has this section, Bombard will start fire with requests
+from this section.
 
-Each request will be repeated ``--repeat`` times as defined in command line
-(or by default value for this option).
-
-And scripts in this section are responsible to fire scripts from ``ammo``
-section, like this
+Requests in this section can fire requests from ``ammo`` section, like this:
 
 .. code-block:: yaml
 
@@ -124,17 +127,26 @@ section, like this
 As you see above you can send some variable not only to global ``supply``
 but just to the request you fire.
 
+If ``prepare`` section did not fire any ``ammo`` requests, Bombard after
+``prepare`` will fire all requests from ``ammo`` section.
+
+That is, if you have only ``extract`` sections in ``prepare`` requests.
+Or if ``scripts`` in ``prepare`` requests do not call ``reload`` to fire
+requests from ``ammo``. Then Bombard will fire all ``ammo`` requests
+after ``prepare`` requests.
+
 ammo
 ----
 
-If campaign file do not have ``prepare`` section, Bombard will fire all requests
-from this section.
+If campaign file do not have ``prepare`` section, Bombard will just fire all
+requests from this section.
 
 Each request will be repeated ``--repeat`` times as defined in command line
 (or by default value for this option).
 
-Otherwise this requests should be fired from requests from ``prepare`` section
-as described above.
+Otherwise bombard will fire ``prepare`` section and after that if ``prepare``
+requests did not fire any requests from ``ammo``, bombard will fire all
+requests from ``ammo``.
 
 Example of ``ammo`` request for the request that you see in ``prepare``
 section:

@@ -23,3 +23,6 @@ class FakeArgs(AttrDict):
     init = False
     examples = False
     file_name = CAMPAIGN_FILE_NAME
+    version = False
+    supply={}
+    repeat=1

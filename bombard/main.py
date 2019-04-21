@@ -10,8 +10,8 @@ from bombard.request_logging import setup_logging, log
 import os.path
 from shutil import copyfile
 from bombard.expand_file_name import get_campaign_file_name, show_folder, expand_relative_file_name
-import sys
 from bombard.terminal_colours import red, RED, OFF
+import bombard
 
 
 def guess_type(value: str):
@@ -88,17 +88,26 @@ def start_campaign(args, campaign_file_name):
 
     bombardier = Bombardier(supply, args, campaign_book)
     if 'prepare' in campaign_book:
-        requests = campaign_book['prepare']
-        repeat = 1
+        for ammo in campaign_book['prepare'].values():
+            bombardier.reload(ammo, repeat=1, prepare=True)
+        bombardier.start()
+        if not bombardier.request_fired:  # no request fired anything so we have to fire ammo section by ourself
+            for ammo in campaign_book['ammo'].values():
+                bombardier.reload(ammo, repeat=args.repeat)
+        bombardier.bombard()
     else:
-        requests = campaign_book['ammo']
-        repeat = args.repeat
-    for ammo in requests.values():
-        bombardier.reload(ammo, repeat=repeat)
-    bombardier.bombard()
+        for ammo in campaign_book['ammo'].values():
+            bombardier.reload(ammo, repeat=args.repeat)
+        bombardier.bombard()
 
 
 def campaign(args):
+    if args.version:
+        print(bombard.__name__, bombard.version())
+        with open(os.path.join(os.path.dirname(bombard.__file__), 'LICENSE.txt'), 'r') as license:
+            print(license.readline())
+        return
+
     if args.quiet:
         level = logging.WARNING
     elif args.verbose:

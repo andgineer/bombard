@@ -51,6 +51,10 @@ To use bombard examples prefix filename with "@".'''
         help=f'verbose output (by default False)'
     )
     parser.add_argument(
+        '--version', dest='version', default=False, action='store_true',
+        help=f'bombard version'
+    )
+    parser.add_argument(
         '--log', '-l', dest='log', type=str, default=None,
         help=f'log file name'
     )

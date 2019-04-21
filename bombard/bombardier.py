@@ -45,6 +45,7 @@ class Bombardier(WeaverMill):
         self.campaign = campaign_book
         self.ok = ok_statuses if ok_statuses is not None else DEFAULT_OK
         self.overload = overload_statuses if overload_statuses is not None else DEFAULT_OVERLOAD
+        self.request_fired = False  # from any request reload() was called
 
         self.show_request = {
             1: 'Sent 1st request..'
@@ -98,12 +99,6 @@ class Bombardier(WeaverMill):
             self.reporter.log(True, elapsed, request.get('name'), size)
             log.debug(f'{status} reply\n{resp}')
             if 'extract' in request:
-                #todo: auto fire ammo after prepare if no reload
-                # now extract option is not so useful - you extract something but do not add
-                # requests that use that. you cannot just have this requests in the same
-                # section because of unpredictable requests order
-                # so we wait prepare section scripts to finish and fire ammo section IF no reload
-                # was registered
                 try:
                     data = json.loads(resp)
                     if not hasattr(request['extract'], 'items'):
@@ -115,10 +110,6 @@ class Bombardier(WeaverMill):
                             self.supply[name] = eval('data' + extractor)
                         else:
                             self.supply[name] = data[extractor]
-                    if not isinstance(request['reload'], list):
-                        request['reload'] = [request['reload']]
-                    for ammo in request['reload']:
-                        self.reload(self.campaign['ammo'][ammo])
                 except Exception as e:
                     log.error(f'Cannot extract {request["extract"]} from {resp}:\n{e}', exc_info=True)
             if 'script' in request:
@@ -204,14 +195,19 @@ class Bombardier(WeaverMill):
         finally:
             request_logging.main_thread()
 
-    def reload(self, requests, repeat=None, **kwargs):
+    def reload(self, requests, repeat=None, prepare=False, **kwargs):
         """
         Add request(s) to the bombardier queue `repeat`-times (args.repeat if None).
         If `repeat` field exists in the request additionally repeats as defined by it.
 
         Requests can be one request or list of requests.
-        If supply specified it'll be used in addition to self.supply
+        If supply specified it'll be used in addition to self.supply.
+
+        Arg `prepare` indicate call from main, not from request script.
+        So we know if any scripts call reload (self.script_fired)
         """
+        if not prepare:
+            self.request_fired = True
         if not isinstance(requests, list):
             requests = [requests]
         if repeat is None:

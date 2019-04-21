@@ -3,9 +3,7 @@ import setuptools
 with open("README.rst", "r") as fh:
     long_description = fh.read()
 
-import sys
-sys.path.insert(0, '../')
-import bombard
+import sys; sys.path.insert(0, '../'); import bombard
 
 setuptools.setup(
     name='bombard',
