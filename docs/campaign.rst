@@ -130,7 +130,7 @@ but just to the request you fire.
 If ``prepare`` section did not fire any ``ammo`` requests, Bombard after
 ``prepare`` will fire all requests from ``ammo`` section.
 
-That is, if you have only ``extract`` sections in ``prepare`` requests.
+So, if you have only ``extract`` sections in ``prepare`` requests.
 Or if ``scripts`` in ``prepare`` requests do not call ``reload`` to fire
 requests from ``ammo``. Then Bombard will fire all ``ammo`` requests
 after ``prepare`` requests.
