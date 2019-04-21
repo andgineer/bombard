@@ -3,10 +3,13 @@ import setuptools
 with open("README.rst", "r") as fh:
     long_description = fh.read()
 
+import sys
+sys.path.insert(0, '../')
+import bombard
 
 setuptools.setup(
     name='bombard',
-    version='1.6',
+    version=bombard.version(),
     # scripts=['bin/bombard'],
     entry_points={
         'console_scripts': [
