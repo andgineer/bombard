@@ -39,9 +39,6 @@ class Bombardier(WeaverMill):
     """
     def __init__(self, supply: dict=None, args=None, campaign_book: dict=None, ok_statuses=None,
                  overload_statuses=None):
-        """
-        :param args.threads: number of threads to use to request
-        """
         self.supply = supply if supply is not None else {}
         self.args = args
         self.campaign = campaign_book
@@ -61,7 +58,7 @@ class Bombardier(WeaverMill):
         )
         request_logging.pretty_ns = self.reporter.pretty_ns
 
-        super().__init__()
+        super().__init__(args.threads)
 
     def status_coloured(self, status: int) -> str:
         if status in self.ok:
@@ -137,11 +134,11 @@ class Bombardier(WeaverMill):
     @staticmethod
     def beautify_url(url, method, body):
         urlparts = urlparse(url)
-        path = urlparts.path if len(urlparts.path) < 15 else '...' + urlparts.path[:-15]
+        path = urlparts.path if len(urlparts.path) < 15 else '...' + urlparts.path[-15:]
         query = '?' + urlparts.query if urlparts.query else ''
         if urlparts.fragment:
             query += '#' + urlparts.fragment
-        query = query if len(query) < 15 else '?...' + query[:-15]
+        query = query if len(query) < 15 else '?...' + query[-15:]
         return f"""{method} {urlparts.netloc}{path}{query}"""
 
     def worker(self, thread_id, ammo):
@@ -228,9 +225,7 @@ class Bombardier(WeaverMill):
                         'supply': kwargs
                     })
 
-    def bombard(self):
-        self.start()  # lock until queue is not empty
-        self.stop()  # stop all threads
+    def report(self):
         log.warning(
             '\n'
             + '='*100

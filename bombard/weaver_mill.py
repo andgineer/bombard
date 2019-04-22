@@ -18,9 +18,8 @@ class WeaverMill:
         """
         self.threads_num = threads_num
         self.threads = []
-        self.queue = Queue(threads_num)
+        self.queue = Queue()
         self.job_count = 0
-
         for thread_id in range(threads_num):
             t = Thread(target=self.thread_worker, args=[thread_id])
             t.daemon = True
@@ -56,16 +55,19 @@ class WeaverMill:
         pass
 
     def put(self, job):
-        """ Add job to queue. To start processing jobs in queue use `start` """
+        """
+        Add job to queue.
+        To start processing use `process`.
+        """
         self.queue.put(job)
 
-    def start(self):
-        """ Starts all threads and lock until queue is not empty """
+    def process(self):
+        """ Starts all threads and lock until queue is empty """
         self.queue.join()
 
     def stop(self):
         """ Stops all threads - send stop signal to queue and lock until they stop """
-        for _ in range(self.threads_num):
+        for _ in range(len(self.threads)):
             self.queue.put(None)
         for thread in self.threads:
             thread.join()

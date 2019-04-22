@@ -92,14 +92,13 @@ def start_campaign(args, campaign_book):
     if PREPARE in campaign_book:
         for ammo in campaign_book[PREPARE].values():
             bombardier.reload(ammo, repeat=1, prepare=True)
-        bombardier.start()
-        if bombardier.request_fired:  # some request(s) fired something so no need to fire 'ammo'
-            return
-    if AMMO in campaign_book:
+        bombardier.process()
+    if not bombardier.request_fired and AMMO in campaign_book:
         for ammo in campaign_book[AMMO].values():
             bombardier.reload(ammo, repeat=args.repeat)
-        bombardier.bombard()
-
+        bombardier.process()
+    bombardier.stop()
+    bombardier.report()
 
 def campaign(args):
     if args.version:
