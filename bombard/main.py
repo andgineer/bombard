@@ -2,7 +2,7 @@
 Bombard's main
 """
 from bombard.campaign_yaml import yaml
-from bombard.bombardier import Bombardier
+from bombard.bombardier import Bombardier, AMMO, PREPARE
 import logging
 from bombard.args import get_args, CAMPAIGN_FILE_NAME, INIT_EXAMPLE, EXAMPLES_PREFIX
 from typing import Optional
@@ -53,7 +53,7 @@ def add_names_to_requests(campaign_book):
     """
     Duplicate names inside requests so worker will see it and use in stat report
     """
-    for request_set in ['prepare', 'ammo']:
+    for request_set in [PREPARE, AMMO]:
         if request_set in campaign_book:
             for name, request in campaign_book[request_set].items():
                 request['name'] = name
@@ -74,11 +74,13 @@ def init(args):
     #todo copy external python scripts if it is included into the example (create yaml CopyLoader)
 
 
-def start_campaign(args, campaign_file_name):
+def start_campaign(args, campaign_book):
     log.debug(f'Starting bombard campaign with args\n' + ' '*4 + f'{args.__dict__}')
-
-    campaign_book = yaml.load(open(campaign_file_name, 'r'))
-    log.debug(f'Loaded bombard campaign from "{args.file_name}": {len(campaign_book["ammo"])} ammo.')
+    log.debug(f'Loaded bombard campaign from "{args.file_name}": {len(campaign_book.get("ammo", {}))} ammo.')
+    if PREPARE not in campaign_book and AMMO not in campaign_book:
+        print(f'You should have at least one of "{PREPARE}" and "{AMMO}" '
+              f'section in your campaign file {args.file_name}')
+        return
 
     supply = get_supply_from_cli(args.supply)
     load_book_supply(supply, campaign_book.get('supply', {}))
@@ -87,16 +89,14 @@ def start_campaign(args, campaign_file_name):
     add_names_to_requests(campaign_book)
 
     bombardier = Bombardier(supply, args, campaign_book)
-    if 'prepare' in campaign_book:
-        for ammo in campaign_book['prepare'].values():
+    if PREPARE in campaign_book:
+        for ammo in campaign_book[PREPARE].values():
             bombardier.reload(ammo, repeat=1, prepare=True)
         bombardier.start()
-        if not bombardier.request_fired:  # no request fired anything so we have to fire ammo section by ourself
-            for ammo in campaign_book['ammo'].values():
-                bombardier.reload(ammo, repeat=args.repeat)
-        bombardier.bombard()
-    else:
-        for ammo in campaign_book['ammo'].values():
+        if bombardier.request_fired:  # some request(s) fired something so no need to fire 'ammo'
+            return
+    if AMMO in campaign_book:
+        for ammo in campaign_book[AMMO].values():
             bombardier.reload(ammo, repeat=args.repeat)
         bombardier.bombard()
 
@@ -127,7 +127,7 @@ def campaign(args):
     elif not os.path.isfile(campaign_file_name) and not args.init:
         print(red(f'\nCannot find campaign file "{args.file_name}"\n'))
     else:
-        start_campaign(args, campaign_file_name)
+        start_campaign(args, yaml.load(open(campaign_file_name, 'r')))
 
 
 def main():

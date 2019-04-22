@@ -17,6 +17,8 @@ log = logging.getLogger()
 
 DEFAULT_OK = [200]
 DEFAULT_OVERLOAD = [502, 504]
+PREPARE = 'prepare'
+AMMO = 'ammo'
 
 
 def apply_supply(request: dict, supply: dict) -> dict:
@@ -122,7 +124,7 @@ class Bombardier(WeaverMill):
                         'resp': json.loads(resp),
                         'args': self.args,
                         'supply': supply,
-                        'ammo': AttrDict(self.campaign['ammo'])
+                        'ammo': AttrDict(self.campaign[AMMO])
                     }
                     if 'compiled' not in request:
                         request['compiled'] = compile(request['script'], 'script', 'exec')
