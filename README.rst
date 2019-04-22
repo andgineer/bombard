@@ -89,7 +89,7 @@ Example of report for the command::
 
 Documentation
 -------------
-`Bombard documentation <https://bombard.masterandrey.com/en/latest/>`_
+`Bombard documentation <https://github.com/masterandrey/bombard/blob/master/docs/_static/simple_stdout.png>`_
 
 
 .. |build_status| image:: https://travis-ci.org/masterandrey/bombard.png
