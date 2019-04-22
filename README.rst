@@ -85,11 +85,11 @@ Example of report for the command::
 
     bombard --example simple --repeat 2 --threshold 100
 
-.. image:: docs/_static/simple_stdout.png
+.. image:: https://github.com/masterandrey/bombard/blob/master/docs/_static/simple_stdout.png?raw=true
 
 Documentation
 -------------
-`Bombard documentation <https://github.com/masterandrey/bombard/blob/master/docs/_static/simple_stdout.png>`_
+`Bombard documentation <https://bombard.masterandrey.com/en/latest/>`_
 
 
 .. |build_status| image:: https://travis-ci.org/masterandrey/bombard.png
