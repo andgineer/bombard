@@ -5,6 +5,12 @@ All sections are optional.
 But you need section ``prepare`` or ``ammo`` so Bombard will
 fire some requests.
 
+Anywhere you can user Python substitution ``{}`` like
+
+.. code-block:: python
+
+    repeat: {iters * 2}
+
 HTTP parameters
 ---------------
 

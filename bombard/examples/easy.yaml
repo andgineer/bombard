@@ -3,18 +3,21 @@ supply:  # you can redefine it from command line (--supply host=http://localhost
   iters: 2
 prepare:  # Get ids from lists
   postsList:
+    repeat: "{iters}"
     url: "{host}posts"
     headers: json
     script: |
       for post in resp[:supply.iters]:
         reload(ammo.getPost, id=post['id'])
   commentsList:
+    repeat: 1
     url: "{host}comments"
     headers: json
     script: |
       for comment in resp[:supply.iters]:
         reload(ammo.getComment, id=comment['id'])
   todosList:
+    repeat: "{iters}"
     url: "{host}todos"
     headers: json
     script: |
@@ -22,11 +25,14 @@ prepare:  # Get ids from lists
         reload(ammo.getTodo, id=todo['id'])
 ammo:  # Request resources by id we see in lists
   getPost:
+    repeat: "{iters*2}"
     url: "{host}posts/{id}"
     headers: json
   getComment:
+    repeat: "{iters*5}"
     url: "{host}comments/{id}"
     headers: json
   getTodo:
+    repeat: "{iters*2}"
     url: "{host}todos/{id}"
     headers: json

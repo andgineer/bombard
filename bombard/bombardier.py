@@ -21,16 +21,25 @@ PREPARE = 'prepare'
 AMMO = 'ammo'
 
 
-def apply_supply(request: dict, supply: dict) -> dict:
+def apply_supply(s: str, supply: dict) -> str:
+    if not isinstance(s, str):
+        return s
+    try:
+        return eval('f"""' + s + '"""', supply)
+    except Exception as e:
+        log.error(f'Cannot eval "{s}":\n{e}', exc_info=True)
+    return s
+
+
+def apply_supply_dict(request: dict, supply: dict) -> dict:
     """
     Use supply to substitute all {name} in request strings.
     """
-    #todo: use eval with supply and args context
     for name in request:
         if isinstance(request[name], dict):
+            request[name] = apply_supply_dict(request[name], supply)
+        elif isinstance(request[name], str):
             request[name] = apply_supply(request[name], supply)
-        if isinstance(request[name], str):
-            request[name] = request[name].format(**supply)
     return request
 
 
@@ -161,7 +170,7 @@ class Bombardier(WeaverMill):
             request_logging.sending(thread_id, ammo_id, ammo_name)
             pretty_url = ''  # we use it in `except`
             try:
-                ammo = apply_supply(ammo, dict(self.supply, **ammo['supply']))
+                ammo = apply_supply_dict(ammo, dict(self.supply, **ammo['supply']))
 
                 url = request.get('url', '')
                 method = request['method'] if 'method' in request else 'GET'
@@ -214,18 +223,21 @@ class Bombardier(WeaverMill):
         if repeat is None:
             repeat = self.args.repeat
         for request in requests:
-            for _ in range(repeat):
-                for __ in range(request.get('repeat', 1)):
-                    self.job_count += 1
-                    if self.job_count % self.args.threads == 0 \
-                            or self.job_count < self.args.threads and self.job_count % 10 == 0:
-                        # show each 10th response before queue is full and then each time it's full
-                        self.show_response[self.job_count] = f'Got {self.job_count} responses...'
-                    self.put({
-                        'id': self.job_count,
-                        'request': request,
-                        'supply': kwargs
-                    })
+            try:
+                _repeat = int(apply_supply(request['repeat'], self.supply))
+            except (ValueError, KeyError):
+                _repeat = repeat
+            for _ in range(_repeat):
+                self.job_count += 1
+                if self.job_count % self.args.threads == 0 \
+                        or self.job_count < self.args.threads and self.job_count % 10 == 0:
+                    # show each 10th response before queue is full and then each time it's full
+                    self.show_response[self.job_count] = f'Got {self.job_count} responses...'
+                self.put({
+                    'id': self.job_count,
+                    'request': request,
+                    'supply': kwargs
+                })
 
     def report(self):
         log.warning(

@@ -18,7 +18,7 @@ TEST_SUPPLY = {'a': '4'}
 
 class TestHttpRequests(unittest.TestCase):
     def testApplySupply(self):
-        self.assertEqual(bombardier.apply_supply(TEST_REQUEST_TEMPLATE, TEST_SUPPLY)['1']['2'], '4')
+        self.assertEqual(bombardier.apply_supply_dict(TEST_REQUEST_TEMPLATE, TEST_SUPPLY)['1']['2'], '4')
 
 
 if __name__ == '__main__':
