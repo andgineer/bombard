@@ -18,11 +18,17 @@ def http_request(url: str, method: str='GET', headers: Optional[dict]=None,
     try:
         url = urlparse(url)
         kwargs = {'timeout': timeout} if timeout is not None else {}
-        conn = http.client.HTTPSConnection(
-            url.netloc,
-            context=ssl._create_unverified_context(),
-            **kwargs,
-        )
+        if url.scheme.lower() == 'https':
+            conn = http.client.HTTPSConnection(
+                url.netloc,
+                context=ssl._create_unverified_context(),
+                **kwargs,
+            )
+        else:
+            conn = http.client.HTTPConnection(
+                url.netloc,
+                **kwargs,
+            )
         conn.request(
             method,
             url.path,
