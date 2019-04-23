@@ -25,6 +25,7 @@ def apply_supply(request: dict, supply: dict) -> dict:
     """
     Use supply to substitute all {name} in request strings.
     """
+    #todo: use eval with supply and args context
     for name in request:
         if isinstance(request[name], dict):
             request[name] = apply_supply(request[name], supply)
@@ -73,6 +74,7 @@ class Bombardier(WeaverMill):
         """
         Treat special value 'json' as Content-Type: application/json
         """
+        #todo: Auto add json if no header Content-Type and defined body
         predefined = {
             'json': {'Content-Type': 'application/json'},
         }

@@ -5,6 +5,28 @@ All sections are optional.
 But you need section ``prepare`` or ``ammo`` so Bombard will
 fire some requests.
 
+HTTP parameters
+---------------
+
+All HTTP parameters but URL are optional.
+
+.. code-block:: yaml
+
+    url: "{base}auth"  # fully specified URL
+    method: POST  # by default GET
+    body:  # below is JSON object for request body
+        email: name@example.com
+        password: admin
+    headers:
+      json:  # the same as Content-Type: "application/json"
+      Authorization: "Bearer {token}"
+
+repeat
+------
+
+Override ``--repeat`` command line option. Number of repetitions
+for the request.
+
 supply
 ------
 
