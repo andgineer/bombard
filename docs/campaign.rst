@@ -30,11 +30,6 @@ All HTTP parameters but URL are optional.
       json:  # the same as Content-Type: "application/json"
       Authorization: "Bearer {token}"
 
-repeat
-------
-
-Override ``--repeat`` command line option. Number of repetitions
-for the request.
 
 supply
 ------
@@ -63,6 +58,7 @@ If you need to, you can add other elements like that:
 .. code-block:: yaml
 
   getToken:  # Name of request by your choice
+    repeat: "{args.repeat * 2}"  # default - option --repeat
     url: "{base}auth"  # we use supply.base var
     method: POST  # by default GET
     body:  # JSON object for the request body
@@ -70,6 +66,12 @@ If you need to, you can add other elements like that:
       password: admin
     extract:  # extract from request result and add to supply
       token:
+
+repeat
+______
+
+Override ``--repeat`` command line option. Number of repetitions
+for the request.
 
 script
 ______
