@@ -95,6 +95,7 @@ class Reporter:
         return '(' + str(len(seq)) + ')' if seq else ''
 
     def report(self):
+        #todo: show separately fail/success for each request type
         by_name = []
         for name, stat in self.stat_by_name.items():
             by_name.append(f'### {name} {self.parenthesized(stat)}\n' + self.report_dimension(stat))

@@ -22,6 +22,7 @@ AMMO = 'ammo'
 
 
 def apply_supply(s: str, supply: dict) -> str:
+    #todo: add args
     if not isinstance(s, str):
         return s
     try:
@@ -50,11 +51,13 @@ class Bombardier(WeaverMill):
     def __init__(self, supply: dict=None, args=None, campaign_book: dict=None, ok_statuses=None,
                  overload_statuses=None):
         self.supply = supply if supply is not None else {}
+        self.supply['args'] = args
         self.args = args
         self.campaign = campaign_book
         self.ok = ok_statuses if ok_statuses is not None else DEFAULT_OK
         self.overload = overload_statuses if overload_statuses is not None else DEFAULT_OVERLOAD
         self.request_fired = False  # from any request reload() was called
+        self.resp_count = 0
 
         self.show_request = {
             1: 'Sent 1st request..'
@@ -194,9 +197,10 @@ class Bombardier(WeaverMill):
 
                 self.process_resp(ammo, status, resp, time_ns() - start_ns, len(resp))
 
+                self.resp_count += 1
                 if self.args.quiet:
-                    if ammo_id in self.show_response:
-                        print(f'{self.show_response[ammo_id].format(id=ammo_id):>15}\r', end='')
+                    if self.resp_count in self.show_response:
+                        print(f'{self.show_response[self.resp_count].format(id=self.resp_count):>15}\r', end='')
                 log.info(self.status_coloured(status) + f' ({pretty_sz(len(resp))}) ' + pretty_url
                         + ' ' + (red(resp) if status == EXCEPTION_STATUS else '')
                 )
@@ -214,7 +218,7 @@ class Bombardier(WeaverMill):
         If supply specified it'll be used in addition to self.supply.
 
         Arg `prepare` indicate call from main, not from request script.
-        So we know if any scripts call reload (self.script_fired)
+        So we know if any scripts call reload (self.request_fired)
         """
         if not prepare:
             self.request_fired = True

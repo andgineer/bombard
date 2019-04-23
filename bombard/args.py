@@ -17,7 +17,7 @@ CAMPAIGN_FILE_NAME = 'bombard.yaml'
 INIT_EXAMPLE = 'easy.yaml'
 REPEAT = 10
 THRESHOLD = 1000
-TIMEOUT = 10
+TIMEOUT = 15
 
 
 def get_args():
