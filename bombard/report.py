@@ -105,7 +105,7 @@ class Reporter:
         elapsed_sec = total_ns / (10 ** 9)
         total_line = ' '.join([
             f'Got `{self.count}` responses',
-            f'in `{self.pretty_ns(total_ns)}`,',
+            f'in `{pretty_ns(total_ns)}`,',
             f'`{round(self.count / elapsed_sec)} op/sec`,',
             f'{pretty_sz(size_sum)},',
             f'{pretty_sz(size_sum // elapsed_sec) if elapsed_sec > 0 else 0}/sec',

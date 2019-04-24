@@ -1,7 +1,16 @@
 #!/usr/bin/env bash
 #
-# map transifex to po-file
+# (Re)create po file for translation in locale/ru_RU
 #
+
+# 1st create pot in _build/gettext
+make gettext
+
+# now create po-files with sphinx-intl
+sudo pip3 install sphinx-intl
+sphinx-intl update -p _build/gettext -l ru_RU
+
+# map transifex to po-file
 TRANSIFEX_PROJECT=bombard
 tx config mapping-bulk \
     --project $TRANSIFEX_PROJECT \
