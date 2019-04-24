@@ -1,6 +1,9 @@
 bombard
 =======
 
+`Русский <https://bombard.masterandrey.com/ru/latest/>`_
+--------------------------------------------------------
+
 Introduction
 ------------
 
@@ -78,7 +81,7 @@ Example of report for the command::
 Source code
 -----------
 
-`GitHub <https://github.com/masterandrey/bombard/>`_.
+`GitHub <https://github.com/masterandrey/bombard/>`_
 
 
 Documentation
