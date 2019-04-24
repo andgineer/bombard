@@ -1,6 +1,3 @@
-bombard
-=======
-
 Translation: `Русский <https://bombard.masterandrey.com/ru/latest/>`_
 ---------------------------------------------------------------------
 
