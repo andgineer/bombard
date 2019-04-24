@@ -90,11 +90,12 @@ class Bombardier(WeaverMill):
             'json': {'Content-Type': 'application/json'},
         }
         if 'headers' in request and isinstance(request['headers'], str):
+            # if headers in request description just a string we know this should be some predefined code
             for known in predefined:
                 if request['headers'].lower() == known:
                     return predefined[known]
         result = {}
-        for name, val in request['headers'].items():
+        for name, val in request.get('headers', {}).items():
             for known in predefined:
                 if name.lower() == known:
                     result.update(predefined[known])

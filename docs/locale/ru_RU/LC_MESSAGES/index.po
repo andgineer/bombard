@@ -1,10 +1,11 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) 2019, Andrey Sorokin
 # This file is distributed under the same license as the bombard package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2019.
-#
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
 # Translators:
 # Andrey Sorokin <filbert@yandex.ru>, 2019
+# 
 #, fuzzy
 msgid ""
 msgstr ""
@@ -13,16 +14,12 @@ msgstr ""
 "POT-Creation-Date: 2019-04-24 16:39+0300\n"
 "PO-Revision-Date: 2019-04-24 08:49+0000\n"
 "Last-Translator: Andrey Sorokin <filbert@yandex.ru>, 2019\n"
-"Language: ru_RU\n"
-"Language-Team: Russian (Russia) "
-"(https://www.transifex.com/masterAndrey/teams/98400/ru_RU/)\n"
-"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
-"n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) "
-"|| (n%100>=11 && n%100<=14)? 2 : 3)\n"
+"Language-Team: Russian (Russia) (https://www.transifex.com/masterAndrey/teams/98400/ru_RU/)\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.6.0\n"
+"Language: ru_RU\n"
+"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);\n"
 
 #: ../../index.rst:2
 msgid "Translation: `Русский <https://bombard.masterandrey.com/ru/latest/>`_"
@@ -38,29 +35,29 @@ msgid ""
 "Especially it's good to simulate a heavy load and initial burst of "
 "simultaneous HTTP requests with complex logic."
 msgstr ""
-"Bombard - это инструмент для стресс-тестирования вашего HTTP-сервера. С "
-"его помощью легко и быстро описывать логику формирования запросов."
+"Bombard - это инструмент для стресс-тестирования вашего HTTP-сервера. С его "
+"помощью легко и быстро описывать логику формирования запросов."
 
 #: ../../index.rst:11
 msgid ""
 "It is designed to be extremely simple yet powerful tool to load test "
 "functional behavior."
 msgstr ""
-"Он разработан, чтобы быть простым, но мощным инструментом для "
-"нагрузочного функционального тестирования."
+"Он разработан, чтобы быть простым, но мощным инструментом для нагрузочного "
+"функционального тестирования."
 
 #: ../../index.rst:14
 msgid ""
 "Thanks to optional Python inlines you can fast and easy describe complex "
 "logic for the tests."
 msgstr ""
-"Благодаря возможности исплоьзовать фрагменты кода Python вы можете легко "
-"и быстро описать сложную логику для тестов."
+"Благодаря возможности исплоьзовать фрагменты кода Python вы можете легко и "
+"быстро описать сложную логику для тестов."
 
 #: ../../index.rst:17
 msgid ""
-"Test report shows you how many requests per second your server is capable"
-" of serving and with what latency."
+"Test report shows you how many requests per second your server is capable of"
+" serving and with what latency."
 msgstr ""
 "Отчет о тестировании показывает, сколько запросов в секунду способен "
 "обслуживать ваш сервер и с какой задержкой."
@@ -91,19 +88,19 @@ msgstr "Командная строка"
 
 #: ../../index.rst:61
 msgid ""
-"From command line you can change number of threads, loop count, supply "
-"vars, customize report and so on."
+"From command line you can change number of threads, loop count, supply vars,"
+" customize report and so on."
 msgstr ""
 "Из командной строки вы можете изменить количество потоков, количество "
 "повторов, переопределить пемеренные, настроить вид отчета и так далее."
 
 #: ../../index.rst:64
 msgid ""
-"Also you can bootstrap your own ``bombard.yaml`` file from any example "
-"you like::"
+"Also you can bootstrap your own ``bombard.yaml`` file from any example you "
+"like::"
 msgstr ""
-"Также вы можете загрузить свой собственный файл ``bombard.yaml`` из "
-"любого понравившегося вам примера "
+"Также вы можете загрузить свой собственный файл ``bombard.yaml`` из любого "
+"понравившегося вам примера "
 
 #: ../../index.rst:70
 msgid "Report"
@@ -119,12 +116,8 @@ msgstr "Исходный код"
 
 #: ../../index.rst:81
 msgid "`GitHub <https://github.com/masterandrey/bombard/>`_"
-msgstr ""
+msgstr "`GitHub <https://github.com/masterandrey/bombard/>`_"
 
 #: ../../index.rst:85
 msgid "Documentation"
 msgstr "Документация"
-
-#~ msgid "bombard"
-#~ msgstr "bombard"
-

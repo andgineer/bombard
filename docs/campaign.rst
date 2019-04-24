@@ -61,11 +61,17 @@ If you need to, you can add other elements like that:
     repeat: "{args.repeat * 2}"  # default - option --repeat
     url: "{base}auth"  # we use supply.base var
     method: POST  # by default GET
+    headers: json  # shortcut for Content-Type: application/json
     body:  # JSON object for the request body
       email: admin@example.com
       password: admin
     extract:  # extract from request result and add to supply
       token:
+
+Bombard automatically adds ``application/json`` to headers if in
+the request some JSON body specified.
+If you need another ``Content-Type`` specification just add it to
+``headers`` section and it will redefine that default.
 
 repeat
 ______
