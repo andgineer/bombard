@@ -2,25 +2,25 @@
 host = https://www.transifex.com
 
 [bombard._build_gettext_report]
-file_filter = locales/<lang>/LC_MESSAGES/report.po
+file_filter = locale/<lang>/LC_MESSAGES/report.po
 source_file = _build/gettext/report.pot
 source_lang = en
 type = PO
 
 [bombard._build_gettext_campaign]
-file_filter = locales/<lang>/LC_MESSAGES/campaign.po
+file_filter = locale/<lang>/LC_MESSAGES/campaign.po
 source_file = _build/gettext/campaign.pot
 source_lang = en
 type = PO
 
 [bombard._build_gettext_quickstart]
-file_filter = locales/<lang>/LC_MESSAGES/quickstart.po
+file_filter = locale/<lang>/LC_MESSAGES/quickstart.po
 source_file = _build/gettext/quickstart.pot
 source_lang = en
 type = PO
 
 [bombard._build_gettext_index]
-file_filter = locales/<lang>/LC_MESSAGES/index.po
+file_filter = locale/<lang>/LC_MESSAGES/index.po
 source_file = _build/gettext/index.pot
 source_lang = en
 type = PO

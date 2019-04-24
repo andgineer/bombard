@@ -9,5 +9,5 @@ tx config mapping-bulk \
     --source-file-dir _build/gettext \
     --source-lang en \
     --type PO \
-    --expression 'locales/<lang>/LC_MESSAGES/{filepath}/{filename}.po' \
+    --expression 'locale/<lang>/LC_MESSAGES/{filepath}/{filename}.po' \
     --execute
