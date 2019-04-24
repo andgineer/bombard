@@ -82,17 +82,14 @@ class Bombardier(WeaverMill):
             return red(str(status))
 
     @staticmethod
-    def get_headers(request: dict) -> dict:
+    def get_headers(request: dict, body_is_json: bool) -> dict:
         """
         Treat special value 'json' as Content-Type: application/json
         """
-        #todo: Auto add json if no header Content-Type and defined body
         predefined = {
             'json': {'Content-Type': 'application/json'},
         }
-        if 'headers' not in request:
-            return {}
-        if isinstance(request['headers'], str):
+        if 'headers' in request and isinstance(request['headers'], str):
             for known in predefined:
                 if request['headers'].lower() == known:
                     return predefined[known]
@@ -104,6 +101,8 @@ class Bombardier(WeaverMill):
                     break
             else:
                 result.update({name: val})
+        if body_is_json and 'Content-Type' not in result:
+            result.update(predefined['json'])
         return result
 
     def process_resp(self, ammo: dict, status: int, resp: str, elapsed: int, size: int):
@@ -178,7 +177,7 @@ class Bombardier(WeaverMill):
                 url = request.get('url', '')
                 method = request['method'] if 'method' in request else 'GET'
                 body = json.dumps(request['body']) if 'body' in request else None
-                headers = self.get_headers(request)
+                headers = self.get_headers(request, body is not None)
                 pretty_url = self.beautify_url(url, method, body)
 
                 log.debug(f'Bomb to drop:\n{pretty_url}' + ('\n{body}' if body is not None else ''))

@@ -1,8 +1,8 @@
 bombard
 =======
 
-`Русский <https://bombard.masterandrey.com/ru/latest/>`_
---------------------------------------------------------
+Translation: `Русский <https://bombard.masterandrey.com/ru/latest/>`_
+---------------------------------------------------------------------
 
 Introduction
 ------------

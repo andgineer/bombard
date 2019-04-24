@@ -1,7 +1,7 @@
 Bombard
 =======
 
-|build_status| |pypi_version| |pypi_license| |readthedocs|
+|made_with_python| |build_status| |pypi_version| |pypi_license| |readthedocs|
 
 Bombard is a tool for stress test and benchmarking your HTTP server.
 Especially it's good to simulate a heavy load and initial burst of
@@ -91,6 +91,7 @@ Documentation
 -------------
 `Bombard documentation <https://bombard.masterandrey.com/en/latest/>`_
 
+Translation managed with `Transifex <https://www.transifex.com/masterAndrey/bombard/translate>`_
 
 .. |build_status| image:: https://travis-ci.org/masterandrey/bombard.png
     :target: https://travis-ci.org/masterandrey/bombard
@@ -108,3 +109,6 @@ Documentation
     :target: https://bombard.readthedocs.io/en/latest/?badge=latest
     :alt: Documentation Status
 
+.. |made_with_python| image:: https://img.shields.io/badge/Made%20with-Python-1f425f.svg
+    :target: https://www.python.org/
+    :alt: Made with Python
