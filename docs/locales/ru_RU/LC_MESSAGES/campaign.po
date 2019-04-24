@@ -1,0 +1,299 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2019, Andrey Sorokin
+# This file is distributed under the same license as the bombard package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
+# Translators:
+# Andrey Sorokin <filbert@yandex.ru>, 2019
+# 
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: bombard 1.16\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-04-23 16:51+0300\n"
+"PO-Revision-Date: 2019-04-24 08:49+0000\n"
+"Last-Translator: Andrey Sorokin <filbert@yandex.ru>, 2019\n"
+"Language-Team: Russian (Russia) (https://www.transifex.com/masterAndrey/teams/98400/ru_RU/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ru_RU\n"
+"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);\n"
+
+#: ../../campaign.rst:2
+msgid "Campaign file"
+msgstr "Файл кампании"
+
+#: ../../campaign.rst:3
+msgid "All sections are optional."
+msgstr "Все разделы не являются обязательными."
+
+#: ../../campaign.rst:5
+msgid ""
+"But you need section ``prepare`` or ``ammo`` so Bombard will fire some "
+"requests."
+msgstr ""
+"Но вам нужен раздел ``prepare`` или ``ammo``, так что Bombard выполнит "
+"несколько запросов."
+
+#: ../../campaign.rst:8
+msgid "Anywhere you can user Python expressions ``{}`` like"
+msgstr "Везде, где вы можете использовать выражения Python ``{}`` как"
+
+#: ../../campaign.rst:14
+msgid ""
+"Command line arguments available as ``args`` in this expressions. All supply"
+" variables - as globals."
+msgstr ""
+"Аргументы командной строки доступны как ``args`` в этих выражениях. Все "
+"переменные предложения - как глобальные."
+
+#: ../../campaign.rst:18
+msgid "HTTP parameters"
+msgstr "Параметры HTTP"
+
+#: ../../campaign.rst:20
+msgid "All HTTP parameters but URL are optional."
+msgstr "Все параметры HTTP, кроме URL, являются необязательными."
+
+#: ../../campaign.rst:35
+msgid "supply"
+msgstr "supply"
+
+#: ../../campaign.rst:37
+msgid ""
+"Variables you use like ``{name}`` in your requests. Also you can (re)define "
+"this variable using ``--supply`` like::"
+msgstr ""
+"Переменные, которые вы используете как ``{имя}`` в своих запросах. Также вы "
+"можете (пере) определить эту переменную используя ``--supply`` наподобие "
+
+#: ../../campaign.rst:42
+msgid "Also you can (re)define it from requests."
+msgstr "Также вы можете (пере) определить его из запросов."
+
+#: ../../campaign.rst:44
+msgid ""
+"If you have ``extract`` section in a request description, it will (re)define"
+" ``supply`` variable with the name from this section."
+msgstr ""
+"Если в описании запроса есть раздел ``extract``, он (пере) определит "
+"переменную ``supply`` с именем из этого раздела."
+
+#: ../../campaign.rst:47
+msgid "And ``script`` section in request also can (re)define variables."
+msgstr "Раздел ``script`` в запросе также может (пере) определять переменные."
+
+#: ../../campaign.rst:50
+msgid "Request description"
+msgstr "Описание запроса"
+
+#: ../../campaign.rst:52
+msgid ""
+"You use this descriptions in sections ``prepare`` and ``ammo`` described "
+"below."
+msgstr ""
+"Вы используете это описание в разделах ``prepare`` и ``ammo``, описанных "
+"ниже."
+
+#: ../../campaign.rst:55
+msgid ""
+"Each request should have ``URL`` and basically that's it. If you need to, "
+"you can add other elements like that:"
+msgstr ""
+"Каждый запрос должен иметь ``URL`` и в принципе этого достаточно. Если вам "
+"нужно, вы можете добавить другие элементы, например:"
+
+#: ../../campaign.rst:71
+msgid "repeat"
+msgstr "repeat"
+
+#: ../../campaign.rst:73
+msgid ""
+"Override ``--repeat`` command line option. Number of repetitions for the "
+"request."
+msgstr ""
+"Переопределить ``--repeat`` параметр командной строки. Количество повторений"
+" для запроса."
+
+#: ../../campaign.rst:77
+msgid "script"
+msgstr "script"
+
+#: ../../campaign.rst:79
+msgid ""
+"In request you can add section ``script`` with Python3 code. It runs after "
+"request."
+msgstr ""
+"В запросе вы можете добавить раздел ``script`` с кодом Python3. Он "
+"запускается после запроса."
+
+#: ../../campaign.rst:82
+msgid ""
+"It can use ``supply`` object and fire requests with ``reload`` function. "
+"Requests definitions from ``ammo`` section available as "
+"``ammo.request_name``."
+msgstr ""
+"Он может использовать объект ``supply`` и запускать запросы с функцией "
+"``reload``. Запрашивает определения из раздела ``ammo``, доступные как "
+"``ammo.request_name``."
+
+#: ../../campaign.rst:85
+msgid "Response to the request is available in ``resp`` object."
+msgstr "Ответ на запрос доступен в объекте ``resp``."
+
+#: ../../campaign.rst:87
+msgid ""
+"In example below we fire requests ``getPost`` from ``ammo`` section for 1st "
+"three posts we get in the response:"
+msgstr ""
+"В приведенном ниже примере мы запускаем запросы ``getPost`` из раздела "
+"``ammo`` для первых трех постов, которые мы получаем в ответе:"
+
+#: ../../campaign.rst:95
+msgid "Also you can place Python code to separate file and use it like this:"
+msgstr ""
+"Также вы можете поместить код Python в отдельный файл и использовать его "
+"следующим образом:"
+
+#: ../../campaign.rst:101
+msgid ""
+"If you add this line it mocks all necessary objects and you can use code "
+"autocomplete in your IDE:"
+msgstr ""
+"Если вы добавите эту строку, она проверяет все необходимые объекты, и вы "
+"можете использовать автозаполнение кода в вашей IDE:"
+
+#: ../../campaign.rst:111
+msgid "extract"
+msgstr "extract"
+
+#: ../../campaign.rst:113
+msgid ""
+"Instead of script you can use section ``extract`` in request. It can contain"
+" map of ``name: extract`` pairs. For each pair Bombard will (re)define "
+"``supply`` var with name ``name`` with value extracted from the request "
+"response as ``['extract']``."
+msgstr ""
+"Вместо скрипта вы можете использовать раздел ``extract`` в запросе. Может "
+"содержать карту пар ``name: extract``. Для каждой пары Bombard будет (пере) "
+"определять ``supply`` var с именем ``name`` со значением, извлеченным из "
+"ответа на запрос как ``['extract']``."
+
+#: ../../campaign.rst:124
+msgid ""
+"If ``extract`` is empty Bombard will use the ``name``, so ``name:`` is the "
+"same as ``name: name``."
+msgstr ""
+"Если ``extract`` пусто, Bombard будет использовать ``name``, поэтому "
+"``name:`` совпадает с ``name: name``."
+
+#: ../../campaign.rst:127
+msgid "Also you can use any custom indices you want like that"
+msgstr ""
+"Также вы можете использовать любые пользовательские индексы, которые вы "
+"хотите, например"
+
+#: ../../campaign.rst:134
+msgid "so ``name: ['name']`` is the same as ``name:``."
+msgstr "поэтому ``name: ['name']`` совпадает с ``name:``."
+
+#: ../../campaign.rst:137
+msgid "dry"
+msgstr "dry"
+
+#: ../../campaign.rst:139
+msgid ""
+"If you run Bombard with ``--dry`` it do not make actual HTTP requests. And "
+"if you have ``dry`` section in request Bombard will use it as result of this"
+" ``dry`` request."
+msgstr ""
+"Если вы запускаете Bombard с ``--dry``, он не делает реальных HTTP-запросов."
+" И если у вас есть раздел ``dry`` в запросе, Bombard будет использовать его "
+"как результат этого запроса ``dry``."
+
+#: ../../campaign.rst:144
+msgid "prepare"
+msgstr "prepare"
+
+#: ../../campaign.rst:146
+msgid ""
+"If campaign file has this section, Bombard will start fire with requests "
+"from this section."
+msgstr ""
+"Если в файле кампании есть этот раздел, Bombard начнет стрелять по запросам "
+"из этого раздела."
+
+#: ../../campaign.rst:149
+msgid ""
+"Requests in this section can fire requests from ``ammo`` section, like this:"
+msgstr ""
+"Запросы в этом разделе могут запускать запросы из раздела ``ammo``, "
+"например:"
+
+#: ../../campaign.rst:160
+msgid ""
+"As you see above you can send some variable not only to global ``supply`` "
+"but just to the request you fire."
+msgstr ""
+"Как вы видите выше, вы можете отправить некоторую переменную не только "
+"глобальному ``supply``, но и просто на ваш запрос."
+
+#: ../../campaign.rst:163
+msgid ""
+"If ``prepare`` section did not fire any ``ammo`` requests, Bombard after "
+"``prepare`` will fire all requests from ``ammo`` section."
+msgstr ""
+"Если в разделе ``prepare`` не было выполнено ни одного запроса ``ammo``, "
+"Bombard после ``prepare`` будет запускать все запросы из раздела ``ammo``."
+
+#: ../../campaign.rst:166
+msgid ""
+"So, if you have only ``extract`` sections in ``prepare`` requests. Or if "
+"``scripts`` in ``prepare`` requests do not call ``reload`` to fire requests "
+"from ``ammo``. Then Bombard will fire all ``ammo`` requests after "
+"``prepare`` requests."
+msgstr ""
+"Итак, если у вас есть только ``extract`` разделы в ``prepare`` запросах. Или"
+" если ``scripts`` в запросах ``prepare`` не вызывает ``reload`` для запуска "
+"запросов из ``ammo``. Затем Bombard будет запускать все запросы ``ammo`` "
+"после запросов ``prepare``."
+
+#: ../../campaign.rst:172
+msgid "ammo"
+msgstr "ammo"
+
+#: ../../campaign.rst:174
+msgid ""
+"If campaign file do not have ``prepare`` section, Bombard will just fire all"
+" requests from this section."
+msgstr ""
+"Если в файле кампании нет раздела ``prepare``, Bombard просто запустит все "
+"запросы из этого раздела."
+
+#: ../../campaign.rst:177
+msgid ""
+"Each request will be repeated ``--repeat`` times as defined in command line "
+"(or by default value for this option)."
+msgstr ""
+"Каждый запрос будет повторяться ``--repeat`` раз, как указано в командной "
+"строке (или по умолчанию для этой опции)."
+
+#: ../../campaign.rst:180
+msgid ""
+"Otherwise bombard will fire ``prepare`` section and after that if "
+"``prepare`` requests did not fire any requests from ``ammo``, bombard will "
+"fire all requests from ``ammo``."
+msgstr ""
+"В противном случае бомбард будет запускать раздел ``prepare``, и после "
+"этого, если запросы ``prepare`` не сработали ни одного запроса от ``ammo``, "
+"то бомбардировка будет запускать все запросы из ``ammo``."
+
+#: ../../campaign.rst:184
+msgid ""
+"Example of ``ammo`` request for the request that you see in ``prepare`` "
+"section:"
+msgstr ""
+"Пример запроса ``ammo`` для запроса, который вы видите в разделе "
+"``prepare``:"
