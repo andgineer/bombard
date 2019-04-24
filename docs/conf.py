@@ -69,9 +69,9 @@ release = bombard.__version__
 # Usually you set "language" from the command line for these cases.
 #language = None
 
-import os.path
-BASEDIR = os.path.dirname(os.path.abspath(__file__))
-locale_dirs = [os.path.join(BASEDIR, 'locale/')]
+# import os.path
+# BASEDIR = os.path.dirname(os.path.abspath(__file__))
+locale_dirs = ['locale']
 gettext_compact = False
 
 # List of patterns, relative to source directory, that match files and
