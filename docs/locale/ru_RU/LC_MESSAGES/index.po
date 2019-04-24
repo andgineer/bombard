@@ -116,7 +116,7 @@ msgstr "Исходный код"
 
 #: ../../index.rst:81
 msgid "`GitHub <https://github.com/masterandrey/bombard/>`_."
-msgstr "`GitHub <https://github.com/masterandrey/bombard/>` _."
+msgstr "`GitHub <https://github.com/masterandrey/bombard/>`_."
 
 #: ../../index.rst:85
 msgid "Documentation"
