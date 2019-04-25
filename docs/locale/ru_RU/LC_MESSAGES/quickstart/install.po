@@ -1,0 +1,32 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2019, Andrey Sorokin
+# This file is distributed under the same license as the bombard package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
+# Translators:
+# Andrey Sorokin <filbert@yandex.ru>, 2019
+# 
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: bombard 1.17\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-04-25 12:46+0300\n"
+"PO-Revision-Date: 2019-04-25 09:46+0000\n"
+"Last-Translator: Andrey Sorokin <filbert@yandex.ru>, 2019\n"
+"Language-Team: Russian (Russia) (https://www.transifex.com/masterAndrey/teams/98400/ru_RU/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ru_RU\n"
+"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);\n"
+
+#: ../../quickstart/install.rst:2
+msgid "Installation"
+msgstr "Установка"
+
+#: ../../quickstart/install.rst:7
+msgid ""
+"If you want to use specific Python version you can use something like that"
+msgstr ""
+"Если необходимо использовать конкретную версию Python, это можно сделать так"

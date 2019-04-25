@@ -25,3 +25,15 @@ source_file = _build/gettext/index.pot
 source_lang = en
 type = PO
 
+[bombard._build_gettext_quickstart_install]
+file_filter = locale/<lang>/LC_MESSAGES/quickstart/install.po
+source_file = _build/gettext/quickstart/install.pot
+source_lang = en
+type = PO
+
+[bombard._build_gettext_quickstart_bootstrap]
+file_filter = locale/<lang>/LC_MESSAGES/quickstart/bootstrap.po
+source_file = _build/gettext/quickstart/bootstrap.pot
+source_lang = en
+type = PO
+
