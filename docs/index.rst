@@ -25,7 +25,7 @@ Requests can be just URL or contain JSON described like this
 .. code-block:: yaml
 
     getToken:
-        url: "{base}auth"  # use custom {base} variable to stay DRY
+        url: "{host}auth"  # use custom {host} variable to stay DRY
         method: POST
         body:  # below is JSON object for request body
             email: name@example.com
@@ -35,7 +35,7 @@ Requests can be just URL or contain JSON described like this
 
 In first request you can get security token as in example above.
 
-And use it in next requests:
+And use it in next requests like that:
 
 .. code-block:: yaml
 

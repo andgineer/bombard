@@ -70,6 +70,7 @@ release = bombard.__version__
 
 locale_dirs = ['locale/']
 gettext_compact = False
+gettext_uuid = True
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.

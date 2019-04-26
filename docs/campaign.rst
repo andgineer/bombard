@@ -21,7 +21,7 @@ All HTTP parameters but URL are optional.
 
 .. code-block:: yaml
 
-    url: "{base}auth"  # fully specified URL
+    url: "{host}auth"  # fully specified URL
     method: POST  # by default GET
     body:  # below is JSON object for request body
         email: name@example.com
@@ -59,7 +59,7 @@ If you need to, you can add other elements like that:
 
   getToken:  # Name of request by your choice
     repeat: "{args.repeat * 2}"  # default - option --repeat
-    url: "{base}auth"  # we use supply.base var
+    url: "{host}auth"  # we use supply.base var
     method: POST  # by default GET
     headers: json  # shortcut for Content-Type: application/json
     body:  # JSON object for the request body
