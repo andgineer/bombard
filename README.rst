@@ -89,12 +89,12 @@ Example of report for the command::
 
 Documentation
 -------------
-`Bombard documentation <https://bombard.masterandrey.com/en/latest/>`_
+`Bombard documentation <https://bombard.sorokin.engineer/en/latest/>`_
 
 Translation managed with `Transifex <https://www.transifex.com/masterAndrey/bombard/translate>`_
 
-.. |build_status| image:: https://travis-ci.org/masterandrey/bombard.png
-    :target: https://travis-ci.org/masterandrey/bombard
+.. |build_status| image:: https://travis-ci.org/andgineer/bombard.png
+    :target: https://travis-ci.org/andgineer/bombard
     :alt: Latest release
 
 .. |pypi_version| image:: https://img.shields.io/pypi/v/bombard.svg?style=flat-square
