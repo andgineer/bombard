@@ -67,7 +67,8 @@ class Bombardier(WeaverMill):
         }
         self.reporter = Reporter(
             time_units=('ms' if args.ms else None),
-            time_threshold_ms=int(args.threshold)
+            time_threshold_ms=int(args.threshold),
+            success_statuses=self.ok
         )
         request_logging.pretty_ns = self.reporter.pretty_ns
 
@@ -108,8 +109,8 @@ class Bombardier(WeaverMill):
 
     def process_resp(self, ammo: dict, status: int, resp: str, elapsed: int, size: int):
         request = ammo['request']
+        self.reporter.log(status, elapsed, request.get('name'), size)
         if status in self.ok:
-            self.reporter.log(True, elapsed, request.get('name'), size)
             log.debug(f'{status} reply\n{resp}')
             if 'extract' in request:
                 try:
@@ -142,8 +143,6 @@ class Bombardier(WeaverMill):
                     exec(request['compiled'], context)
                 except Exception as e:
                     log.error(f'Script fail\n{e}\n\n{request["script"]}\n\n{supply}\n', exc_info=True)
-        else:
-            self.reporter.log(False, elapsed, request.get('name'), size)
 
     @staticmethod
     def beautify_url(url, method, body):
