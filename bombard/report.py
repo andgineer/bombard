@@ -13,20 +13,14 @@ from bombard.terminal_colours import red
 from copy import deepcopy
 
 
-ARRAY_UINT64 = 'Q'  # in 8 bytes 200 000 days (we store time in ns). 4 bytes is only 3 days.
-ARRAY_UINT32 = 'L'  # sizes up to 4 Gbytes
+ARRAY_UINT64 = 'Q'
+ARRAY_UINT32 = 'L'
 SUCCESS_GROUP = 'success'
 FAIL_GROUP = 'fail'
 GROUPS = [SUCCESS_GROUP, FAIL_GROUP]
 TIME = 'time'
 SIZE = 'size'
-DIMENSIONS = {
-    TIME: {'type': ARRAY_UINT64},
-    SIZE: {'type': ARRAY_UINT32},
-}
-STAT_DEFAULT = {
-    name: array(params['type']) for name, params in DIMENSIONS.items()
-}
+TIME_DENOMINATOR = 1  # if 1 we store ns.
 
 
 class Reporter:
@@ -42,10 +36,18 @@ class Reporter:
             success_statuses: dict
     ):
         """
-        :param time_units: fix all time in the units (see names in pretty_ns)
+        :param time_units: time representation fixed in the units (see names in bombard.pretty_ns)
         :param time_threshold_ms: show times bigger than that in red
         :param success_statuses: dict of statuses treated as success
         """
+        self.DIMENSIONS = {
+            TIME: {'type': ARRAY_UINT64, 'pretty_func': self.pretty_time},  # time in ns up to 200 000 days.
+            SIZE: {'type': ARRAY_UINT32, 'pretty_func': pretty_sz},  # sizes up to 4 Gbytes
+        }
+        self.STAT_DEFAULT = {
+            name: array(params['type']) for name, params in self.DIMENSIONS.items()
+        }
+
         self.start_ns = time_ns()
 
         self.time_units = time_units
@@ -78,8 +80,8 @@ class Reporter:
         :param request_name: Request name or None
         :param response_size: Response body size
         """
-        self.stat.setdefault(request_name, {}).setdefault(status, deepcopy(STAT_DEFAULT))
-        self.stat[request_name][status][TIME].append(elapsed)
+        self.stat.setdefault(request_name, {}).setdefault(status, deepcopy(self.STAT_DEFAULT))
+        self.stat[request_name][status][TIME].append(elapsed // TIME_DENOMINATOR)
         self.stat[request_name][status][SIZE].append(response_size)
 
     @property
@@ -92,7 +94,7 @@ class Reporter:
             dimension_name: str,
             status_group_filter: str = None,
             request_name_filter: str = None
-    ) -> dict:
+    ) -> int:
         """
         Reduce the dimension by group and/or request_name with the reduce_func
         Returns dict {'time':, 'size':}
@@ -115,7 +117,7 @@ class Reporter:
         Filter the dimension by group and/or request_name,
         Returns array with values from dimention_name
         """
-        dimension = array(DIMENSIONS[dimension_name]['type'])
+        dimension = array(self.DIMENSIONS[dimension_name]['type'])
         for request_name in self.stat:
             if request_name == request_name_filter or request_name_filter is None:
                 for status in self.stat[request_name]:
@@ -143,13 +145,13 @@ class Reporter:
         Returns report str with stats for all dimensions.
         """
         result = []
-        for dimension_name in DIMENSIONS:
+        for dimension_name in self.DIMENSIONS:
             dimension = self.filter(dimension_name, status_group_filter, request_name_filter)
             if dimension:
                 result.append(
                     self.dimension_stat_report(
                         dimension,
-                        self.pretty_ns if TIME in dimension_name else pretty_sz
+                        self.DIMENSIONS[dimension_name]['pretty_func']
                     )
                 )
         if not result:
@@ -160,9 +162,12 @@ class Reporter:
         return ', '.join([f'{group} {self.reduce(len, TIME, group, request_name_filter)}'
                           for group in GROUPS])
 
-    def pretty_ns(self, elapsed_ns: int):
+    def pretty_time(self, elapsed: int, paint: bool = True):
+        return self.pretty_ns(elapsed * TIME_DENOMINATOR, paint)
+
+    def pretty_ns(self, elapsed_ns: int, paint: bool = True):
         result = pretty_ns(elapsed_ns, self.time_units)
-        if elapsed_ns > self.time_threshold_ns:
+        if elapsed_ns > self.time_threshold_ns and paint:
             return red(result)
         else:
             return result
@@ -174,7 +179,7 @@ class Reporter:
         elapsed_sec = total_ns / (10 ** 9)
         total_line = ' '.join([
             f'Got `{total_num}` responses',
-            f'in `{pretty_ns(total_ns)}`,',
+            f'in `{self.pretty_time(total_ns, paint=False)}`,',
             f'`{round(total_num / elapsed_sec)} op/sec`,',
             f'{pretty_sz(size_sum)},',
             f'{pretty_sz(size_sum // elapsed_sec) if elapsed_sec > 0 else 0}/sec',
