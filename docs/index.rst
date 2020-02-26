@@ -24,8 +24,11 @@ Requests can be just URL or contain JSON described like this
 
 .. code-block:: yaml
 
+    supply:  # you can redefine variables from command line (--supply host=http://localhost/)
+      host: https://jsonplaceholder.typicode.com/
+
     getToken:
-        url: "{host}auth"  # use custom {host} variable to stay DRY
+        url: "{host}auth"  # use {host} variable from supply to stay DRY
         method: POST
         body:  # below is JSON object for request body
             email: name@example.com
