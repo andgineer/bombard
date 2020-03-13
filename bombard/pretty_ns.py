@@ -5,12 +5,14 @@
 
 Usage:
 >>> start = time_ns()
->>> pass  # code to time
+>>> import time
+>>> time.sleep(0.0000001)
 >>> pretty_ns((start + 100) - start)
 '0.1 mks'
 
 >>> with Timer() as timer:
-...     pass
+...     import time
+...     time.sleep(0.0000001)
 ...     timer.pretty.endswith('s')
 ...     timer.ns > 0
 True
