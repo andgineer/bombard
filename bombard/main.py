@@ -12,6 +12,11 @@ from shutil import copyfile
 from bombard.expand_file_name import get_campaign_file_name, show_folder, expand_relative_file_name
 from bombard.terminal_colours import red, RED, OFF
 import bombard
+import colorama
+
+
+colorama.init()  # On Windows will filter ANSI escape sequences out of any text sent to 
+# stdout or stderr, and replace them with equivalent Win32 calls.
 
 
 def guess_type(value: str):
