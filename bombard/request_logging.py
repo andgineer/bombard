@@ -64,7 +64,7 @@ def setup_logging(level: int, log_file_name: Optional[str] = None):
     formatter = RequestFormatter(
             fmt=f'%(colour)s%(asctime)s %(requestid)s %(elapsed)s (thread %(threadid)s) '
                 f'%(requestname)s %(dir)s %(message)s{OFF}',
-            datefmt='%-d %b %H:%M:%S'
+            datefmt='%d %b %H:%M:%S'
     )
     handler.setFormatter(formatter)
     handler.setLevel(level)

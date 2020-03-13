@@ -3,6 +3,9 @@ import setuptools
 with open("README.rst", "r") as fh:
     long_description = fh.read()
 
+with open('requirements.txt') as f:
+    requirements = f.read().splitlines()    
+
 import sys; sys.path.insert(0, '../'); import bombard
 
 setuptools.setup(
@@ -22,9 +25,7 @@ setuptools.setup(
     url="https://bombard.readthedocs.io/en/latest/",
     packages=setuptools.find_packages(),
     include_package_data=True,
-    install_requires=[
-        'pyyaml>=5.1',
-    ],
+    install_requires=requirements,
     keywords='http load test parallel',
     classifiers=[
      "Programming Language :: Python :: 3",

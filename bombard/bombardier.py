@@ -10,7 +10,7 @@ from bombard.pretty_sz import pretty_sz
 from bombard.show_descr import markdown_for_terminal
 from bombard.http_request import http_request, EXCEPTION_STATUS
 from bombard import request_logging
-from collections import Mapping
+from typing import Mapping
 
 
 log = logging.getLogger()

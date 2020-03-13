@@ -3,20 +3,28 @@ Colourize text in terminal
 source https://en.wikipedia.org/wiki/ANSI_escape_code#Colors
 
 You can use it function style
-green('Hello!')
+>>> green('Hello!')
+'\\x1b[1;32mHello!\\x1b[0m'
 
 Or include style
-f'{YELLOW}Hello{OFF}, {RED}world{OFF}!'
+>>> f'{YELLOW}Hello{OFF}, {RED}world{OFF}!'
+'\\x1b[1;33mHello\\x1b[0m, \\x1b[1;31mworld\\x1b[0m!'
+
+Under the hood this is colorama.
+But I keep my wrapper in this module as legacy.
 """
 
-GREEN = '\033[1;32;40m'
-RED = '\033[1;31;40m'
-DARK_RED = '\033[0;31;40m'
-GRAY = '\033[1;30;40m'
-BROWN = '\033[0;33;40m'
-YELLOW = '\033[1;33;40m'
+from colorama.ansi import code_to_chars, AnsiFore, AnsiStyle
 
-OFF = '\033[0m'
+
+GREEN = code_to_chars(f'{AnsiStyle.BRIGHT};{AnsiFore.GREEN}')
+RED = code_to_chars(f'{AnsiStyle.BRIGHT};{AnsiFore.RED}')
+DARK_RED = code_to_chars(f'{AnsiStyle.DIM};{AnsiFore.RED}')
+GRAY = code_to_chars(f'{AnsiStyle.BRIGHT};{AnsiFore.BLACK}')
+BROWN = code_to_chars(f'{AnsiStyle.DIM};{AnsiFore.YELLOW}')
+YELLOW = code_to_chars(f'{AnsiStyle.BRIGHT};{AnsiFore.YELLOW}')
+
+OFF = code_to_chars(AnsiStyle.RESET_ALL)
 
 
 def paint_it(msg: str, colour: str) -> str:
@@ -49,4 +57,6 @@ def yellow(s: str) -> str:
 
 if __name__ == "__main__":
     import doctest
-    doctest.testmod()
+    fail, total = doctest.testmod(report=True)
+    if not fail:
+        print(f'... {total} test(s) passed')
