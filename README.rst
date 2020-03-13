@@ -96,8 +96,8 @@ Documentation
 
 Translation managed with `Transifex <https://www.transifex.com/masterAndrey/bombard/translate>`_
 
-.. |build_status| image:: https://travis-ci.org/andgineer/bombard.png
-    :target: https://travis-ci.org/andgineer/bombard
+.. |build_status| image:: https://github.com/andgineer/bombard/workflows/ci/badge.svg
+    :target: https://github.com/andgineer/bombard/actions
     :alt: Latest release
 
 .. |pypi_version| image:: https://img.shields.io/pypi/v/bombard.svg?style=flat-square
