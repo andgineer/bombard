@@ -31,9 +31,9 @@ class Reporter:
     """
     def __init__(
             self,
-            time_units: str,
-            time_threshold_ms: int,
-            success_statuses: dict
+            time_units: str='ms',
+            time_threshold_ms: int=1,
+            success_statuses: dict=[200]
     ):
         """
         :param time_units: time representation fixed in the units (see names in bombard.pretty_ns)
@@ -177,12 +177,13 @@ class Reporter:
         total_ns = self.reduce(sum, TIME)
         total_num = self.reduce(len, TIME)
         elapsed_sec = total_ns / (10 ** 9)
+        infinity = chr(0x221E)
         total_line = ' '.join([
             f'Got `{total_num}` responses',
             f'in `{self.pretty_time(total_ns, paint=False)}`,',
-            f'`{round(total_num / elapsed_sec) if elapsed_sec > 0 else "\u221E"} op/sec`,',
+            f'`{round(total_num / elapsed_sec) if elapsed_sec > 0 else infinity} op/sec`,',
             f'{pretty_sz(size_sum)},',
-            f'{pretty_sz(size_sum // elapsed_sec) if elapsed_sec > 0 else "\u221E"}/sec',
+            f'{pretty_sz(size_sum // elapsed_sec) if elapsed_sec > 0 else infinity}/sec',
         ])
         by_group = []
         for status_group in GROUPS:
