@@ -9,7 +9,7 @@ CYAN='\033[1;36m'
 NC='\033[0m' # No Color
 NL=$'\n'
 
-python -m unittest discover --start-directory tests --verbose $@
+python3 -m unittest --verbose $@
 
 if [ $? -eq 0 ]; then
   echo

@@ -71,11 +71,11 @@ def init(args):
         print(f'Cannot init from {src}:\n{RED}File {CAMPAIGN_FILE_NAME} already exists.{OFF}')
         return
     copyfile(src, CAMPAIGN_FILE_NAME)
-    #todo copy external python scripts if it is included into the example (create yaml CopyLoader)
+    # todo copy external python scripts if it is included into the example (create yaml CopyLoader)
 
 
 def start_campaign(args, campaign_book):
-    log.debug(f'Starting bombard campaign with args\n' + ' '*4 + f'{args.__dict__}')
+    log.debug(f'Starting bombard campaign with args\n' + ' ' * 4 + f'{args.__dict__}')
     log.debug(f'Loaded bombard campaign from "{args.file_name}": {len(campaign_book.get("ammo", {}))} ammo.')
     if PREPARE not in campaign_book and AMMO not in campaign_book:
         print(f'You should have at least one of "{PREPARE}" and "{AMMO}" '
@@ -99,6 +99,7 @@ def start_campaign(args, campaign_book):
         bombardier.process()
     bombardier.stop()
     bombardier.report()
+
 
 def campaign(args):
     if args.version:
@@ -134,4 +135,4 @@ def main():
 
 
 if __name__ == '__main__':
-        main()
+    main()

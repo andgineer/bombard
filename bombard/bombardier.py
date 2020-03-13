@@ -1,17 +1,17 @@
-from bombard.terminal_colours import red, dark_red, green, gray, GRAY, OFF
-from bombard.attr_dict import AttrDict
-from urllib.parse import urlparse
 import json
 import logging
-from bombard.weaver_mill import WeaverMill
-from bombard.report import Reporter
+from typing import Mapping
+from urllib.parse import urlparse
+
+from bombard import request_logging
+from bombard.attr_dict import AttrDict
+from bombard.http_request import http_request, EXCEPTION_STATUS
 from bombard.pretty_ns import time_ns
 from bombard.pretty_sz import pretty_sz
+from bombard.report import Reporter
 from bombard.show_descr import markdown_for_terminal
-from bombard.http_request import http_request, EXCEPTION_STATUS
-from bombard import request_logging
-from typing import Mapping
-
+from bombard.terminal_colours import red, dark_red, green
+from bombard.weaver_mill import WeaverMill
 
 log = logging.getLogger()
 
@@ -22,7 +22,7 @@ AMMO = 'ammo'
 
 
 def apply_supply(s: str, supply: dict) -> str:
-    #todo: add args
+    # todo: add args
     if not isinstance(s, str):
         return s
     try:
@@ -48,7 +48,8 @@ class Bombardier(WeaverMill):
     """
     Use horde of threads to make HTTP-requests
     """
-    def __init__(self, supply: dict=None, args=None, campaign_book: dict=None, ok_statuses=None,
+
+    def __init__(self, supply: dict = None, args=None, campaign_book: dict = None, ok_statuses=None,
                  overload_statuses=None):
         self.supply = supply if supply is not None else {}
         self.supply['args'] = args
@@ -201,8 +202,8 @@ class Bombardier(WeaverMill):
                     if self.resp_count in self.show_response:
                         print(f'{self.show_response[self.resp_count].format(id=self.resp_count):>15}\r', end='')
                 log.info(self.status_coloured(status) + f' ({pretty_sz(len(resp))}) ' + pretty_url
-                        + ' ' + (red(resp) if status == EXCEPTION_STATUS else '')
-                )
+                         + ' ' + (red(resp) if status == EXCEPTION_STATUS else '')
+                         )
             except Exception as e:
                 log.info(pretty_url + ' ' + red(str(e)), exc_info=True)
         finally:
@@ -245,9 +246,9 @@ class Bombardier(WeaverMill):
     def report(self):
         log.warning(
             '\n'
-            + '='*100
+            + '=' * 100
             + '\n'
             + markdown_for_terminal(self.reporter.report())
-            + '='*100
+            + '=' * 100
             + '\n'
         )

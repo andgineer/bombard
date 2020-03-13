@@ -8,10 +8,11 @@ All strings with `bombard.examples.mock_globals` will be automatically removed b
 """
 from bombard.campaign_yaml import yaml
 from bombard.expand_file_name import expand_relative_file_name
-import os.path  # we use it to simplify import lines in examples
+import os.path # do not remove. we use it to simplify import lines in examples #NOSONAR
 
 
 resp = {}
+
 
 def reload(requests, repeat=None, **kwargs):
     pass

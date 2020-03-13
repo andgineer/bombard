@@ -21,6 +21,8 @@ True
 """
 
 time_ns = None  # for Python3.7+ this is function from system library time
+
+
 # for earlier Python versions this is emulation of the Python3.7 time_ns
 
 
@@ -68,13 +70,15 @@ class Timer:
 
 
 import time
+
 try:
     time_ns = time.time_ns
 except AttributeError:
     from time import perf_counter
-    time_ns = emul_time_ns
 
+    time_ns = emul_time_ns
 
 if __name__ == "__main__":
     import doctest
+
     doctest.testmod()

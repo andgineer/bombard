@@ -1,12 +1,11 @@
 """
 Parse bombard command line args.
 """
-import sys
-import os.path
-from bombard.terminal_colours import red, BROWN, OFF
 import argparse
-import bombard
+
 from bombard.show_descr import markdown_for_terminal
+from bombard.terminal_colours import BROWN, OFF
+
 # from pkg_resources import resource_string
 
 
