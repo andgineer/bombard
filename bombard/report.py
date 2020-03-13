@@ -180,9 +180,9 @@ class Reporter:
         total_line = ' '.join([
             f'Got `{total_num}` responses',
             f'in `{self.pretty_time(total_ns, paint=False)}`,',
-            f'`{round(total_num / elapsed_sec)} op/sec`,',
+            f'`{round(total_num / elapsed_sec) if elapsed_sec > 0 else "\u221E"} op/sec`,',
             f'{pretty_sz(size_sum)},',
-            f'{pretty_sz(size_sum // elapsed_sec) if elapsed_sec > 0 else 0}/sec',
+            f'{pretty_sz(size_sum // elapsed_sec) if elapsed_sec > 0 else "\u221E"}/sec',
         ])
         by_group = []
         for status_group in GROUPS:
