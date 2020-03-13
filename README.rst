@@ -1,7 +1,7 @@
 Bombard
 =======
 
-|made_with_python| |build_status| |pypi_version| |pypi_license| |readthedocs|
+|made_with_python| |build_status| |upload_pip| |pypi_version| |pypi_license| |readthedocs|
 
 Bombard is a tool for stress test and benchmarking your HTTP server.
 Especially it's good to simulate a heavy load and initial burst of
@@ -99,6 +99,10 @@ Translation managed with `Transifex <https://www.transifex.com/masterAndrey/bomb
 .. |build_status| image:: https://github.com/andgineer/bombard/workflows/ci/badge.svg
     :target: https://github.com/andgineer/bombard/actions
     :alt: Latest release
+
+.. |upload_pip| image:: https://github.com/andgineer/bombard/workflows/Upload%20Python%20Package/badge.svg
+    :target: https://github.com/andgineer/bombard/actions
+    :alt: Pip upload
 
 .. |pypi_version| image:: https://img.shields.io/pypi/v/bombard.svg?style=flat-square
     :target: https://pypi.org/p/bombard
