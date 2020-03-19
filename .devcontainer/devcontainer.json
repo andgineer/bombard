@@ -4,6 +4,7 @@
 	"name": "Python3.8",
 	"context": "..",
 	"image": "python:3",
+	"postCreateCommand": "pip install --no-cache-dir -r requirements.txt",
 
 	// Set *default* container specific settings.json values on container create.
 	"settings": { 
