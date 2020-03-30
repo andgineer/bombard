@@ -19,7 +19,7 @@ fi
 
 echo -e "Last version tag: \033[33m$major.$minor.$build\033[39m"
 
-if [[ $(git diff-index HEAD) ]]; then
+if [[ $(git diff-index HEAD) || $(git status) == *"is ahead"* ]]; then
         echo -e "\n\033[33mPlease commit and push all changes" \
         "before setting version tag\033[39m\n"
         exit -1
