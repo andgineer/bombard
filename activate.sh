@@ -24,9 +24,9 @@ fi
 # virtual env
 if [[ ! -d ${VENV_FOLDER} ]] ; then
     echo -e $CYAN"Creating virtual environment for python in ${VENV_FOLDER}"$NC
-    virtualenv ${VENV_FOLDER} -p `which $PYTHON`
+    $PYTHON -m venv  ${VENV_FOLDER}
     . ${VENV_FOLDER}/bin/activate
-    pip install -r requirements.txt
+    $PYTHON -m pip install -r requirements.txt
 else
     echo -e $CYAN"Activating virtual environment ..."$NC
     . ${VENV_FOLDER}/bin/activate

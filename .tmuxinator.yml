@@ -41,4 +41,4 @@ root: /mnt/c/Users/Andrei_Sorokin2/projects/bombard
 
 windows:
   - debug: cd bombard; python3
-  - bash: cd bombard
+  - bash: cd bombard; . ./activate.sh
