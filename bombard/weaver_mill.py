@@ -67,7 +67,7 @@ class WeaverMill:
 
     def stop(self):
         """ Stops all threads - send stop signal to queue and lock until they stop """
-        for _ in range(len(self.threads)):
+        for _ in self.threads:
             self.queue.put(None)
         for thread in self.threads:
             thread.join()

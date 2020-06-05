@@ -36,10 +36,10 @@ def apply_supply_dict(request: dict, supply: dict) -> dict:
     """
     Use supply to substitute all {name} in request strings.
     """
-    for name in request:
+    for name, value in request.items():
         if isinstance(request[name], dict):
             request[name] = apply_supply_dict(request[name], supply)
-        elif isinstance(request[name], str):
+        elif isinstance(value, str):
             request[name] = apply_supply(request[name], supply)
     return request
 
@@ -93,14 +93,14 @@ class Bombardier(WeaverMill):
         }
         if 'headers' in request and isinstance(request['headers'], str):
             # if headers in request description just a string we know this should be some predefined code
-            for known in predefined:
+            for known, value_ in predefined.items():
                 if request['headers'].lower() == known:
-                    return predefined[known]
+                    return value_
         result = {}
         for name, val in request.get('headers', {}).items():
-            for known in predefined:
+            for known, value in predefined.items():
                 if name.lower() == known:
-                    result.update(predefined[known])
+                    result.update(value)
                     break
             else:
                 result.update({name: val})
@@ -182,9 +182,8 @@ class Bombardier(WeaverMill):
                 pretty_url = self.beautify_url(url, method, body)
 
                 log.debug(f'Bomb to drop:\n{pretty_url}' + ('\n{body}' if body is not None else ''))
-                if self.args.quiet:
-                    if ammo_id in self.show_request:
-                        print(f'{self.show_request[ammo_id].format(id=ammo_id):>15}\r', end='')
+                if self.args.quiet and ammo_id in self.show_request:
+                    print(f'{self.show_request[ammo_id].format(id=ammo_id):>15}\r', end='')
                 log.info(pretty_url)
 
                 start_ns = time_ns()
@@ -198,9 +197,8 @@ class Bombardier(WeaverMill):
                 self.process_resp(ammo, status, resp, time_ns() - start_ns, len(resp))
 
                 self.resp_count += 1
-                if self.args.quiet:
-                    if self.resp_count in self.show_response:
-                        print(f'{self.show_response[self.resp_count].format(id=self.resp_count):>15}\r', end='')
+                if self.args.quiet and self.resp_count in self.show_response:
+                    print(f'{self.show_response[self.resp_count].format(id=self.resp_count):>15}\r', end='')
                 log.info(self.status_coloured(status) + f' ({pretty_sz(len(resp))}) ' + pretty_url
                          + ' ' + (red(resp) if status == EXCEPTION_STATUS else '')
                          )
