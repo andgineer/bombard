@@ -1,4 +1,4 @@
-Translation: `Русский <https://bombard.masterandrey.com/ru/latest/>`_
+Translation: `Русский <https://bombard.sorokin.engineer/ru/latest/>`_
 ---------------------------------------------------------------------
 
 Introduction

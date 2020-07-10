@@ -26,8 +26,8 @@ msgstr ""
 
 # 410b45b159e1436e8d9c08435e56ac17
 #: ../../index.rst:2
-msgid "Translation: `Русский <https://bombard.masterandrey.com/ru/latest/>`_"
-msgstr "Перевод: `English <https://bombard.masterandrey.com/en/latest/>`_"
+msgid "Translation: `Русский <https://bombard.sorokin.engineer/ru/latest/>`_"
+msgstr "Перевод: `English <https://bombard.sorokin.engineer/en/latest/>`_"
 
 # a0a73ef21dd84e3ea5719d401c57db2b
 #: ../../index.rst:5
