@@ -1,4 +1,7 @@
-__version__ = '1.20.1'
+import bombard.version
+
+
+__version__ = bombard.version.VERSION
 
 
 def version():

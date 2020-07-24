@@ -2,7 +2,7 @@
 # Increments version git tag
 # Saves it into VERSION_FILE
 
-VERSION_FILE="bombard/version"
+VERSION_FILE="bombard/version.py"
 
 TAG=$(git describe --tags)
 
@@ -41,7 +41,7 @@ fi
 
 NEW_TAG=$(echo "$major.$minor.$build")
 echo -e "New    : \033[32m$NEW_TAG\033[39m"
-echo -e "export const VERSION = '$NEW_TAG';" > $VERSION_FILE
+echo -e "VERSION = '$NEW_TAG'" > $VERSION_FILE
 
 COMMIT_MSG=$(git log $TAG..HEAD --format=oneline | awk '{$1=""; print $0}')
 COMMIT_MSG=$(echo -e "\n$COMMIT_MSG\n")
@@ -50,9 +50,10 @@ echo "Changes:"
 echo $COMMIT_MSG
 echo
 
-git add .
+git add $VERSION_FILE
 git commit -m "Version $NEW_TAG$COMMIT_MSG"
 
 echo "...push"
     git tag $NEW_TAG -m "$COMMIT_MSG"
     git push origin $NEW_TAG
+    git push
