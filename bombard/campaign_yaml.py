@@ -37,14 +37,11 @@ class IncludesLoader(original_yaml.SafeLoader):
         super(IncludesLoader, self).__init__(stream)
 
     @staticmethod
-    def wrap_in_yaml_document(msg: str) ->str:
+    def wrap_in_yaml_document(msg: str) -> str:
         """
         Converts multi-line msg to yaml document that we can insert into yaml
         """
-        result = []
-        for line in msg.split('\n'):
-            if SIGNATURE not in line:  # skip line that mocks globals
-                result.append(' '*4 + line)
+        result = [' '*4 + line for line in msg.split('\n') if SIGNATURE not in line]
         return '|\n' + '\n'.join(result)
 
     def include(self, node):

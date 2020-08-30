@@ -129,7 +129,7 @@ def campaign(args):
     campaign_file_name = get_campaign_file_name(args)
     if os.path.isdir(campaign_file_name):
         show_folder(campaign_file_name)
-    elif not os.path.isfile(campaign_file_name) and not args.init:
+    elif not (os.path.isfile(campaign_file_name) or args.init):
         print(red(f'\nCannot find campaign file "{args.file_name}"\n'))
     else:
         start_campaign(args, yaml.load(open(campaign_file_name, 'r')))

@@ -8,6 +8,7 @@ from bombard.main import start_campaign
 
 EMPTY_BOOK = {}
 
+
 class TestCampaignCheck(unittest.TestCase):
     def setUp(self):
         setup_logging(logging.DEBUG)

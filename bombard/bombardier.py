@@ -36,10 +36,10 @@ def apply_supply_dict(request: dict, supply: dict) -> dict:
     """
     Use supply to substitute all {name} in request strings.
     """
-    for name in request:
+    for name, value in request.items():
         if isinstance(request[name], dict):
             request[name] = apply_supply_dict(request[name], supply)
-        elif isinstance(request[name], str):
+        elif isinstance(value, str):
             request[name] = apply_supply(request[name], supply)
     return request
 
@@ -93,14 +93,14 @@ class Bombardier(WeaverMill):
         }
         if 'headers' in request and isinstance(request['headers'], str):
             # if headers in request description just a string we know this should be some predefined code
-            for known in predefined:
+            for known, value in predefined.items():
                 if request['headers'].lower() == known:
-                    return predefined[known]
+                    return value
         result = {}
         for name, val in request.get('headers', {}).items():
-            for known in predefined:
+            for known, value in predefined.items():
                 if name.lower() == known:
-                    result.update(predefined[known])
+                    result.update(value)
                     break
             else:
                 result.update({name: val})
