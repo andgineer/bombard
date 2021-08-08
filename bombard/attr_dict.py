@@ -28,18 +28,20 @@ And it works without master
 7
 
 """
+from typing import Any, Dict, Optional
 
 
-class AttrDict(dict):
+class AttrDict(Dict[str, Any]):
     """
     You can access all dict values as attributes.
     All changes immediately repeated in master_dict.
     """
-    def __call__(self, **kwargs):
+
+    def __call__(self, **kwargs: Any) -> None:
         for name, val in kwargs.items():
             self[name] = val
 
-    def __init__(self, master_dict: dict=None, **kwargs):
+    def __init__(self, master_dict: Optional[Dict[str, Any]] = None, **kwargs: Any) -> None:
         if master_dict is None:
             super().__init__(**kwargs)
         else:
@@ -47,12 +49,15 @@ class AttrDict(dict):
         self.__dict__ = self
         self.master_dict = master_dict
 
-    def __setitem__(self, name, val):
+    def __setitem__(self, name: str, val: Any) -> None:
         if self.master_dict is not None:
             self.master_dict[name] = val
-        super().__setitem__(name, val)  # __dict__ pointed to self so all dict items became attributes
+        super().__setitem__(
+            name, val
+        )  # __dict__ pointed to self so all dict items became attributes
 
 
 if __name__ == "__main__":
     import doctest
+
     doctest.testmod()

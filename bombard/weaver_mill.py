@@ -5,14 +5,14 @@ Override method worker in descendant to do a job.
 Add jobs with `put`.
 Start processing with `start`.
 """
-from threading import Thread
-from queue import Queue
-from copy import deepcopy
 from abc import abstractmethod
+from copy import deepcopy
+from queue import Queue
+from threading import Thread
 
 
 class WeaverMill:
-    def __init__(self, threads_num: int=10):
+    def __init__(self, threads_num: int = 10):
         """
         :param threads_num: How many threads we will use.
         """
@@ -52,7 +52,6 @@ class WeaverMill:
         :param thread_id: just sequential number of the thread we work into
         :param job: job from queue
         """
-        pass
 
     def put(self, job):
         """

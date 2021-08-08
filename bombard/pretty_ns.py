@@ -26,23 +26,23 @@ time_ns = None  # for Python3.7+ this is function from system library time
 # for earlier Python versions this is emulation of the Python3.7 time_ns
 
 
-def pretty_ns(elapsed_ns: int, fixed_units=None):
+def pretty_ns(elapsed_ns: int, fixed_units: str = None) -> str:
     dividers = {
-        'us': 1,
-        'mks': 1000,
-        'ms': 1000,
-        'sec': 1000,
-        'minutes': 60,
-        'hours': 60,
-        'days': 24
+        "us": 1,
+        "mks": 1000,
+        "ms": 1000,
+        "sec": 1000,
+        "minutes": 60,
+        "hours": 60,
+        "days": 24,
     }
     result = elapsed_ns
     for unit, divider in dividers.items():
         result /= divider
         if result < 100 or unit.lower() == fixed_units:
-            return f'{result:.1f} {unit}'
-        else:
-            result = round(result)
+            return f"{result:.1f} {unit}"
+        result = round(result)
+    return f"{result:.1f} {dividers['days']}"
 
 
 def emul_time_ns():

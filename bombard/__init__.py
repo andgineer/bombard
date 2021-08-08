@@ -1,13 +1,12 @@
 import bombard.version
 
-
 __version__ = bombard.version.VERSION
 
 
-def version():
+def version() -> str:
     """ 'major.minor' without build number """
-    return '.'.join(__version__.split('.')[:2])
+    return ".".join(__version__.split(".")[:2])
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     print(version())

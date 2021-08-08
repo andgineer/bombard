@@ -5,8 +5,8 @@ This is AttrDict so you can use something like that
 >>> args.init
 True
 """
+from bombard.args import CAMPAIGN_FILE_NAME, THREADS_NUM, THRESHOLD, TIMEOUT
 from bombard.attr_dict import AttrDict
-from bombard.args import CAMPAIGN_FILE_NAME, THRESHOLD, TIMEOUT, THREADS_NUM
 
 
 class FakeArgs(AttrDict):
@@ -24,5 +24,5 @@ class FakeArgs(AttrDict):
     examples = False
     file_name = CAMPAIGN_FILE_NAME
     version = False
-    supply={}
-    repeat=1
+    supply = {}
+    repeat = 1

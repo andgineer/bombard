@@ -36,4 +36,3 @@ file_filter = locale/<lang>/LC_MESSAGES/quickstart/bootstrap.po
 source_file = _build/gettext/quickstart/bootstrap.pot
 source_lang = en
 type = PO
-

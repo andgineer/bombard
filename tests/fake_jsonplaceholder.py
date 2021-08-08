@@ -1,13 +1,10 @@
 import json
 
-
 FAKE_RESP = {
-    ('GET', '/posts'): [
-        {'id': 1}, {'id': 2}, {'id': 3}
-    ],
-    ('GET', '/posts/1'): '',
-    ('GET', '/posts/2'): '',
-    ('GET', '/posts/3'): '',
+    ("GET", "/posts"): [{"id": 1}, {"id": 2}, {"id": 3}],
+    ("GET", "/posts/1"): "",
+    ("GET", "/posts/2"): "",
+    ("GET", "/posts/3"): "",
 }
 
 
@@ -28,6 +25,4 @@ class FakeJSONPlaceholder:
         self.path = path
 
     def response(self):
-        return FakeResp(json.dumps(
-            FAKE_RESP[(self.method, self.path)]
-        ))
+        return FakeResp(json.dumps(FAKE_RESP[(self.method, self.path)]))

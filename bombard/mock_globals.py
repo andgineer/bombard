@@ -6,10 +6,10 @@ If you use include files for scripts add into them
 That defines globals so you have valid code and code autocomplete in your IDE editor.
 All strings with `bombard.examples.mock_globals` will be automatically removed before running bombard scripts.
 """
+import os.path  # pyflakes.ignore  # do not remove. we use it to simplify import lines in examples #NOSONAR
+
 from bombard.campaign_yaml import yaml
 from bombard.expand_file_name import expand_relative_file_name
-import os.path # do not remove. we use it to simplify import lines in examples #NOSONAR
-
 
 resp = {}
 
@@ -41,10 +41,10 @@ def master(yaml_file_name: str):
     That makes code autocomplete work in bombard script.
     """
     try:
-        campaign_book = yaml.load(open(expand_relative_file_name(yaml_file_name), 'r'))
-        for name in campaign_book['ammo']:
+        campaign_book = yaml.load(open(expand_relative_file_name(yaml_file_name), "r"))
+        for name in campaign_book["ammo"]:
             setattr(ammo, name, None)
-        for name in campaign_book['supply']:
+        for name in campaign_book["supply"]:
             setattr(supply, name, None)
     except Exception:
         pass  # ignore if the file is not completed at the moment

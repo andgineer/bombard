@@ -14,21 +14,20 @@ Under the hood this is colorama.
 But I keep my wrapper in this module as legacy.
 """
 
-from colorama.ansi import code_to_chars, AnsiFore, AnsiStyle
+from colorama.ansi import AnsiFore, AnsiStyle, code_to_chars
 
-
-GREEN = code_to_chars(f'{AnsiStyle.BRIGHT};{AnsiFore.GREEN}')
-RED = code_to_chars(f'{AnsiStyle.BRIGHT};{AnsiFore.RED}')
-DARK_RED = code_to_chars(f'{AnsiStyle.DIM};{AnsiFore.RED}')
-GRAY = code_to_chars(f'{AnsiStyle.BRIGHT};{AnsiFore.BLACK}')
-BROWN = code_to_chars(f'{AnsiStyle.DIM};{AnsiFore.YELLOW}')
-YELLOW = code_to_chars(f'{AnsiStyle.BRIGHT};{AnsiFore.YELLOW}')
+GREEN = code_to_chars(f"{AnsiStyle.BRIGHT};{AnsiFore.GREEN}")
+RED = code_to_chars(f"{AnsiStyle.BRIGHT};{AnsiFore.RED}")
+DARK_RED = code_to_chars(f"{AnsiStyle.DIM};{AnsiFore.RED}")
+GRAY = code_to_chars(f"{AnsiStyle.BRIGHT};{AnsiFore.BLACK}")
+BROWN = code_to_chars(f"{AnsiStyle.DIM};{AnsiFore.YELLOW}")
+YELLOW = code_to_chars(f"{AnsiStyle.BRIGHT};{AnsiFore.YELLOW}")
 
 OFF = code_to_chars(AnsiStyle.RESET_ALL)
 
 
 def paint_it(msg: str, colour: str) -> str:
-    return f'{colour}{msg}{OFF}'
+    return f"{colour}{msg}{OFF}"
 
 
 def green(s: str) -> str:
@@ -57,6 +56,7 @@ def yellow(s: str) -> str:
 
 if __name__ == "__main__":
     import doctest
+
     fail, total = doctest.testmod(report=True)
     if not fail:
-        print(f'... {total} test(s) passed')
+        print(f"... {total} test(s) passed")

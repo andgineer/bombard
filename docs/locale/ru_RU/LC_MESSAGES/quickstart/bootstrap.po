@@ -2,10 +2,10 @@
 # Copyright (C) 2019, Andrey Sorokin
 # This file is distributed under the same license as the bombard package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# 
+#
 # Translators:
 # Andrey Sorokin <filbert@yandex.ru>, 2019
-# 
+#
 #, fuzzy
 msgid ""
 msgstr ""

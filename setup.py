@@ -3,18 +3,21 @@ import setuptools
 with open("README.rst", "r") as fh:
     long_description = fh.read()
 
-with open('requirements.txt') as f:
-    requirements = f.read().splitlines()    
+with open("requirements.txt") as f:
+    requirements = f.read().splitlines()
 
-import sys; sys.path.insert(0, '../'); import bombard
+import sys
+
+sys.path.insert(0, "../")
+import bombard
 
 setuptools.setup(
-    name='bombard',
+    name="bombard",
     version=bombard.version(),
     # scripts=['bin/bombard'],
     entry_points={
-        'console_scripts': [
-            'bombard=bombard.main:main',
+        "console_scripts": [
+            "bombard=bombard.main:main",
         ],
     },
     author="Andrey Sorokin",
@@ -26,10 +29,10 @@ setuptools.setup(
     packages=setuptools.find_packages(),
     include_package_data=True,
     install_requires=requirements,
-    keywords='http load test parallel',
+    keywords="http load test parallel",
     classifiers=[
-     "Programming Language :: Python :: 3",
-     "License :: OSI Approved :: MIT License",
-     "Operating System :: OS Independent",
+        "Programming Language :: Python :: 3",
+        "License :: OSI Approved :: MIT License",
+        "Operating System :: OS Independent",
     ],
- )
+)
