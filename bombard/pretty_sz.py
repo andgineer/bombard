@@ -1,4 +1,7 @@
-def pretty_sz(size: int) -> str:
+from typing import Union
+
+
+def pretty_sz(size: Union[int, float]) -> str:
     dividers = {
         "bytes": 1,
         "kb": 1024,
@@ -12,3 +15,4 @@ def pretty_sz(size: int) -> str:
         if result < 100:
             return f"{result:.1f} {unit}"
         result = round(result)
+    return f"{result:.1f} {dividers['pb']}"

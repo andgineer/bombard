@@ -4,4 +4,4 @@ from pygments.lexers.markup import MarkdownLexer
 
 
 def markdown_for_terminal(descr: str) -> str:
-    return highlight(descr, MarkdownLexer(), TerminalFormatter())
+    return str(highlight(descr, MarkdownLexer(), TerminalFormatter()))
