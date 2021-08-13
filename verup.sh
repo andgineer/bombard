@@ -50,7 +50,7 @@ if ! [[ "$response" =~ ^([yY][eE][sS]|[yY])$ ]]; then
 fi
 
 for file in ${VERSION_FILES[*]}; do
-  echo -e "VERSION = '$NEW_VERSION'" >$file
+  echo -e "VERSION = \"$NEW_VERSION\"" >$file
   git add $file
 done
 
