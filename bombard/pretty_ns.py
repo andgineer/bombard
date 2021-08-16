@@ -19,6 +19,7 @@ True
 True
 
 """
+from typing import Any, Optional
 
 time_ns = None  # for Python3.7+ this is function from system library time
 
@@ -26,7 +27,7 @@ time_ns = None  # for Python3.7+ this is function from system library time
 # for earlier Python versions this is emulation of the Python3.7 time_ns
 
 
-def pretty_ns(elapsed_ns: int, fixed_units: str = None) -> str:
+def pretty_ns(elapsed_ns: int, fixed_units: Optional[str] = None) -> str:
     dividers = {
         "us": 1,
         "mks": 1000,
@@ -36,7 +37,7 @@ def pretty_ns(elapsed_ns: int, fixed_units: str = None) -> str:
         "hours": 60,
         "days": 24,
     }
-    result = elapsed_ns
+    result: float = elapsed_ns
     for unit, divider in dividers.items():
         result /= divider
         if result < 100 or unit.lower() == fixed_units:
@@ -45,27 +46,27 @@ def pretty_ns(elapsed_ns: int, fixed_units: str = None) -> str:
     return f"{result:.1f} {dividers['days']}"
 
 
-def emul_time_ns():
+def emul_time_ns() -> int:
     return int(perf_counter() * 10 ** 9)
 
 
 class Timer:
-    def __init__(self):
+    def __init__(self) -> None:
         pass
 
-    def __enter__(self):
-        self.start = time_ns()
+    def __enter__(self) -> "Timer":
+        self.start = time_ns()  # type: ignore
         return self
 
-    def __exit__(self, *args):
+    def __exit__(self, *args: Any) -> None:
         pass
 
     @property
-    def ns(self):
-        return time_ns() - self.start
+    def ns(self) -> int:
+        return time_ns() - self.start  # type: ignore
 
     @property
-    def pretty(self):
+    def pretty(self) -> str:
         return pretty_ns(self.ns)
 
 

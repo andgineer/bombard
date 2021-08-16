@@ -51,11 +51,11 @@ class Bombardier(WeaverMill):
 
     def __init__(
         self,
-        supply: Dict[str, Any] = None,
+        supply: Optional[Dict[str, Any]] = None,
         args: Optional[Any] = None,
-        campaign_book: Dict[str, Any] = None,
-        ok_statuses: List[int] = None,
-        overload_statuses: List[int] = None,
+        campaign_book: Optional[Dict[str, Any]] = None,
+        ok_statuses: Optional[List[int]] = None,
+        overload_statuses: Optional[List[int]] = None,
     ):
         self.supply = supply if supply is not None else {}
         self.supply["args"] = args

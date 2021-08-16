@@ -4,7 +4,7 @@ Bombard's main
 import logging
 import os.path
 from shutil import copyfile
-from typing import Optional
+from typing import Any, Dict, Optional, Union
 
 import colorama
 
@@ -20,7 +20,7 @@ colorama.init()  # On Windows will filter ANSI escape sequences out of any text 
 # stdout or stderr, and replace them with equivalent Win32 calls.
 
 
-def guess_type(value: str):
+def guess_type(value: str) -> Union[str, int, float]:
     """
     Converts value in int or float if possible
     """
@@ -35,7 +35,7 @@ def guess_type(value: str):
     return value
 
 
-def get_supply_from_cli(supply: Optional[list]):
+def get_supply_from_cli(supply: Optional[list]) -> Dict[str, Any]:
     result = {}
     if supply:
         for item in supply:
@@ -140,7 +140,7 @@ def campaign(args):
         start_campaign(args, yaml.load(open(campaign_file_name, "r")))
 
 
-def main():
+def main() -> None:
     campaign(get_args())
 
 
