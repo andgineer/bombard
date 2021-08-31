@@ -9,7 +9,7 @@ from abc import abstractmethod
 from copy import deepcopy
 from queue import Queue
 from threading import Thread
-from typing import Any, Dict
+from typing import Any, Dict, Optional
 
 
 class WeaverMill:
@@ -19,7 +19,7 @@ class WeaverMill:
         """
         self.threads_num = threads_num
         self.threads = []
-        self.queue: Queue = Queue()
+        self.queue: Queue[Optional[Dict[str, Any]]] = Queue()
         self.job_count = 0
         for thread_id in range(threads_num):
             t = Thread(target=self.thread_worker, args=[thread_id])

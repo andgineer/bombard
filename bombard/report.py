@@ -8,6 +8,7 @@ Use:
 import statistics
 from array import array
 from copy import deepcopy
+from typing import Optional, Set
 
 from bombard.pretty_ns import pretty_ns, time_ns
 from bombard.pretty_sz import pretty_sz
@@ -31,12 +32,15 @@ class Reporter:
     """
 
     def __init__(
-        self, time_units: str = "ms", time_threshold_ms: int = 1, success_statuses: dict = [200]
+        self,
+        time_units: Optional[str] = "ms",
+        time_threshold_ms: int = 1,
+        success_statuses: Set[int] = {200},
     ):
         """
         :param time_units: time representation fixed in the units (see names in bombard.pretty_ns)
         :param time_threshold_ms: show times bigger than that in red
-        :param success_statuses: dict of statuses treated as success
+        :param success_statuses: set of statuses treated as success
         """
         self.DIMENSIONS = {
             TIME: {
