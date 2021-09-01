@@ -19,9 +19,11 @@ True
 True
 
 """
-from typing import Any, Optional
+from typing import Any, Callable, Optional
 
-time_ns = None  # for Python3.7+ this is function from system library time
+time_ns: Optional[
+    Callable[[], int]
+] = None  # for Python3.7+ this is function from system library time
 
 
 # for earlier Python versions this is emulation of the Python3.7 time_ns

@@ -8,7 +8,7 @@ Use:
 import statistics
 from array import array
 from copy import deepcopy
-from typing import Optional, Set
+from typing import Any, Dict, Optional, Set
 
 from bombard.pretty_ns import pretty_ns, time_ns
 from bombard.pretty_sz import pretty_sz
@@ -42,7 +42,7 @@ class Reporter:
         :param time_threshold_ms: show times bigger than that in red
         :param success_statuses: set of statuses treated as success
         """
-        self.DIMENSIONS = {
+        self.DIMENSIONS: Dict[str, Dict[str, Any]] = {
             TIME: {
                 "type": ARRAY_UINT64,
                 "pretty_func": self.pretty_time,

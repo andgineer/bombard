@@ -1,6 +1,6 @@
 import json
 import logging
-from typing import Any, Dict, List, Mapping, Optional
+from typing import Any, Dict, List, Mapping, Optional, Set
 from urllib.parse import urlparse
 
 from bombard import request_logging
@@ -15,7 +15,7 @@ from bombard.weaver_mill import WeaverMill
 
 log = logging.getLogger()
 
-DEFAULT_OK = [200]
+DEFAULT_OK = {200}
 DEFAULT_OVERLOAD = [502, 504]
 PREPARE = "prepare"
 AMMO = "ammo"
@@ -51,10 +51,10 @@ class Bombardier(WeaverMill):
 
     def __init__(
         self,
+        args: object,
         supply: Optional[Dict[str, Any]] = None,
-        args: Optional[Any] = None,
         campaign_book: Optional[Dict[str, Any]] = None,
-        ok_statuses: Optional[List[int]] = None,
+        ok_statuses: Optional[Set[int]] = None,
         overload_statuses: Optional[List[int]] = None,
     ):
         self.supply = supply if supply is not None else {}
