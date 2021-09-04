@@ -19,7 +19,7 @@ PACKAGES = [bombard, tests]
 PY_EXT = ".py"
 
 
-def load_tests(loader, tests, ignore) -> None:
+def load_tests(loader, tests, ignore) -> None:  # pylint: disable=unused-argument
     """
     Unittest hook to add tests to auto-discovered ones
     https://docs.python.org/3/library/unittest.html#load-tests-protocol

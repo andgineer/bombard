@@ -6,7 +6,7 @@ If you use include files for scripts add into them
 That defines globals so you have valid code and code autocomplete in your IDE editor.
 All strings with `bombard.examples.mock_globals` will be automatically removed before running bombard scripts.
 """
-import os.path  # pyflakes.ignore  # do not remove. we use it to simplify import lines in examples #NOSONAR
+import os.path  # pylint: disable=unused-import  # do not remove. we use it to simplify import lines in examples #NOSONAR
 
 from bombard.campaign_yaml import yaml
 from bombard.expand_file_name import expand_relative_file_name
@@ -14,7 +14,7 @@ from bombard.expand_file_name import expand_relative_file_name
 resp = {}
 
 
-def reload(requests, repeat=None, **kwargs):
+def reload(requests, repeat=None, **kwargs):  # pylint: disable=unused-argument
     pass
 
 
