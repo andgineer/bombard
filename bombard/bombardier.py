@@ -151,7 +151,7 @@ class Bombardier(WeaverMill):
                     )
 
     @staticmethod
-    def beautify_url(url, method, body):
+    def beautify_url(url, method, body):  # pylint: disable=unused-argument
         urlparts = urlparse(url)
         path = urlparts.path if len(urlparts.path) < 15 else "..." + urlparts.path[-15:]
         query = "?" + urlparts.query if urlparts.query else ""
