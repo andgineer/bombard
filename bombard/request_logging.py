@@ -5,7 +5,7 @@ Use main_thread/sending/receiving to switch logger modes.
 """
 import logging
 import threading
-from typing import Optional
+from typing import Any, Callable, Optional
 
 from bombard.pretty_ns import pretty_ns as plain_ns
 from bombard.pretty_ns import time_ns
@@ -13,10 +13,12 @@ from bombard.terminal_colours import GRAY, OFF
 
 log = logging.getLogger()
 thread_data = threading.local()
-pretty_ns = plain_ns  # we can redefine that to have customized formatting
+pretty_ns: Callable[
+    [int, Optional[Any]], str
+] = plain_ns  # we can redefine that to have customized formatting
 
 
-def main_thread():
+def main_thread() -> None:
     """
     We are in main thread
     """
@@ -28,7 +30,7 @@ def main_thread():
     thread_data.colour = OFF
 
 
-def sending(thread_id, request_id, request_name):
+def sending(thread_id, request_id, request_name) -> None:
     """
     Start sending request
     """
@@ -40,7 +42,7 @@ def sending(thread_id, request_id, request_name):
     thread_data.start = time_ns()
 
 
-def receiving():
+def receiving() -> None:
     """
     Got response to request
     """

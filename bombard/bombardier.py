@@ -51,7 +51,7 @@ class Bombardier(WeaverMill):
 
     def __init__(
         self,
-        args: object,
+        args: Any,
         supply: Optional[Dict[str, Any]] = None,
         campaign_book: Optional[Dict[str, Any]] = None,
         ok_statuses: Optional[Set[int]] = None,
