@@ -30,7 +30,7 @@ def main_thread() -> None:
     thread_data.colour = OFF
 
 
-def sending(thread_id, request_id, request_name) -> None:
+def sending(thread_id: int, request_id: str, request_name: str) -> None:
     """
     Start sending request
     """

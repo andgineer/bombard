@@ -37,7 +37,7 @@ class WeaverMill:
         Job == None is a signal to stop work.
         """
         while True:
-            job = deepcopy(self.queue.get())
+            job: Optional[Dict[str, Any]] = deepcopy(self.queue.get())
             if job is None:
                 break
             try:
