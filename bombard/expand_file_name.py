@@ -1,4 +1,5 @@
 import os.path
+from typing import Any
 
 import bombard
 from bombard.args import CAMPAIGN_FILE_NAME, DIR_DESC_FILE_NAME, EXAMPLES_PREFIX
@@ -6,7 +7,7 @@ from bombard.show_descr import markdown_for_terminal
 from bombard.terminal_colours import red
 
 
-def expand_relative_file_name(file_name):
+def expand_relative_file_name(file_name: str) -> str:
     """
     Replace RELATIVE_PREFIX with package folder so bombard script can use internal examples without full path spec
     """
@@ -15,11 +16,10 @@ def expand_relative_file_name(file_name):
         return os.path.join(
             os.path.dirname(bombard.__file__), "examples", file_name[len(EXAMPLES_PREFIX) :]
         )
-    else:
-        return file_name
+    return file_name
 
 
-def get_campaign_file_name(args):
+def get_campaign_file_name(args: Any) -> str:
     if args.example is not None:
         if args.file_name != CAMPAIGN_FILE_NAME:
             print(red(f'--example option found - ignoring campaign file name "{args.file_name}".'))
@@ -38,7 +38,7 @@ def get_campaign_file_name(args):
     return expand_relative_file_name(args.file_name)
 
 
-def show_folder(folder_path):
+def show_folder(folder_path: str) -> None:
     file_name = os.path.join(folder_path, DIR_DESC_FILE_NAME)
     if not os.path.isfile(file_name):
         print(f"\nNo {DIR_DESC_FILE_NAME} in folder {folder_path}. \nFolder content:\n")
