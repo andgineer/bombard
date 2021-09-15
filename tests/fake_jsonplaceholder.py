@@ -1,4 +1,5 @@
 import json
+from typing import Any, Dict, Optional
 
 FAKE_RESP = {
     ("GET", "/posts"): [{"id": 1}, {"id": 2}, {"id": 3}],
@@ -10,19 +11,25 @@ FAKE_RESP = {
 
 class FakeResp:
     status = 200
-    body = None
+    body: Optional[str] = None
 
-    def __init__(self, resp_body):
+    def __init__(self, resp_body: str) -> None:
         self.body = resp_body
 
-    def read(self):
+    def read(self) -> str:
         return self.body
 
 
 class FakeJSONPlaceholder:
-    def request(self, method, path, body=None, headers=None):
+    def request(
+        self,
+        method: str,
+        path: str,
+        body: Optional[str] = None,
+        headers: Optional[Dict[str, Any]] = None,
+    ) -> None:
         self.method = method
         self.path = path
 
-    def response(self):
+    def response(self) -> FakeResp:
         return FakeResp(json.dumps(FAKE_RESP[(self.method, self.path)]))
