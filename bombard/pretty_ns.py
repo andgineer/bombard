@@ -19,17 +19,14 @@ True
 True
 
 """
-from typing import Any, Callable, Optional
-
-time_ns: Optional[
-    Callable[[], int]
-] = None  # for Python3.7+ this is function from system library time
-
-
-# for earlier Python versions this is emulation of the Python3.7 time_ns
+import time
+from typing import Any, Optional
 
 
 def pretty_ns(elapsed_ns: int, fixed_units: Optional[str] = None) -> str:
+    """
+    for earlier Python versions this is emulation of the Python3.7 time_ns
+    """
     dividers = {
         "us": 1,
         "mks": 1000,
@@ -48,8 +45,15 @@ def pretty_ns(elapsed_ns: int, fixed_units: Optional[str] = None) -> str:
     return f"{result:.1f} {dividers['days']}"
 
 
-def emul_time_ns() -> int:
-    return int(perf_counter() * 10 ** 9)
+try:
+    time_ns = time.time_ns
+except AttributeError:
+    from time import perf_counter
+
+    def emul_time_ns() -> int:
+        return int(perf_counter() * 10 ** 9)
+
+    time_ns = emul_time_ns
 
 
 class Timer:
@@ -71,15 +75,6 @@ class Timer:
     def pretty(self) -> str:
         return pretty_ns(self.ns)
 
-
-import time
-
-try:
-    time_ns = time.time_ns
-except AttributeError:
-    from time import perf_counter
-
-    time_ns = emul_time_ns
 
 if __name__ == "__main__":
     import doctest

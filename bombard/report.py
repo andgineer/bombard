@@ -10,7 +10,7 @@ from array import array
 from copy import deepcopy
 from typing import Any, Dict, Optional, Set
 
-from bombard.pretty_ns import pretty_ns, time_ns
+from bombard import pretty_ns
 from bombard.pretty_sz import pretty_sz
 from bombard.terminal_colours import red
 
@@ -53,13 +53,13 @@ class Reporter:
             name: array(params["type"]) for name, params in self.DIMENSIONS.items()
         }
 
-        self.start_ns = time_ns()
+        self.start_ns = pretty_ns.time_ns()
 
         self.time_units = time_units
         self.time_threshold_ns = time_threshold_ms * 10 ** 6
         self.ok = success_statuses
 
-        self.stat = {}  # stat[request type][status]
+        self.stat: Dict[Any, Any] = {}  # stat[request type][status]
         # todo implement cache
         # To select the best approach cache compare benchmarks for two versions:
         #  1) fill cache in log() and use in filter()/reduce()
@@ -67,7 +67,7 @@ class Reporter:
         # self.stat_by_group = {}  # cache
         # self.stat_by_request = {}  # cache
 
-    def group_name_by_status(self, status):
+    def group_name_by_status(self, status: int) -> str:
         """
         All this statuses should be in GROUPS
         """
@@ -76,7 +76,7 @@ class Reporter:
         else:
             return FAIL_GROUP
 
-    def log(self, status, elapsed, request_name, response_size):
+    def log(self, status: int, elapsed: int, request_name: str, response_size: int) -> None:
         """
         Add result to the report
 
@@ -90,8 +90,8 @@ class Reporter:
         self.stat[request_name][status][SIZE].append(response_size)
 
     @property
-    def total_elapsed_ns(self):
-        return time_ns() - self.start_ns
+    def total_elapsed_ns(self) -> int:
+        return pretty_ns.time_ns() - self.start_ns
 
     def reduce(
         self,
@@ -173,8 +173,8 @@ class Reporter:
     def pretty_time(self, elapsed: int, paint: bool = True):
         return self.pretty_ns(elapsed * TIME_DENOMINATOR, paint)
 
-    def pretty_ns(self, elapsed_ns: int, paint: bool = True):
-        result = pretty_ns(elapsed_ns, self.time_units)
+    def pretty_ns(self, elapsed_ns: int, paint: bool = True) -> str:
+        result = pretty_ns.pretty_ns(elapsed_ns, self.time_units)
         if elapsed_ns > self.time_threshold_ns and paint:
             return red(result)
         else:

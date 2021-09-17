@@ -13,9 +13,7 @@ from bombard.terminal_colours import GRAY, OFF
 
 log = logging.getLogger()
 thread_data = threading.local()
-pretty_ns: Callable[
-    [int, Optional[Any]], str
-] = plain_ns  # we can redefine that to have customized formatting
+pretty_ns: Callable[[int], str] = plain_ns  # we can redefine that to have customized formatting
 
 
 def main_thread() -> None:
@@ -51,7 +49,7 @@ def receiving() -> None:
 
 
 class RequestFormatter(logging.Formatter):
-    def format(self, record):
+    def format(self, record: Any) -> str:
         record.threadid = thread_data.thread_id
         record.requestid = str(thread_data.request_id).rjust(4)
         record.colour = thread_data.colour
@@ -63,7 +61,7 @@ class RequestFormatter(logging.Formatter):
         return super().format(record)
 
 
-def setup_logging(level: int, log_file_name: Optional[str] = None):
+def setup_logging(level: int, log_file_name: Optional[str] = None) -> None:
     main_thread()
     handler = logging.StreamHandler()
     formatter = RequestFormatter(

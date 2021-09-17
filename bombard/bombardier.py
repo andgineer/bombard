@@ -109,7 +109,9 @@ class Bombardier(WeaverMill):
             result.update(predefined["json"])
         return result
 
-    def process_resp(self, ammo: Dict[str, Any], status: int, resp: str, elapsed: int, size: int):
+    def process_resp(
+        self, ammo: Dict[str, Any], status: int, resp: str, elapsed: int, size: int
+    ) -> None:
         request = ammo["request"]
         self.reporter.log(status, elapsed, request.get("name"), size)
         if status in self.ok:

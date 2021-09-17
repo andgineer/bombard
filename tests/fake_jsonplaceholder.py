@@ -16,7 +16,7 @@ class FakeResp:
     def __init__(self, resp_body: str) -> None:
         self.body = resp_body
 
-    def read(self) -> str:
+    def read(self) -> Optional[str]:
         return self.body
 
 
