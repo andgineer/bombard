@@ -53,7 +53,7 @@ To use bombard examples prefix filename with "@".""",
         dest="supply",
         type=str,
         nargs="*",
-        help='supply as separate pairs "-c name=val" or many pairs at once "-c name1=val1,name2=val2,.."',
+        help='supply as separate pairs "-s name=val" or many pairs at once "-s name1=val1,name2=val2,.."',
     )
     parser.add_argument(
         "--repeat",

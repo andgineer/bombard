@@ -4,7 +4,7 @@ Bombard's main
 import logging
 import os.path
 from shutil import copyfile
-from typing import Any, Dict, Optional, Union
+from typing import Any, Dict, List, Optional, Union
 
 import colorama
 
@@ -35,7 +35,10 @@ def guess_type(value: str) -> Union[str, int, float]:
     return value
 
 
-def get_supply_from_cli(supply: Optional[list]) -> Dict[str, Any]:
+def get_supply_from_cli(supply: Optional[List[str]]) -> Dict[str, Any]:
+    """
+    Extract key=value pairs from list of `supply` args
+    """
     result = {}
     if supply:
         for item in supply:
@@ -45,7 +48,7 @@ def get_supply_from_cli(supply: Optional[list]) -> Dict[str, Any]:
     return result
 
 
-def load_book_supply(cli_supply, book_supply):
+def load_book_supply(cli_supply: Dict[str, Any], book_supply: Dict[str, Any]) -> None:
     """
     Updates CLI supply with supply from campaign book.
     But do not overwrite CLI supply with book supply - values from CLI have bigger priority.
