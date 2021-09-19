@@ -35,15 +35,13 @@ class CaptureOutput:
     def stdout(self) -> Optional[str]:
         if self.capture and self.out.getvalue():
             return self.out.getvalue()
-        else:
-            return None
+        return None
 
     @property
     def stderr(self) -> Optional[str]:
         if self.capture and self.err.getvalue():
             return self.err.getvalue()
-        else:
-            return None
+        return None
 
     @property
     def output(self) -> Optional[str]:
@@ -52,8 +50,7 @@ class CaptureOutput:
             return "\n".join([self.stdout, self.stderr])
         elif self.stdout is not None:
             return self.stdout
-        else:
-            return self.stderr
+        return self.stderr
 
     def __exit__(self, *args) -> None:
         if self.capture:

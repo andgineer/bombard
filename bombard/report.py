@@ -8,7 +8,7 @@ Use:
 import statistics
 from array import array
 from copy import deepcopy
-from typing import Any, Dict, Optional, Set
+from typing import Any, Callable, Dict, Optional, Set
 
 from bombard import pretty_ns
 from bombard.pretty_sz import pretty_sz
@@ -59,7 +59,9 @@ class Reporter:
         self.time_threshold_ns = time_threshold_ms * 10 ** 6
         self.ok = success_statuses
 
-        self.stat: Dict[Any, Any] = {}  # stat[request type][status]
+        self.stat: Dict[
+            str, Dict[int, Dict[str, array[Any]]]
+        ] = {}  # stat[request type][status]['time'|'size']
         # todo implement cache
         # To select the best approach cache compare benchmarks for two versions:
         #  1) fill cache in log() and use in filter()/reduce()
@@ -73,8 +75,7 @@ class Reporter:
         """
         if status in self.ok:
             return SUCCESS_GROUP
-        else:
-            return FAIL_GROUP
+        return FAIL_GROUP
 
     def log(self, status: int, elapsed: int, request_name: str, response_size: int) -> None:
         """
@@ -95,10 +96,12 @@ class Reporter:
 
     def reduce(
         self,
-        reduce_func,
+        reduce_func: Callable[
+            [Any], Any
+        ],  # actually this is Sized (for len) or Iterable[int] (for sub) but I do not see how to express that for mypy
         dimension_name: str,
-        status_group_filter: str = None,
-        request_name_filter: str = None,
+        status_group_filter: Optional[str] = None,
+        request_name_filter: Optional[str] = None,
     ) -> int:
         """
         Reduce the dimension by group and/or request_name with the reduce_func
@@ -177,10 +180,9 @@ class Reporter:
         result = pretty_ns.pretty_ns(elapsed_ns, self.time_units)
         if elapsed_ns > self.time_threshold_ns and paint:
             return red(result)
-        else:
-            return result
+        return result
 
-    def report(self):
+    def report(self) -> str:
         size_sum = self.reduce(sum, SIZE)
         total_ns = self.reduce(sum, TIME)
         total_num = self.reduce(len, TIME)
