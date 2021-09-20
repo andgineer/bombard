@@ -58,7 +58,7 @@ def load_book_supply(cli_supply: Dict[str, Any], book_supply: Dict[str, Any]) ->
             cli_supply[var] = val.format(**cli_supply) if isinstance(val, str) else val
 
 
-def add_names_to_requests(campaign_book):
+def add_names_to_requests(campaign_book: Dict[str, Any]) -> None:
     """
     Duplicate names inside requests so worker will see it and use in stat report
     """
@@ -68,7 +68,7 @@ def add_names_to_requests(campaign_book):
                 request["name"] = name
 
 
-def init(args):
+def init(args: Any) -> None:
     """
     Copies the example to current folder as bombard.yaml
     """
@@ -83,7 +83,7 @@ def init(args):
     # todo copy external python scripts if it is included into the example (create yaml CopyLoader)
 
 
-def start_campaign(args, campaign_book):
+def start_campaign(args: Any, campaign_book: Dict[str, Any]) -> None:
     log.debug("Starting bombard campaign with args\n" + " " * 4 + f"{args.__dict__}")
     log.debug(
         f'Loaded bombard campaign from "{args.file_name}": {len(campaign_book.get("ammo", {}))} ammo.'
@@ -114,7 +114,7 @@ def start_campaign(args, campaign_book):
     bombardier.report()
 
 
-def campaign(args):
+def campaign(args: Any) -> None:
     if args.version:
         print(bombard.__name__, bombard.version())
         with open(os.path.join(os.path.dirname(bombard.__file__), "LICENSE.txt"), "r") as license:

@@ -225,7 +225,7 @@ class Bombardier(WeaverMill):
         finally:
             request_logging.main_thread()
 
-    def reload(self, requests, repeat=None, prepare=False, **kwargs):
+    def reload(self, requests: Any, repeat: int = None, prepare: bool = False, **kwargs) -> None:
         """
         Add request(s) to the bombardier queue `repeat`-times (args.repeat if None).
         If `repeat` field exists in the request additionally repeats as defined by it.
@@ -258,7 +258,7 @@ class Bombardier(WeaverMill):
                     self.show_response[self.job_count] = f"Got {self.job_count} responses..."
                 self.put({"id": self.job_count, "request": request, "supply": kwargs})
 
-    def report(self):
+    def report(self) -> None:
         log.warning(
             "\n"
             + "=" * 100
