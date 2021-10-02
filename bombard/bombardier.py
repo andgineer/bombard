@@ -52,8 +52,8 @@ class Bombardier(WeaverMill):
     def __init__(
         self,
         args: Any,
+        campaign_book: Dict[str, Any],
         supply: Optional[Dict[str, Any]] = None,
-        campaign_book: Optional[Dict[str, Any]] = None,
         ok_statuses: Optional[Set[int]] = None,
         overload_statuses: Optional[List[int]] = None,
     ):
@@ -153,7 +153,7 @@ class Bombardier(WeaverMill):
                     )
 
     @staticmethod
-    def beautify_url(url, method, body):  # pylint: disable=unused-argument
+    def beautify_url(url: str, method: str, body: str) -> str:  # pylint: disable=unused-argument
         urlparts = urlparse(url)
         path = urlparts.path if len(urlparts.path) < 15 else "..." + urlparts.path[-15:]
         query = "?" + urlparts.query if urlparts.query else ""
@@ -162,7 +162,7 @@ class Bombardier(WeaverMill):
         query = query if len(query) < 15 else "?..." + query[-15:]
         return f"""{method} {urlparts.netloc}{path}{query}"""
 
-    def worker(self, thread_id, ammo):
+    def worker(self, thread_id: int, ammo: Dict[str, Any]) -> None:
         """
         Thread callable.
         Strike ammo from queue.

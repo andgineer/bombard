@@ -101,7 +101,7 @@ def start_campaign(args: Any, campaign_book: Dict[str, Any]) -> None:
 
     add_names_to_requests(campaign_book)
 
-    bombardier = Bombardier(args, supply, campaign_book)
+    bombardier = Bombardier(args, campaign_book, supply)
     if PREPARE in campaign_book:
         for ammo in campaign_book[PREPARE].values():
             bombardier.reload(ammo, repeat=1, prepare=True)

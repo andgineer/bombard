@@ -21,7 +21,7 @@ class TestHttpRequests(unittest.TestCase):
         setup_logging(logging.DEBUG)
 
     def testRequest(self) -> None:
-        bombardier.Bombardier(args=FakeArgs()).worker(1, TEST_AMMO)
+        bombardier.Bombardier(args=FakeArgs(), campaign_book={}).worker(1, TEST_AMMO)
         http_request.http.client.HTTPSConnection.request.assert_called_once_with(
             "GET", "/users", body=None, headers={"x-x": "json"}
         )
