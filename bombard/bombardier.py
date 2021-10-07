@@ -153,7 +153,9 @@ class Bombardier(WeaverMill):
                     )
 
     @staticmethod
-    def beautify_url(url: str, method: str, body: str) -> str:  # pylint: disable=unused-argument
+    def beautify_url(
+        url: str, method: str, body: Optional[str]
+    ) -> str:  # pylint: disable=unused-argument
         urlparts = urlparse(url)
         path = urlparts.path if len(urlparts.path) < 15 else "..." + urlparts.path[-15:]
         query = "?" + urlparts.query if urlparts.query else ""
@@ -198,7 +200,7 @@ class Bombardier(WeaverMill):
 
                 start_ns = time_ns()
                 if self.args.dry:
-                    status, resp = self.ok[0], json.dumps(request.get("dry"))
+                    status, resp = list(self.ok)[0], json.dumps(request.get("dry"))
                 else:
                     status, resp = http_request(url, method, headers, body, self.args.timeout)
 
@@ -225,7 +227,9 @@ class Bombardier(WeaverMill):
         finally:
             request_logging.main_thread()
 
-    def reload(self, requests: Any, repeat: int = None, prepare: bool = False, **kwargs) -> None:
+    def reload(
+        self, requests: Any, repeat: int = None, prepare: bool = False, **kwargs: Any
+    ) -> None:
         """
         Add request(s) to the bombardier queue `repeat`-times (args.repeat if None).
         If `repeat` field exists in the request additionally repeats as defined by it.
