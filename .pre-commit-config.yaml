@@ -65,7 +65,7 @@ repos:
         entry: dmypy
         files: \.py$
         # pre-commit send full file list so exclude in .mypy.ini is ignored
-        exclude: ^tests/fake_jsonplaceholder\.py
+        exclude: (^tests/fake_jsonplaceholder\.py|tests)
         language: python
         require_serial: true
         args: ["run", "--", "--strict", "--implicit-reexport", "--warn-unused-ignores", "--cache-fine-grained"]

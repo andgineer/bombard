@@ -61,7 +61,7 @@ class Timer:
         pass
 
     def __enter__(self) -> "Timer":
-        self.start = time_ns()  # type: ignore
+        self.start = time_ns()
         return self
 
     def __exit__(self, *args: Any) -> None:
@@ -69,7 +69,7 @@ class Timer:
 
     @property
     def ns(self) -> int:
-        return time_ns() - self.start  # type: ignore
+        return time_ns() - self.start
 
     @property
     def pretty(self) -> str:

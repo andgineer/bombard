@@ -33,9 +33,9 @@ yaml = Yaml()
 
 
 class IncludesLoader(original_yaml.SafeLoader):
-    def __init__(self, stream):
+    def __init__(self, stream):  # type: ignore
         self._root = os.path.split(stream.name)[0]
-        super(IncludesLoader, self).__init__(stream)
+        super().__init__(stream)
 
     @staticmethod
     def wrap_in_yaml_document(msg: str) -> str:
@@ -45,12 +45,12 @@ class IncludesLoader(original_yaml.SafeLoader):
         result = [" " * 4 + line for line in msg.split("\n") if SIGNATURE not in line]
         return "|\n" + "\n".join(result)
 
-    def include(self, node):
-        filename = os.path.join(self._root, self.construct_scalar(node))
+    def include(self, node):  # type: ignore
+        filename = os.path.join(self._root, str(self.construct_scalar(node)))
         with open(filename, "r") as f:
             wrapped = io.StringIO(self.wrap_in_yaml_document(f.read()))
             wrapped.name = f.name  # to please owe own __init__
             return original_yaml.load(wrapped, IncludesLoader)
 
 
-IncludesLoader.add_constructor("!include", IncludesLoader.include)
+IncludesLoader.add_constructor("!include", IncludesLoader.include)  # type: ignore
