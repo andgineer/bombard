@@ -4,7 +4,7 @@
 #
 
 VENV_FOLDER="venv"
-PYTHON="python3"
+PYTHON="python3.8"
 
 RED='\033[1;31m'
 GREEN='\033[1;32m'
@@ -24,9 +24,14 @@ fi
 # virtual env
 if [[ ! -d ${VENV_FOLDER} ]] ; then
     echo -e $CYAN"Creating virtual environment for python in ${VENV_FOLDER}"$NC
-    $PYTHON -m venv  ${VENV_FOLDER}
-    . ${VENV_FOLDER}/bin/activate
-    $PYTHON -m pip install -r requirements.txt
+    if virtualenv ${VENV_FOLDER} --python=${PYTHON}; then
+      python -m venv  ${VENV_FOLDER}
+      . ${VENV_FOLDER}/bin/activate
+      python -m pip install -r requirements.txt
+    else
+      echo "Error to create virtual env. Do you have virtualenv installed?"
+      return 1
+    fi
 else
     echo -e $CYAN"Activating virtual environment ..."$NC
     . ${VENV_FOLDER}/bin/activate
