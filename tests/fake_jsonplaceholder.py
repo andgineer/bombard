@@ -25,8 +25,8 @@ class FakeJSONPlaceholder:
         self,
         method: str,
         path: str,
-        body: Optional[str] = None,
-        headers: Optional[Dict[str, Any]] = None,
+        body: Optional[str] = None,  # pylint: disable=unused-argument
+        headers: Optional[Dict[str, Any]] = None,  # pylint: disable=unused-argument
     ) -> None:
         self.method = method
         self.path = path

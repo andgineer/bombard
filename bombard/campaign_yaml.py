@@ -32,7 +32,7 @@ class Yaml:
 yaml = Yaml()
 
 
-class IncludesLoader(original_yaml.SafeLoader):
+class IncludesLoader(original_yaml.SafeLoader):  # pylint: disable=too-many-ancestors
     def __init__(self, stream):  # type: ignore
         self._root = os.path.split(stream.name)[0]
         super().__init__(stream)

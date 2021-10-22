@@ -154,7 +154,7 @@ class Bombardier(WeaverMill):
 
     @staticmethod
     def beautify_url(
-        url: str, method: str, body: Optional[str]
+        url: str, method: str, body: Optional[str]  # pylint: disable=unused-argument
     ) -> str:  # pylint: disable=unused-argument
         urlparts = urlparse(url)
         path = urlparts.path if len(urlparts.path) < 15 else "..." + urlparts.path[-15:]
@@ -220,7 +220,7 @@ class Bombardier(WeaverMill):
                     + f" ({pretty_sz(len(resp))}) "
                     + pretty_url
                     + " "
-                    + (red(resp) if status == EXCEPTION_STATUS else "")
+                    + (red(resp) if status == EXCEPTION_STATUS else "")  # type: ignore
                 )
             except Exception as e:
                 log.info(pretty_url + " " + red(str(e)), exc_info=True)
@@ -228,7 +228,7 @@ class Bombardier(WeaverMill):
             request_logging.main_thread()
 
     def reload(
-        self, requests: Any, repeat: int = None, prepare: bool = False, **kwargs: Any
+        self, requests: Any, repeat: Optional[int] = None, prepare: bool = False, **kwargs: Any
     ) -> None:
         """
         Add request(s) to the bombardier queue `repeat`-times (args.repeat if None).
