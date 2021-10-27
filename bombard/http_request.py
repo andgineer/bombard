@@ -1,6 +1,6 @@
 import http.client
 import ssl
-from typing import Optional
+from typing import Any, Dict, Optional, Tuple, Union
 from urllib.parse import urlparse
 
 EXCEPTION_STATUS = "!!!"
@@ -9,10 +9,10 @@ EXCEPTION_STATUS = "!!!"
 def http_request(
     url: str,
     method: str = "GET",
-    headers: Optional[dict] = None,
+    headers: Optional[Dict[str, Any]] = None,
     body: Optional[str] = None,
     timeout: Optional[int] = None,
-) -> (int, dict):
+) -> Tuple[Union[int, str], Any]:
     """
     Make HTTP request.
 
@@ -20,20 +20,22 @@ def http_request(
         <HTTP response status>, <response body>
     """
     try:
-        url = urlparse(url)
+        url_parsed = urlparse(url)
         kwargs = {"timeout": timeout} if timeout is not None else {}
-        if url.scheme.lower() == "https":
+        if url_parsed.scheme.lower() == "https":
             conn = http.client.HTTPSConnection(
-                url.netloc,
-                context=ssl._create_unverified_context(),
-                **kwargs,
+                url_parsed.netloc,
+                context=ssl._create_unverified_context(),  # type:ignore
+                **kwargs,  # type:ignore
             )
         else:
-            conn = http.client.HTTPConnection(
-                url.netloc,
-                **kwargs,
+            conn = http.client.HTTPConnection(  # type:ignore
+                url_parsed.netloc,
+                **kwargs,  # type:ignore
             )
-        conn.request(method, url.path, body=body, headers=headers if headers is not None else {})
+        conn.request(
+            method, url_parsed.path, body=body, headers=headers if headers is not None else {}
+        )
         resp = conn.getresponse()
         resp_body = resp.read()
     except Exception as e:

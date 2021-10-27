@@ -15,18 +15,18 @@ SIGNATURE = "bombard.mock_globals"
 
 class Yaml:
     @staticmethod
-    def load(*args: Any, **kwargs: Any) -> Any:
+    def load(stream: Any, Loader: Any = None) -> Any:  # pylint: disable=unused-argument
         """
         Mimics yaml interface for seamless injection
         """
-        return original_yaml.load(*args, **kwargs, Loader=IncludesLoader)
+        return original_yaml.load(stream, Loader=IncludesLoader)
 
     @staticmethod
-    def full_load(*args: Any, **kwargs: Any) -> Any:
+    def full_load(stream: Any, Loader: Any = None) -> Any:  # pylint: disable=unused-argument
         """
         Mimics yaml interface for seamless injection
         """
-        return original_yaml.load(*args, **kwargs, Loader=IncludesLoader)
+        return original_yaml.load(stream, Loader=IncludesLoader)
 
 
 yaml = Yaml()

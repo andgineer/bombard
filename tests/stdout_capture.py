@@ -46,9 +46,9 @@ class CaptureOutput:
     @property
     def output(self) -> Optional[str]:
         """ stdout and strerr separated by new line """
-        if self.stdout is not None and self.stderr is not None:
-            return "\n".join([self.stdout, self.stderr])
-        elif self.stdout is not None:
+        if self.stdout is not None:
+            if self.stderr is not None:
+                return "\n".join([self.stdout, self.stderr])
             return self.stdout
         return self.stderr
 

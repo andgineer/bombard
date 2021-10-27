@@ -84,7 +84,9 @@ def init(args: Any) -> None:
 
 
 def start_campaign(args: Any, campaign_book: Dict[str, Any]) -> None:
-    log.debug("Starting bombard campaign with args\n" + " " * 4 + f"{args.__dict__}")
+    log.debug(  # pylint: disable=logging-not-lazy
+        "Starting bombard campaign with args\n" + " " * 4 + f"{args.__dict__}"
+    )
     log.debug(
         f'Loaded bombard campaign from "{args.file_name}": {len(campaign_book.get("ammo", {}))} ammo.'
     )

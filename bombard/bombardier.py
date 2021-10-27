@@ -1,6 +1,6 @@
 import json
 import logging
-from typing import Any, Dict, List, Mapping, Optional, Set
+from typing import Any, Dict, List, Optional, Set, Union
 from urllib.parse import urlparse
 
 from bombard import request_logging
@@ -110,7 +110,7 @@ class Bombardier(WeaverMill):
         return result
 
     def process_resp(
-        self, ammo: Dict[str, Any], status: int, resp: str, elapsed: int, size: int
+        self, ammo: Dict[str, Any], status: Union[int, str], resp: str, elapsed: int, size: int
     ) -> None:
         request = ammo["request"]
         self.reporter.log(status, elapsed, request.get("name"), size)
@@ -133,6 +133,7 @@ class Bombardier(WeaverMill):
                         f'Cannot extract {request["extract"]} from {resp}:\n{e}', exc_info=True
                     )
             if "script" in request:
+                supply = None
                 try:
                     # Supply immediately repeats all changes in the self.supply so if the script spawns new
                     # requests they already get new values
@@ -171,7 +172,7 @@ class Bombardier(WeaverMill):
         """
         try:
             # setup logging ASAP and as safe as possible
-            if isinstance(ammo, Mapping):
+            if isinstance(ammo, dict):
                 request = ammo.get("request", {})
                 ammo_id = ammo.get("id", "")
                 ammo_name = request.get("name", "")
@@ -190,15 +191,15 @@ class Bombardier(WeaverMill):
                 headers = self.get_headers(request, body is not None)
                 pretty_url = self.beautify_url(url, method, body)
 
-                log.debug(
+                log.debug(  # pylint: disable=logging-not-lazy
                     f"Bomb to drop:\n{pretty_url}" + ("\n{body}" if body is not None else "")
                 )
-                if self.args.quiet:
-                    if ammo_id in self.show_request:
-                        print(f"{self.show_request[ammo_id].format(id=ammo_id):>15}\r", end="")
+                if self.args.quiet and ammo_id in self.show_request:
+                    print(f"{self.show_request[ammo_id].format(id=ammo_id):>15}\r", end="")
                 log.info(pretty_url)
 
                 start_ns = time_ns()
+                status: Union[str, int]
                 if self.args.dry:
                     status, resp = list(self.ok)[0], json.dumps(request.get("dry"))
                 else:
@@ -209,21 +210,22 @@ class Bombardier(WeaverMill):
                 self.process_resp(ammo, status, resp, time_ns() - start_ns, len(resp))
 
                 self.resp_count += 1
-                if self.args.quiet:
-                    if self.resp_count in self.show_response:
-                        print(
-                            f"{self.show_response[self.resp_count].format(id=self.resp_count):>15}\r",
-                            end="",
-                        )
+                if self.args.quiet and self.resp_count in self.show_response:
+                    print(
+                        f"{self.show_response[self.resp_count].format(id=self.resp_count):>15}\r",
+                        end="",
+                    )
                 log.info(
                     self.status_coloured(status)
                     + f" ({pretty_sz(len(resp))}) "
                     + pretty_url
                     + " "
-                    + (red(resp) if status == EXCEPTION_STATUS else "")  # type: ignore
+                    + (red(resp) if status == EXCEPTION_STATUS else "")
                 )
             except Exception as e:
-                log.info(pretty_url + " " + red(str(e)), exc_info=True)
+                log.info(  # pylint: disable=logging-not-lazy
+                    pretty_url + " " + red(str(e)), exc_info=True
+                )
         finally:
             request_logging.main_thread()
 
@@ -263,7 +265,7 @@ class Bombardier(WeaverMill):
                 self.put({"id": self.job_count, "request": request, "supply": kwargs})
 
     def report(self) -> None:
-        log.warning(
+        log.warning(  # pylint: disable=logging-not-lazy
             "\n"
             + "=" * 100
             + "\n"

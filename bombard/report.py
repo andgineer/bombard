@@ -8,7 +8,7 @@ Use:
 import statistics
 from array import array
 from copy import deepcopy
-from typing import Any, Callable, Dict, Optional, Set
+from typing import Any, Callable, Dict, Optional, Set, Union
 
 from bombard import pretty_ns
 from bombard.pretty_sz import pretty_sz
@@ -35,7 +35,7 @@ class Reporter:
         self,
         time_units: Optional[str] = "ms",
         time_threshold_ms: int = 1,
-        success_statuses: Set[int] = {200},
+        success_statuses: Set[int] = None,
     ):
         """
         :param time_units: time representation fixed in the units (see names in bombard.pretty_ns)
@@ -57,17 +57,11 @@ class Reporter:
 
         self.time_units = time_units
         self.time_threshold_ns = time_threshold_ms * 10 ** 6
-        self.ok = success_statuses
+        self.ok = success_statuses or {200}
 
         self.stat: Dict[
             str, Dict[int, Dict[str, array[Any]]]
         ] = {}  # stat[request type][status]['time'|'size']
-        # todo implement cache
-        # To select the best approach cache compare benchmarks for two versions:
-        #  1) fill cache in log() and use in filter()/reduce()
-        #  2) fill cache in filter() and use in reduce()
-        # self.stat_by_group = {}  # cache
-        # self.stat_by_request = {}  # cache
 
     def group_name_by_status(self, status: int) -> str:
         """
@@ -77,7 +71,9 @@ class Reporter:
             return SUCCESS_GROUP
         return FAIL_GROUP
 
-    def log(self, status: int, elapsed: int, request_name: str, response_size: int) -> None:
+    def log(
+        self, status: Union[int, str], elapsed: int, request_name: str, response_size: int
+    ) -> None:
         """
         Add result to the report
 
@@ -86,9 +82,10 @@ class Reporter:
         :param request_name: Request name or None
         :param response_size: Response body size
         """
-        self.stat.setdefault(request_name, {}).setdefault(status, deepcopy(self.STAT_DEFAULT))
-        self.stat[request_name][status][TIME].append(elapsed // TIME_DENOMINATOR)
-        self.stat[request_name][status][SIZE].append(response_size)
+        if isinstance(status, int):  # do not log exceptions
+            self.stat.setdefault(request_name, {}).setdefault(status, deepcopy(self.STAT_DEFAULT))
+            self.stat[request_name][status][TIME].append(elapsed // TIME_DENOMINATOR)
+            self.stat[request_name][status][SIZE].append(response_size)
 
     @property
     def total_elapsed_ns(self) -> int:
@@ -170,10 +167,10 @@ class Reporter:
 
     def statuses_report(self, request_name_filter: str = None) -> str:
         return ", ".join(
-            [f"{group} {self.reduce(len, TIME, group, request_name_filter)}" for group in GROUPS]
+            f"{group} {self.reduce(len, TIME, group, request_name_filter)}" for group in GROUPS
         )
 
-    def pretty_time(self, elapsed: int, paint: bool = True):
+    def pretty_time(self, elapsed: int, paint: bool = True) -> str:
         return self.pretty_ns(elapsed * TIME_DENOMINATOR, paint)
 
     def pretty_ns(self, elapsed_ns: int, paint: bool = True) -> str:
