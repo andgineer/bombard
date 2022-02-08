@@ -8,7 +8,7 @@ Use:
 import statistics
 from array import array
 from copy import deepcopy
-from typing import Any, Callable, Dict, Optional, Set, Union
+from typing import Any, Callable, Dict, MutableSequence, Optional, Set, Union
 
 from bombard import pretty_ns
 from bombard.pretty_sz import pretty_sz
@@ -49,7 +49,7 @@ class Reporter:
             },  # time in ns up to 200 000 days.
             SIZE: {"type": ARRAY_UINT32, "pretty_func": pretty_sz},  # sizes up to 4 Gbytes
         }
-        self.STAT_DEFAULT = {
+        self.STAT_DEFAULT: Dict[str, MutableSequence[Any]] = {
             name: array(params["type"]) for name, params in self.DIMENSIONS.items()
         }
 
@@ -60,7 +60,7 @@ class Reporter:
         self.ok = success_statuses or {200}
 
         self.stat: Dict[
-            str, Dict[int, Dict[str, array[Any]]]
+            str, Dict[int, Dict[str, MutableSequence[Any]]]
         ] = {}  # stat[request type][status]['time'|'size']
 
     def group_name_by_status(self, status: int) -> str:
@@ -105,24 +105,24 @@ class Reporter:
         Returns dict {'time':, 'size':}
         """
         result = 0
-        for request_name in self.stat:
+        for request_name, statuses in self.stat.items():
             if request_name == request_name_filter or request_name_filter is None:
-                for status in self.stat[request_name]:
+                for status in statuses:
                     if (
                         self.group_name_by_status(status) == status_group_filter
                         or status_group_filter is None
                     ):
-                        result += reduce_func(self.stat[request_name][status][dimension_name])
+                        result += reduce_func(statuses[status][dimension_name])
         return result
 
     def filter(
         self, dimension_name: str, status_group_filter: str = None, request_name_filter: str = None
-    ) -> array:
+    ) -> MutableSequence[Any]:
         """
         Filter the dimension by group and/or request_name,
         Returns array with values from dimention_name
         """
-        dimension = array(self.DIMENSIONS[dimension_name]["type"])
+        dimension: MutableSequence[Any] = array(self.DIMENSIONS[dimension_name]["type"])
         for request_name in self.stat:
             if request_name == request_name_filter or request_name_filter is None:
                 for status in self.stat[request_name]:
@@ -134,7 +134,10 @@ class Reporter:
         return dimension
 
     @staticmethod
-    def dimension_stat_report(dimension_values: array, pretty_func) -> str:
+    def dimension_stat_report(
+        dimension_values: MutableSequence[Union[int, float]],
+        pretty_func: Callable[[Union[int, float]], str],
+    ) -> str:
         if not dimension_values:
             return ""
         return ", ".join(

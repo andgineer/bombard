@@ -25,7 +25,7 @@ def http_request(
         if url_parsed.scheme.lower() == "https":
             conn = http.client.HTTPSConnection(
                 url_parsed.netloc,
-                context=ssl._create_unverified_context(),  # type:ignore
+                context=ssl._create_unverified_context(),
                 **kwargs,  # type:ignore
             )
         else:
