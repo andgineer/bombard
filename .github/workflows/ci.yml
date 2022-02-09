@@ -30,7 +30,7 @@ jobs:
         pip install -r requirements.txt
     - name: pre-commit
       run: |
-        pip install flake8 pre-commit
+        pip install flake8 pylint pre-commit
         pre-commit run --all-files
     - name: Test with unittest
       run: |
