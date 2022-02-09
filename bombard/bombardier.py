@@ -77,10 +77,15 @@ class Bombardier(WeaverMill):
 
         super().__init__(args.threads)
 
-    def status_coloured(self, status: int) -> str:
+    def status_coloured(self, status: Union[str, int]) -> str:
+        """
+        Paint ok status as green and overload as red using terminal control codes.
+
+        If status has special string value (EXCEPTION_STATUS) paint it red.
+        """
         if status in self.ok:
             return green(str(status))
-        if status in self.overload:
+        if status in self.overload or status == EXCEPTION_STATUS:
             return dark_red(str(status))
         return red(str(status))
 
@@ -165,16 +170,16 @@ class Bombardier(WeaverMill):
         query = query if len(query) < 15 else "?..." + query[-15:]
         return f"""{method} {urlparts.netloc}{path}{query}"""
 
-    def worker(self, thread_id: int, ammo: Dict[str, Any]) -> None:
+    def worker(self, thread_id: int, job: Dict[str, Any]) -> None:
         """
         Thread callable.
         Strike ammo from queue.
         """
         try:
             # setup logging ASAP and as safe as possible
-            if isinstance(ammo, dict):
-                request = ammo.get("request", {})
-                ammo_id = ammo.get("id", "")
+            if isinstance(job, dict):
+                request = job.get("request", {})
+                ammo_id = job.get("id", "")
                 ammo_name = request.get("name", "")
             else:
                 request = {}
@@ -183,7 +188,7 @@ class Bombardier(WeaverMill):
             request_logging.sending(thread_id, ammo_id, ammo_name)
             pretty_url = ""  # we use it in `except`
             try:
-                ammo = apply_supply_dict(ammo, dict(self.supply, **ammo["supply"]))
+                job = apply_supply_dict(job, dict(self.supply, **job["supply"]))
 
                 url = request.get("url", "")
                 method = request["method"] if "method" in request else "GET"
@@ -207,7 +212,7 @@ class Bombardier(WeaverMill):
 
                 request_logging.receiving()
 
-                self.process_resp(ammo, status, resp, time_ns() - start_ns, len(resp))
+                self.process_resp(job, status, resp, time_ns() - start_ns, len(resp))
 
                 self.resp_count += 1
                 if self.args.quiet and self.resp_count in self.show_response:

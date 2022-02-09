@@ -35,7 +35,7 @@ class Reporter:
         self,
         time_units: Optional[str] = "ms",
         time_threshold_ms: int = 1,
-        success_statuses: Set[int] = None,
+        success_statuses: Optional[Set[int]] = None,
     ):
         """
         :param time_units: time representation fixed in the units (see names in bombard.pretty_ns)
@@ -116,22 +116,25 @@ class Reporter:
         return result
 
     def filter(
-        self, dimension_name: str, status_group_filter: str = None, request_name_filter: str = None
+        self,
+        dimension_name: str,
+        status_group_filter: Optional[str] = None,
+        request_name_filter: Optional[str] = None,
     ) -> MutableSequence[Any]:
         """
         Filter the dimension by group and/or request_name,
         Returns array with values from dimention_name
         """
-        dimension: MutableSequence[Any] = array(self.DIMENSIONS[dimension_name]["type"])
-        for request_name in self.stat:
+        dimension_values: MutableSequence[Any] = array(self.DIMENSIONS[dimension_name]["type"])
+        for request_name, statuses in self.stat.items():
             if request_name == request_name_filter or request_name_filter is None:
-                for status in self.stat[request_name]:
+                for status_name, status in statuses.items():
                     if (
-                        self.group_name_by_status(status) == status_group_filter
+                        self.group_name_by_status(status_name) == status_group_filter
                         or status_group_filter is None
                     ):
-                        dimension += self.stat[request_name][status][dimension_name]
-        return dimension
+                        dimension_values += status[dimension_name]
+        return dimension_values
 
     @staticmethod
     def dimension_stat_report(
@@ -149,26 +152,26 @@ class Reporter:
         )
 
     def filtered_report(
-        self, status_group_filter: str = None, request_name_filter: str = None
+        self, status_group_filter: Optional[str] = None, request_name_filter: Optional[str] = None
     ) -> str:
         """
         Filter by group and/or request_name.
         Returns report str with stats for all dimensions.
         """
         result = []
-        for dimension_name in self.DIMENSIONS:
-            dimension = self.filter(dimension_name, status_group_filter, request_name_filter)
-            if dimension:
+        for dimension_name, dimention_descr in self.DIMENSIONS.items():
+            dimension_values = self.filter(
+                dimension_name, status_group_filter, request_name_filter
+            )
+            if dimension_values:
                 result.append(
-                    self.dimension_stat_report(
-                        dimension, self.DIMENSIONS[dimension_name]["pretty_func"]
-                    )
+                    self.dimension_stat_report(dimension_values, dimention_descr["pretty_func"])
                 )
         if not result:
             return "No such requests"
         return "\n".join(result)
 
-    def statuses_report(self, request_name_filter: str = None) -> str:
+    def statuses_report(self, request_name_filter: Optional[str] = None) -> str:
         return ", ".join(
             f"{group} {self.reduce(len, TIME, group, request_name_filter)}" for group in GROUPS
         )
@@ -204,7 +207,7 @@ class Reporter:
 {self.filtered_report(status_group)}
 """
             )
-        by_group = "\n".join(by_group)
+        by_group_str = "\n".join(by_group)  # we cannot use "\n" inside f-string
         by_request = []
         for request_name in self.stat:
             by_request.append(
@@ -212,9 +215,9 @@ class Reporter:
 {self.filtered_report(None, request_name)}
 """
             )
-        by_request = "\n".join(by_request)
+        by_request_str = "\n".join(by_request)  # we cannot use "\n" inside f-string
         return f"""{total_line}
 
-{by_group}
+{by_group_str}
 
-{by_request}"""
+{by_request_str}"""
