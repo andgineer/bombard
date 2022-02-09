@@ -29,7 +29,7 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
     - name: pre-commit
-      if: matrix.os == 'ubuntu-latest'  # we do not need static code analizes on each platform
+      if: startsWith(matrix.os,'ubuntu')  # we do not need static code analizes on each platform
       run: |
         pip install flake8 pylint pre-commit
         pre-commit run --all-files
