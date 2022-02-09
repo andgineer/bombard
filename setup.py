@@ -1,9 +1,9 @@
 import setuptools
 
-with open("README.rst", "r") as fh:
+with open("README.rst", "r", encoding="utf8") as fh:
     long_description = fh.read()
 
-with open("requirements.txt") as f:
+with open("requirements.txt", encoding="utf8") as f:
     requirements = f.read().splitlines()
 
 import sys

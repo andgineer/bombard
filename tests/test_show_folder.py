@@ -13,7 +13,7 @@ class TestShowFolder(unittest.TestCase):
             campaign(FakeArgs(examples=True))
 
         self.maxDiff = 1024
-        with open(f"bombard/examples/{DIR_DESC_FILE_NAME}") as desc:
+        with open(f"bombard/examples/{DIR_DESC_FILE_NAME}", encoding="utf8") as desc:
             self.assertIn(  # do not check 1st line of output with the folder name
                 markdown_for_terminal(desc.read()), captured.output
             )

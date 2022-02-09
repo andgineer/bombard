@@ -11,6 +11,6 @@ class TestVersion(unittest.TestCase):
         with CaptureOutput() as captured:
             campaign(FakeArgs(version=True))
 
-        with open("bombard/LICENSE.txt") as license:
+        with open("bombard/LICENSE.txt", encoding="utf8") as license:
             self.assertIn(license.readline(), captured.output)
         self.assertIn(bombard.version(), captured.output)

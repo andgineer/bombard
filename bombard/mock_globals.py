@@ -41,7 +41,9 @@ def master(yaml_file_name: str):
     That makes code autocomplete work in bombard script.
     """
     try:
-        campaign_book = yaml.load(open(expand_relative_file_name(yaml_file_name), "r"))
+        campaign_book = yaml.load(
+            open(expand_relative_file_name(yaml_file_name), "r", encoding="utf8")
+        )
         for name in campaign_book["ammo"]:
             setattr(ammo, name, None)
         for name in campaign_book["supply"]:

@@ -25,8 +25,8 @@ class TestInit(unittest.TestCase):
             campaign(FakeArgs(init=True))
 
         self.maxDiff = 1024
-        with open(f"bombard/examples/{INIT_EXAMPLE}") as ex, open(
-            f"{CAMPAIGN_FILE_NAME}", "r"
+        with open(f"bombard/examples/{INIT_EXAMPLE}", encoding="utf8") as ex, open(
+            f"{CAMPAIGN_FILE_NAME}", "r", encoding="utf8"
         ) as init:
             self.assertEqual(ex.read(), init.read())
 
@@ -35,7 +35,7 @@ class TestInit(unittest.TestCase):
             campaign(FakeArgs(example="simpleton", init=True))
 
         self.maxDiff = 1024
-        with open("bombard/examples/simpleton.yaml") as desc, open(
-            f"{CAMPAIGN_FILE_NAME}", "r"
+        with open("bombard/examples/simpleton.yaml", encoding="utf8") as desc, open(
+            f"{CAMPAIGN_FILE_NAME}", "r", encoding="utf8"
         ) as init:
             self.assertIn(desc.read(), init.read())

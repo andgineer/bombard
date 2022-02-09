@@ -46,5 +46,5 @@ def show_folder(folder_path: str) -> None:
             print(name)
     else:
         print(f"\n{folder_path}:\n")
-        with open(file_name, "r") as desc:
+        with open(file_name, "r", encoding="utf8") as desc:
             print(markdown_for_terminal(desc.read()))

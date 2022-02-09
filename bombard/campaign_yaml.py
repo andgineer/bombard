@@ -47,7 +47,7 @@ class IncludesLoader(original_yaml.SafeLoader):  # pylint: disable=too-many-ance
 
     def include(self, node):  # type: ignore
         filename = os.path.join(self._root, str(self.construct_scalar(node)))
-        with open(filename, "r") as f:
+        with open(filename, "r", encoding="utf8") as f:
             wrapped = io.StringIO(self.wrap_in_yaml_document(f.read()))
             wrapped.name = f.name  # to please owe own __init__
             return original_yaml.load(wrapped, IncludesLoader)

@@ -119,7 +119,9 @@ def start_campaign(args: Any, campaign_book: Dict[str, Any]) -> None:
 def campaign(args: Any) -> None:
     if args.version:
         print(bombard.__name__, bombard.version())
-        with open(os.path.join(os.path.dirname(bombard.__file__), "LICENSE.txt"), "r") as license:
+        with open(
+            os.path.join(os.path.dirname(bombard.__file__), "LICENSE.txt"), "r", encoding="utf8"
+        ) as license:
             print(license.readline())
         return
 
@@ -142,7 +144,7 @@ def campaign(args: Any) -> None:
     elif not (os.path.isfile(campaign_file_name) or args.init):
         print(red(f'\nCannot find campaign file "{args.file_name}"\n'))
     else:
-        start_campaign(args, yaml.load(open(campaign_file_name, "r")))
+        start_campaign(args, yaml.load(open(campaign_file_name, "r", encoding="utf8")))
 
 
 def main() -> None:
