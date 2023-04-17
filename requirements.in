@@ -1,0 +1,5 @@
+pyyaml>=5.1
+pygments
+colorama
+types-PyYAML
+mypy

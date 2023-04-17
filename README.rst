@@ -90,6 +90,11 @@ Example of report for the command::
 
 .. image:: https://github.com/andgineer/bombard/blob/master/docs/_static/simple_stdout.png?raw=true
 
+Publishing
+----------
+
+Place pypi password into ~/.pypirc
+
 Documentation
 -------------
 `Bombard documentation <https://bombard.sorokin.engineer/en/latest/>`_

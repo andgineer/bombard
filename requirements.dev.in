@@ -1,0 +1,16 @@
+# dependencies list to build requirements.dev.txt with pip-compile (from pip-tools package)
+sphinx-intl
+python-levenshtein
+pylint
+mypy
+pytest
+pytest-asyncio
+pydocstyle
+twine
+setuptools
+wheel
+tqdm
+pre-commit
+pip-tools
+black
+requests
