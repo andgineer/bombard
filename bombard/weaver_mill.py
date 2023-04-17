@@ -1,5 +1,5 @@
 """
-Multi-threaded jobs processor abstraction.
+Multithreading jobs processor abstraction.
 
 Override method worker in descendant to do a job.
 Add jobs with `put`.
