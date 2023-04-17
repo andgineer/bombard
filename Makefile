@@ -23,6 +23,11 @@ uninstall:
 test:
 	bash ./scripts/test.sh
 
-
 upload:
 	bash ./scripts/upload.sh
+
+run:
+	bash ./scripts/run.sh
+
+lint:
+	bash ./scripts/lint.sh

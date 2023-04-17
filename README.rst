@@ -93,7 +93,11 @@ Example of report for the command::
 Publishing
 ----------
 
-Place pypi password into ~/.pypirc
+Automatically published on pypi on create release on github.
+
+If for some reason you want to publish from local machine:
+1) Place pypi password into ~/.pypirc
+2) `make upload`
 
 Documentation
 -------------

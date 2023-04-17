@@ -26,7 +26,7 @@ def apply_supply(s: str, supply: Dict[str, Any]) -> str:
     if not isinstance(s, str):
         return s
     try:
-        return str(eval('f"""' + s + '"""', supply))
+        return str(eval('f"""' + s + '"""', supply))  # pylint: disable=eval-used
     except Exception as e:
         log.error(f'Cannot eval "{s}":\n{e}', exc_info=True)
     return s
@@ -130,7 +130,9 @@ class Bombardier(WeaverMill):
                         if not extractor:
                             extractor = name
                         if "[" in extractor:
-                            self.supply[name] = eval("data" + extractor)
+                            self.supply[name] = eval(  # pylint: disable=eval-used
+                                "data" + extractor
+                            )
                         else:
                             self.supply[name] = data[extractor]
                 except Exception as e:
@@ -152,7 +154,7 @@ class Bombardier(WeaverMill):
                     }
                     if "compiled" not in request:
                         request["compiled"] = compile(request["script"], "script", "exec")
-                    exec(request["compiled"], context)
+                    exec(request["compiled"], context)  # pylint: disable=exec-used
                 except Exception as e:
                     log.error(
                         f'Script fail\n{e}\n\n{request["script"]}\n\n{supply}\n', exc_info=True
