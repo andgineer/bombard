@@ -26,7 +26,7 @@ def apply_supply(s: str, supply: Dict[str, Any]) -> str:
     if not isinstance(s, str):
         return s
     try:
-        return str(eval('f"""' + s + '"""', supply))  # pylint: disable=eval-used
+        return str(eval(f'f"""{s}"""', supply))  # pylint: disable=eval-used
     except Exception as e:
         log.error(f'Cannot eval "{s}":\n{e}', exc_info=True)
     return s
@@ -131,7 +131,7 @@ class Bombardier(WeaverMill):
                             extractor = name
                         if "[" in extractor:
                             self.supply[name] = eval(  # pylint: disable=eval-used
-                                "data" + extractor
+                                f"data{extractor}"
                             )
                         else:
                             self.supply[name] = data[extractor]
@@ -165,11 +165,11 @@ class Bombardier(WeaverMill):
         url: str, method: str, body: Optional[str]  # pylint: disable=unused-argument
     ) -> str:  # pylint: disable=unused-argument
         urlparts = urlparse(url)
-        path = urlparts.path if len(urlparts.path) < 15 else "..." + urlparts.path[-15:]
-        query = "?" + urlparts.query if urlparts.query else ""
+        path = urlparts.path if len(urlparts.path) < 15 else f"...{urlparts.path[-15:]}"
+        query = f"?{urlparts.query}" if urlparts.query else ""
         if urlparts.fragment:
-            query += "#" + urlparts.fragment
-        query = query if len(query) < 15 else "?..." + query[-15:]
+            query += f"#{urlparts.fragment}"
+        query = query if len(query) < 15 else f"?...{query[-15:]}"
         return f"""{method} {urlparts.netloc}{path}{query}"""
 
     def worker(self, thread_id: int, job: Dict[str, Any]) -> None:
@@ -231,7 +231,7 @@ class Bombardier(WeaverMill):
                 )
             except Exception as e:
                 log.info(  # pylint: disable=logging-not-lazy
-                    pretty_url + " " + red(str(e)), exc_info=True
+                    f"{pretty_url} {red(str(e))}", exc_info=True
                 )
         finally:
             request_logging.main_thread()
