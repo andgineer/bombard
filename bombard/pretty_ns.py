@@ -51,7 +51,7 @@ except AttributeError:
     from time import perf_counter
 
     def emul_time_ns() -> int:
-        return int(perf_counter() * 10 ** 9)
+        return int(perf_counter() * 10**9)
 
     time_ns = emul_time_ns
 

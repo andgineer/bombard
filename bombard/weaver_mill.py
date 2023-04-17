@@ -62,11 +62,11 @@ class WeaverMill:
         self.queue.put(job)
 
     def process(self) -> None:
-        """ Starts all threads and lock until queue is empty """
+        """Starts all threads and lock until queue is empty"""
         self.queue.join()
 
     def stop(self) -> None:
-        """ Stops all threads - send stop signal to queue and lock until they stop """
+        """Stops all threads - send stop signal to queue and lock until they stop"""
         for _ in self.threads:
             self.queue.put(None)
         for thread in self.threads:

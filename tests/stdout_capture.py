@@ -21,7 +21,7 @@ from typing import Optional
 
 class CaptureOutput:
     def __init__(self, capture=True) -> None:
-        """ To see output you can set capture to False"""
+        """To see output you can set capture to False"""
         self.capture = capture
 
     def __enter__(self) -> "CaptureOutput":
@@ -45,7 +45,7 @@ class CaptureOutput:
 
     @property
     def output(self) -> Optional[str]:
-        """ stdout and strerr separated by new line """
+        """stdout and strerr separated by new line"""
         if self.stdout is not None:
             if self.stderr is not None:
                 return "\n".join([self.stdout, self.stderr])

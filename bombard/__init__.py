@@ -4,7 +4,7 @@ __version__ = bombard.version.VERSION
 
 
 def version() -> str:
-    """ 'major.minor' without build number """
+    """'major.minor' without build number"""
     return ".".join(__version__.split(".")[:2])
 
 

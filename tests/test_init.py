@@ -8,7 +8,7 @@ from tests.stdout_capture import CaptureOutput
 
 
 def clean_campaign_file() -> None:
-    """ Removes default campaign from folder root """
+    """Removes default campaign from folder root"""
     if os.path.isfile(CAMPAIGN_FILE_NAME):
         os.remove(CAMPAIGN_FILE_NAME)
 

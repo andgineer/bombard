@@ -56,7 +56,7 @@ class Reporter:
         self.start_ns = pretty_ns.time_ns()
 
         self.time_units = time_units
-        self.time_threshold_ns = time_threshold_ms * 10 ** 6
+        self.time_threshold_ns = time_threshold_ms * 10**6
         self.ok = success_statuses or {200}
 
         self.stat: Dict[
@@ -189,7 +189,7 @@ class Reporter:
         size_sum = self.reduce(sum, SIZE)
         total_ns = self.reduce(sum, TIME)
         total_num = self.reduce(len, TIME)
-        elapsed_sec = total_ns / (10 ** 9)
+        elapsed_sec = total_ns / (10**9)
         infinity = chr(0x221E)
         total_line = " ".join(
             [

@@ -53,4 +53,4 @@ class IncludesLoader(original_yaml.SafeLoader):  # pylint: disable=too-many-ance
             return original_yaml.load(wrapped, IncludesLoader)
 
 
-IncludesLoader.add_constructor("!include", IncludesLoader.include)  # type: ignore
+IncludesLoader.add_constructor("!include", IncludesLoader.include)
