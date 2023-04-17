@@ -16,3 +16,9 @@ ver-release:
 
 reqs:
 	bash ./scripts/compile_requirements.sh
+
+uninstall:
+	bash ./scripts/uninstall.sh
+
+test:
+	bash ./scripts/test.sh

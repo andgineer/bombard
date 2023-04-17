@@ -9,7 +9,7 @@ CYAN='\033[1;36m'
 NC='\033[0m' # No Color
 NL=$'\n'
 
-python3 -m unittest --verbose $@
+python -m unittest --verbose $@
 
 if [ $? -eq 0 ]; then
   echo
@@ -19,3 +19,5 @@ else
   echo -e $RED"fail"$NC
 fi
 echo
+
+python -m pytest --verbose $@

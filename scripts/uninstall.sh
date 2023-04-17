@@ -2,4 +2,4 @@
 #
 # Uninstall bombard package to debug installation
 #
-python3.6 -m pip uninstall bombard
+python -m pip uninstall bombard

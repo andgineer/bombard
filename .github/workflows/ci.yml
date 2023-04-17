@@ -34,6 +34,7 @@ jobs:
       run: |
         pip install flake8 pylint pre-commit
         pre-commit run --all-files
-    - name: Test with unittest
+    - name: Test with pytest and unittest
       run: |
         python -m unittest --verbose
+        python -m pytest --verbose
