@@ -22,3 +22,7 @@ uninstall:
 
 test:
 	bash ./scripts/test.sh
+
+
+upload:
+	bash ./scripts/upload.sh

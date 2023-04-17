@@ -6,5 +6,5 @@
 # The package will be uploaded automatically when you create new release on github
 rm -rf build/*
 rm -rf dist/*
-./build.sh
+scripts/build.sh
 python3 -m twine upload --verbose dist/*
