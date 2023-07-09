@@ -37,5 +37,16 @@ jobs:
         pre-commit run --all-files
     - name: Test with pytest and unittest
       run: |
-        python -m unittest --verbose
-        python -m pytest --verbose
+        unittest --verbose
+        pytest --junitxml=pytest.xml --cov-report=term-missing:skip-covered --cov=bombard tests/ | tee pytest-coverage.txt
+    - name: Pytest coverage comment
+      if: ${{ matrix.python-version == 3.11 && matrix.platform == 'ubuntu-latest' }}
+      uses: MishaKav/pytest-coverage-comment@main
+      with:
+        pytest-coverage-path: ./pytest-coverage.txt
+        junitxml-path: ./pytest.xml
+    - name: Upload coverage data to coveralls.io
+      if: ${{ matrix.python-version == 3.11 && matrix.platform == 'ubuntu-latest' }}
+      run: coveralls --service=github
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
