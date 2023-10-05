@@ -105,6 +105,12 @@ Documentation
 
 Translation managed with `Transifex <https://www.transifex.com/masterAndrey/bombard/translate>`_
 
+Scripts
+-------
+.. code-block:: bash
+
+    make help
+
 .. |build_status| image:: https://github.com/andgineer/bombard/workflows/ci/badge.svg
     :target: https://github.com/andgineer/bombard/actions
     :alt: Latest release
