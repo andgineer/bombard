@@ -18,8 +18,10 @@ bleach==6.0.0
     # via readme-renderer
 build==0.10.0
     # via pip-tools
-certifi==2023.5.7
+certifi==2023.7.22
     # via requests
+cffi==1.15.1
+    # via cryptography
 cfgv==3.3.1
     # via pre-commit
 charset-normalizer==3.2.0
@@ -35,6 +37,8 @@ coverage[toml]==6.5.0
     #   pytest-cov
 coveralls==3.3.1
     # via -r requirements.dev.in
+cryptography==41.0.2
+    # via secretstorage
 dill==0.3.6
     # via pylint
 distlib==0.3.6
@@ -45,8 +49,6 @@ docutils==0.20.1
     # via
     #   readme-renderer
     #   sphinx
-exceptiongroup==1.1.2
-    # via pytest
 filelock==3.12.2
     # via virtualenv
 identify==2.5.24
@@ -58,7 +60,6 @@ imagesize==1.4.1
 importlib-metadata==6.8.0
     # via
     #   keyring
-    #   sphinx
     #   twine
 iniconfig==2.0.0
     # via pytest
@@ -66,6 +67,10 @@ isort==5.12.0
     # via pylint
 jaraco-classes==3.3.0
     # via keyring
+jeepney==0.8.0
+    # via
+    #   keyring
+    #   secretstorage
 jinja2==3.1.2
     # via sphinx
 keyring==24.2.0
@@ -113,6 +118,8 @@ pluggy==1.2.0
     # via pytest
 pre-commit==3.3.3
     # via -r requirements.dev.in
+pycparser==2.21
+    # via cffi
 pydocstyle==6.3.0
     # via -r requirements.dev.in
 pygments==2.15.1
@@ -154,6 +161,8 @@ rfc3986==2.0.0
     # via twine
 rich==13.4.2
     # via twine
+secretstorage==3.3.3
+    # via keyring
 six==1.16.0
     # via bleach
 snowballstemmer==2.2.0
@@ -176,16 +185,6 @@ sphinxcontrib-qthelp==1.0.3
     # via sphinx
 sphinxcontrib-serializinghtml==1.1.5
     # via sphinx
-tomli==2.0.1
-    # via
-    #   black
-    #   build
-    #   coverage
-    #   mypy
-    #   pip-tools
-    #   pylint
-    #   pyproject-hooks
-    #   pytest
 tomlkit==0.11.8
     # via pylint
 tqdm==4.65.0
@@ -193,11 +192,7 @@ tqdm==4.65.0
 twine==4.0.2
     # via -r requirements.dev.in
 typing-extensions==4.7.1
-    # via
-    #   astroid
-    #   black
-    #   mypy
-    #   pylint
+    # via mypy
 urllib3==2.0.3
     # via
     #   requests
