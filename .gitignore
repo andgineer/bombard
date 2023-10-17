@@ -9,3 +9,6 @@ venv/
 *.so
 *~
 docs/_build
+.coverage
+.dmypy.json
+pytest.xml
