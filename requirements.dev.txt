@@ -4,23 +4,23 @@
 #
 #    pip-compile requirements.dev.in
 #
-alabaster==0.7.13
+alabaster==0.7.16
     # via sphinx
-astroid==3.0.1
+astroid==3.0.2
     # via pylint
-babel==2.13.0
+babel==2.14.0
     # via
     #   sphinx
     #   sphinx-intl
-black==23.9.1
+black==23.12.1
     # via -r requirements.dev.in
 build==1.0.3
     # via pip-tools
-certifi==2023.7.22
+certifi==2023.11.17
     # via requests
 cfgv==3.4.0
     # via pre-commit
-charset-normalizer==3.3.0
+charset-normalizer==3.3.2
     # via requests
 click==8.1.7
     # via
@@ -29,13 +29,14 @@ click==8.1.7
     #   sphinx-intl
 coverage[toml]==6.5.0
     # via
+    #   coverage
     #   coveralls
     #   pytest-cov
 coveralls==3.3.1
     # via -r requirements.dev.in
 dill==0.3.7
     # via pylint
-distlib==0.3.7
+distlib==0.3.8
     # via virtualenv
 docopt==0.6.2
     # via coveralls
@@ -43,17 +44,17 @@ docutils==0.20.1
     # via
     #   readme-renderer
     #   sphinx
-exceptiongroup==1.1.3
+exceptiongroup==1.2.0
     # via pytest
-filelock==3.12.4
+filelock==3.13.1
     # via virtualenv
-identify==2.5.30
+identify==2.5.33
     # via pre-commit
-idna==3.4
+idna==3.6
     # via requests
 imagesize==1.4.1
     # via sphinx
-importlib-metadata==6.8.0
+importlib-metadata==7.0.1
     # via
     #   build
     #   keyring
@@ -61,13 +62,13 @@ importlib-metadata==6.8.0
     #   twine
 iniconfig==2.0.0
     # via pytest
-isort==5.12.0
+isort==5.13.2
     # via pylint
 jaraco-classes==3.3.0
     # via keyring
-jinja2==3.1.2
+jinja2==3.1.3
     # via sphinx
-keyring==24.2.0
+keyring==24.3.0
     # via twine
 levenshtein==0.23.0
     # via python-levenshtein
@@ -79,15 +80,15 @@ mccabe==0.7.0
     # via pylint
 mdurl==0.1.2
     # via markdown-it-py
-more-itertools==10.1.0
+more-itertools==10.2.0
     # via jaraco-classes
-mypy==1.6.0
+mypy==1.8.0
     # via -r requirements.dev.in
 mypy-extensions==1.0.0
     # via
     #   black
     #   mypy
-nh3==0.2.14
+nh3==0.2.15
     # via readme-renderer
 nodeenv==1.8.0
     # via pre-commit
@@ -97,38 +98,38 @@ packaging==23.2
     #   build
     #   pytest
     #   sphinx
-pathspec==0.11.2
+pathspec==0.12.1
     # via black
 pip-tools==7.3.0
     # via -r requirements.dev.in
 pkginfo==1.9.6
     # via twine
-platformdirs==3.11.0
+platformdirs==4.1.0
     # via
     #   black
     #   pylint
     #   virtualenv
 pluggy==1.3.0
     # via pytest
-pre-commit==3.5.0
+pre-commit==3.6.0
     # via -r requirements.dev.in
 pydocstyle==6.3.0
     # via -r requirements.dev.in
-pygments==2.16.1
+pygments==2.17.2
     # via
     #   readme-renderer
     #   rich
     #   sphinx
-pylint==3.0.1
+pylint==3.0.3
     # via -r requirements.dev.in
 pyproject-hooks==1.0.0
     # via build
-pytest==7.4.2
+pytest==7.4.4
     # via
     #   -r requirements.dev.in
     #   pytest-asyncio
     #   pytest-cov
-pytest-asyncio==0.21.1
+pytest-asyncio==0.23.3
     # via -r requirements.dev.in
 pytest-cov==4.1.0
     # via -r requirements.dev.in
@@ -136,7 +137,7 @@ python-levenshtein==0.23.0
     # via -r requirements.dev.in
 pyyaml==6.0.1
     # via pre-commit
-rapidfuzz==3.4.0
+rapidfuzz==3.6.1
     # via levenshtein
 readme-renderer==42.0
     # via twine
@@ -151,33 +152,27 @@ requests-toolbelt==1.0.0
     # via twine
 rfc3986==2.0.0
     # via twine
-rich==13.6.0
+rich==13.7.0
     # via twine
 snowballstemmer==2.2.0
     # via
     #   pydocstyle
     #   sphinx
 sphinx==7.2.6
-    # via
-    #   sphinx-intl
-    #   sphinxcontrib-applehelp
-    #   sphinxcontrib-devhelp
-    #   sphinxcontrib-htmlhelp
-    #   sphinxcontrib-qthelp
-    #   sphinxcontrib-serializinghtml
+    # via sphinx-intl
 sphinx-intl==2.1.0
     # via -r requirements.dev.in
-sphinxcontrib-applehelp==1.0.7
+sphinxcontrib-applehelp==1.0.8
     # via sphinx
-sphinxcontrib-devhelp==1.0.5
+sphinxcontrib-devhelp==1.0.6
     # via sphinx
-sphinxcontrib-htmlhelp==2.0.4
+sphinxcontrib-htmlhelp==2.0.5
     # via sphinx
 sphinxcontrib-jsmath==1.0.1
     # via sphinx
-sphinxcontrib-qthelp==1.0.6
+sphinxcontrib-qthelp==1.0.7
     # via sphinx
-sphinxcontrib-serializinghtml==1.1.9
+sphinxcontrib-serializinghtml==1.1.10
     # via sphinx
 tomli==2.0.1
     # via
@@ -189,25 +184,25 @@ tomli==2.0.1
     #   pylint
     #   pyproject-hooks
     #   pytest
-tomlkit==0.12.1
+tomlkit==0.12.3
     # via pylint
 tqdm==4.66.1
     # via -r requirements.dev.in
 twine==4.0.2
     # via -r requirements.dev.in
-typing-extensions==4.8.0
+typing-extensions==4.9.0
     # via
     #   astroid
     #   black
     #   mypy
     #   pylint
-urllib3==2.0.6
+urllib3==2.1.0
     # via
     #   requests
     #   twine
-virtualenv==20.24.5
+virtualenv==20.25.0
     # via pre-commit
-wheel==0.41.2
+wheel==0.42.0
     # via
     #   -r requirements.dev.in
     #   pip-tools
