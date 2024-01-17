@@ -1,7 +1,7 @@
 Bombard
 =======
 
-|made_with_python| |build_status| |upload_pip| |pypi_version| |pypi_license| |readthedocs|
+|made_with_python| |build_status| |coverage| |upload_pip| |pypi_version| |pypi_license| |readthedocs|
 
 Bombard is a tool for stress test and benchmarking your HTTP server.
 Especially it's good to simulate a heavy load and initial burst of
@@ -111,9 +111,18 @@ Scripts
 
     make help
 
+Coverage report
+---------------
+* `Codecov <https://app.codecov.io/gh/andgineer/bombard/tree/master/bombard>`_
+* `Coveralls <https://coveralls.io/github/andgineer/bombard>`_
+
 .. |build_status| image:: https://github.com/andgineer/bombard/workflows/ci/badge.svg
     :target: https://github.com/andgineer/bombard/actions
     :alt: Latest release
+
+.. |coverage| image:: https://raw.githubusercontent.com/andgineer/bombard/python-coverage-comment-action-data/badge.svg
+    :target: https://htmlpreview.github.io/?https://github.com/andgineer/bombard/blob/python-coverage-comment-action-data/htmlcov/index.html
+    :alt: Coverage
 
 .. |upload_pip| image:: https://github.com/andgineer/bombard/workflows/Upload%20Python%20Package/badge.svg
     :target: https://github.com/andgineer/bombard/actions
