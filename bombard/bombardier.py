@@ -44,12 +44,12 @@ def apply_supply_dict(request: Dict[str, Any], supply: Dict[str, Any]) -> Dict[s
     return request
 
 
-class Bombardier(WeaverMill):
+class Bombardier(WeaverMill):  # pylint: disable=too-many-instance-attributes
     """
     Use horde of threads to make HTTP-requests
     """
 
-    def __init__(
+    def __init__(  # pylint: disable=too-many-arguments
         self,
         args: Any,
         campaign_book: Dict[str, Any],
@@ -98,7 +98,7 @@ class Bombardier(WeaverMill):
             "json": {"Content-Type": "application/json"},
         }
         if "headers" in request and isinstance(request["headers"], str):
-            # if headers in request description just a string we know this should be some predefined code
+            # headers in request description just a string: this should be some predefined code
             for known, value in predefined.items():
                 if request["headers"].lower() == known:
                     return value
@@ -114,8 +114,13 @@ class Bombardier(WeaverMill):
             result.update(predefined["json"])
         return result
 
-    def process_resp(
-        self, ammo: Dict[str, Any], status: Union[int, str], resp: str, elapsed: int, size: int
+    def process_resp(  # pylint: disable=too-many-arguments
+        self,
+        ammo: Dict[str, Any],
+        status: Union[int, str],
+        resp: str,
+        elapsed: int,
+        size: int,
     ) -> None:
         request = ammo["request"]
         self.reporter.log(status, elapsed, request.get("name"), size)
@@ -137,13 +142,14 @@ class Bombardier(WeaverMill):
                             self.supply[name] = data[extractor]
                 except Exception as e:
                     log.error(
-                        f'Cannot extract {request["extract"]} from {resp}:\n{e}', exc_info=True
+                        f'Cannot extract {request["extract"]} from {resp}:\n{e}',
+                        exc_info=True,
                     )
             if "script" in request:
                 supply = None
                 try:
-                    # Supply immediately repeats all changes in the self.supply so if the script spawns new
-                    # requests they already get new values
+                    # Supply immediately repeats all changes in the self.supply
+                    # so if the script spawns new requests they already get new values
                     supply = AttrDict(self.supply, **ammo["supply"])
                     context = {
                         "reload": self.reload,
@@ -157,12 +163,15 @@ class Bombardier(WeaverMill):
                     exec(request["compiled"], context)  # pylint: disable=exec-used
                 except Exception as e:
                     log.error(
-                        f'Script fail\n{e}\n\n{request["script"]}\n\n{supply}\n', exc_info=True
+                        f'Script fail\n{e}\n\n{request["script"]}\n\n{supply}\n',
+                        exc_info=True,
                     )
 
     @staticmethod
     def beautify_url(
-        url: str, method: str, body: Optional[str]  # pylint: disable=unused-argument
+        url: str,
+        method: str,
+        body: Optional[str],  # pylint: disable=unused-argument
     ) -> str:  # pylint: disable=unused-argument
         urlparts = urlparse(url)
         path = urlparts.path if len(urlparts.path) < 15 else f"...{urlparts.path[-15:]}"
@@ -237,7 +246,11 @@ class Bombardier(WeaverMill):
             request_logging.main_thread()
 
     def reload(
-        self, requests: Any, repeat: Optional[int] = None, prepare: bool = False, **kwargs: Any
+        self,
+        requests: Any,
+        repeat: Optional[int] = None,
+        prepare: bool = False,
+        **kwargs: Any,
     ) -> None:
         """
         Add request(s) to the bombardier queue `repeat`-times (args.repeat if None).
@@ -273,10 +286,5 @@ class Bombardier(WeaverMill):
 
     def report(self) -> None:
         log.warning(  # pylint: disable=logging-not-lazy
-            "\n"
-            + "=" * 100
-            + "\n"
-            + markdown_for_terminal(self.reporter.report())
-            + "=" * 100
-            + "\n"
+            "\n" + "=" * 100 + "\n" + markdown_for_terminal(self.reporter.report()) + "=" * 100 + "\n"
         )

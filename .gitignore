@@ -2,6 +2,7 @@
 build/
 dist/
 venv/
+bin/
 *.egg-info/
 *.egg
 *.py[cod]

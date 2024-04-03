@@ -1,6 +1,6 @@
-import bombard.version
+import bombard.version as version_module
 
-__version__ = bombard.version.VERSION
+__version__ = version_module.VERSION
 
 
 def version() -> str:

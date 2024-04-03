@@ -5,6 +5,7 @@ Use:
 * `log` to add each request result.
 * `report` to generate report.
 """
+
 import statistics
 from array import array
 from copy import deepcopy
@@ -42,14 +43,17 @@ class Reporter:
         :param time_threshold_ms: show times bigger than that in red
         :param success_statuses: set of statuses treated as success
         """
-        self.DIMENSIONS: Dict[str, Dict[str, Any]] = {
+        self.DIMENSIONS: Dict[str, Dict[str, Any]] = {  # pylint: disable=invalid-name
             TIME: {
                 "type": ARRAY_UINT64,
                 "pretty_func": self.pretty_time,
             },  # time in ns up to 200 000 days.
-            SIZE: {"type": ARRAY_UINT32, "pretty_func": pretty_sz},  # sizes up to 4 Gbytes
+            SIZE: {
+                "type": ARRAY_UINT32,
+                "pretty_func": pretty_sz,
+            },  # sizes up to 4 Gbytes
         }
-        self.STAT_DEFAULT: Dict[str, MutableSequence[Any]] = {
+        self.STAT_DEFAULT: Dict[str, MutableSequence[Any]] = {  # pylint: disable=invalid-name
             name: array(params["type"]) for name, params in self.DIMENSIONS.items()
         }
 
@@ -72,7 +76,11 @@ class Reporter:
         return FAIL_GROUP
 
     def log(
-        self, status: Union[int, str], elapsed: int, request_name: str, response_size: int
+        self,
+        status: Union[int, str],
+        elapsed: int,
+        request_name: str,
+        response_size: int,
     ) -> None:
         """
         Add result to the report
@@ -108,10 +116,7 @@ class Reporter:
         for request_name, statuses in self.stat.items():
             if request_name == request_name_filter or request_name_filter is None:
                 for status in statuses:
-                    if (
-                        self.group_name_by_status(status) == status_group_filter
-                        or status_group_filter is None
-                    ):
+                    if self.group_name_by_status(status) == status_group_filter or status_group_filter is None:
                         result += reduce_func(statuses[status][dimension_name])
         return result
 
@@ -129,10 +134,7 @@ class Reporter:
         for request_name, statuses in self.stat.items():
             if request_name == request_name_filter or request_name_filter is None:
                 for status_name, status in statuses.items():
-                    if (
-                        self.group_name_by_status(status_name) == status_group_filter
-                        or status_group_filter is None
-                    ):
+                    if self.group_name_by_status(status_name) == status_group_filter or status_group_filter is None:
                         dimension_values += status[dimension_name]
         return dimension_values
 
@@ -152,7 +154,9 @@ class Reporter:
         )
 
     def filtered_report(
-        self, status_group_filter: Optional[str] = None, request_name_filter: Optional[str] = None
+        self,
+        status_group_filter: Optional[str] = None,
+        request_name_filter: Optional[str] = None,
     ) -> str:
         """
         Filter by group and/or request_name.
@@ -160,21 +164,15 @@ class Reporter:
         """
         result = []
         for dimension_name, dimention_descr in self.DIMENSIONS.items():
-            dimension_values = self.filter(
-                dimension_name, status_group_filter, request_name_filter
-            )
+            dimension_values = self.filter(dimension_name, status_group_filter, request_name_filter)
             if dimension_values:
-                result.append(
-                    self.dimension_stat_report(dimension_values, dimention_descr["pretty_func"])
-                )
+                result.append(self.dimension_stat_report(dimension_values, dimention_descr["pretty_func"]))
         if not result:
             return "No such requests"
         return "\n".join(result)
 
     def statuses_report(self, request_name_filter: Optional[str] = None) -> str:
-        return ", ".join(
-            f"{group} {self.reduce(len, TIME, group, request_name_filter)}" for group in GROUPS
-        )
+        return ", ".join(f"{group} {self.reduce(len, TIME, group, request_name_filter)}" for group in GROUPS)
 
     def pretty_time(self, elapsed: int, paint: bool = True) -> str:
         return self.pretty_ns(elapsed * TIME_DENOMINATOR, paint)

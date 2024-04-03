@@ -8,7 +8,6 @@ All strings with `bombard.examples.mock_globals` will be automatically removed b
 """
 
 import contextlib
-import os.path  # pylint: disable=unused-import  # do not remove. we use it to simplify import lines in examples #NOSONAR
 
 from bombard.campaign_yaml import yaml
 from bombard.expand_file_name import expand_relative_file_name
@@ -42,7 +41,9 @@ def master(yaml_file_name: str):
     Add names from the yaml file to the unit globals.
     That makes code autocomplete work in bombard script.
     """
-    with contextlib.suppress(Exception):  # ignore if the file is not completed at the moment
+    with contextlib.suppress(
+        Exception
+    ):  # ignore if the file is not completed at the moment
         campaign_book = yaml.load(
             open(expand_relative_file_name(yaml_file_name), "r", encoding="utf8")
         )

@@ -25,7 +25,7 @@ def http_request(
         if url_parsed.scheme.lower() == "https":
             conn = http.client.HTTPSConnection(
                 url_parsed.netloc,
-                context=ssl._create_unverified_context(),
+                context=ssl._create_unverified_context(),  # pylint: disable=protected-access
                 **kwargs,  # type:ignore
             )
         else:
@@ -34,7 +34,10 @@ def http_request(
                 **kwargs,  # type:ignore
             )
         conn.request(
-            method, url_parsed.path, body=body, headers=headers if headers is not None else {}
+            method,
+            url_parsed.path,
+            body=body,
+            headers=headers if headers is not None else {},
         )
         resp = conn.getresponse()
         resp_body = resp.read()

@@ -12,9 +12,12 @@ def expand_relative_file_name(file_name: str) -> str:
     Replace RELATIVE_PREFIX with package folder so bombard script can use internal examples without full path spec
     """
     if file_name.strip().startswith(EXAMPLES_PREFIX):
-        # resource_string(__name__, args.file_name[1:])  # recommended use resource to be zipfile compatible. but this is a pain for !include
+        # recommended use resource to be zipfile compatible. but this is a pain for !include
+        # resource_string(__name__, args.file_name[1:])
         return os.path.join(
-            os.path.dirname(bombard.__file__), "examples", file_name[len(EXAMPLES_PREFIX) :]
+            os.path.dirname(bombard.__file__),
+            "examples",
+            file_name[len(EXAMPLES_PREFIX) :],
         )
     return file_name
 
@@ -28,9 +31,7 @@ def get_campaign_file_name(args: Any) -> str:
             args.file_name += ".yaml"
     if args.examples:
         if args.file_name != CAMPAIGN_FILE_NAME:
-            print(
-                red(f'--examples option found - ignoring campaign file name "{args.file_name}".')
-            )
+            print(red(f'--examples option found - ignoring campaign file name "{args.file_name}".'))
         if args.example is not None:
             print(red("Please do not use --example and --examples options simultaneously."))
         args.file_name = EXAMPLES_PREFIX

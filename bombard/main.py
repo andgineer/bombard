@@ -1,6 +1,7 @@
 """
 Bombard's main
 """
+
 import logging
 import os.path
 from shutil import copyfile
@@ -12,7 +13,11 @@ import bombard
 from bombard.args import CAMPAIGN_FILE_NAME, EXAMPLES_PREFIX, INIT_EXAMPLE, get_args
 from bombard.bombardier import AMMO, PREPARE, Bombardier
 from bombard.campaign_yaml import yaml
-from bombard.expand_file_name import expand_relative_file_name, get_campaign_file_name, show_folder
+from bombard.expand_file_name import (
+    expand_relative_file_name,
+    get_campaign_file_name,
+    show_folder,
+)
 from bombard.request_logging import log, setup_logging
 from bombard.terminal_colours import OFF, RED, red
 
@@ -87,9 +92,7 @@ def start_campaign(args: Any, campaign_book: Dict[str, Any]) -> None:
     log.debug(  # pylint: disable=logging-not-lazy
         "Starting bombard campaign with args\n" + " " * 4 + f"{args.__dict__}"
     )
-    log.debug(
-        f'Loaded bombard campaign from "{args.file_name}": {len(campaign_book.get("ammo", {}))} ammo.'
-    )
+    log.debug(f'Loaded bombard campaign from "{args.file_name}": {len(campaign_book.get("ammo", {}))} ammo.')
     if PREPARE not in campaign_book and AMMO not in campaign_book:
         print(
             f'You should have at least one of "{PREPARE}" and "{AMMO}" '
@@ -120,9 +123,11 @@ def campaign(args: Any) -> None:
     if args.version:
         print(bombard.__name__, bombard.version())
         with open(
-            os.path.join(os.path.dirname(bombard.__file__), "LICENSE.txt"), "r", encoding="utf8"
-        ) as license:
-            print(license.readline())
+            os.path.join(os.path.dirname(bombard.__file__), "LICENSE.txt"),
+            "r",
+            encoding="utf8",
+        ) as file:
+            print(file.readline())
         return
 
     if args.quiet:
@@ -144,7 +149,8 @@ def campaign(args: Any) -> None:
     elif not (os.path.isfile(campaign_file_name) or args.init):
         print(red(f'\nCannot find campaign file "{args.file_name}"\n'))
     else:
-        start_campaign(args, yaml.load(open(campaign_file_name, "r", encoding="utf8")))
+        with open(campaign_file_name, "r", encoding="utf8") as file:
+            start_campaign(args, yaml.load(file))
 
 
 def main() -> None:

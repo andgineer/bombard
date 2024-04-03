@@ -1,6 +1,7 @@
 """
 Parse bombard command line args.
 """
+
 import argparse
 from typing import Any
 
@@ -11,9 +12,7 @@ from bombard.terminal_colours import BROWN, OFF
 
 
 EXAMPLES_PREFIX = "bombard://"  # replaced with path to package folder
-DIR_DESC_FILE_NAME = (
-    "README.md"  # if directory as campaign file then show content of this file from the directory
-)
+DIR_DESC_FILE_NAME = "README.md"  # if directory as campaign file then show content of this file from the directory
 THREADS_NUM = 10
 CAMPAIGN_FILE_NAME = "bombard.yaml"
 INIT_EXAMPLE = "easy.yaml"
@@ -72,7 +71,11 @@ To use bombard examples prefix filename with "@".""",
         help="verbose output (by default False)",
     )
     parser.add_argument(
-        "--version", dest="version", default=False, action="store_true", help="bombard version"
+        "--version",
+        dest="version",
+        default=False,
+        action="store_true",
+        help="bombard version",
     )
     parser.add_argument("--log", "-l", dest="log", type=str, default=None, help="log file name")
     parser.add_argument(

@@ -4,6 +4,7 @@ Bombard campaign loader.
 Extends yaml loader with loading external files `!include file.ext`.
 Excludes lines that import mock_globals.
 """
+
 import io
 import os.path
 from typing import Any
@@ -15,14 +16,14 @@ SIGNATURE = "bombard.mock_globals"
 
 class Yaml:
     @staticmethod
-    def load(stream: Any, Loader: Any = None) -> Any:  # pylint: disable=unused-argument
+    def load(stream: Any, Loader: Any = None) -> Any:  # pylint: disable=unused-argument,invalid-name
         """
         Mimics yaml interface for seamless injection
         """
         return original_yaml.load(stream, Loader=IncludesLoader)
 
     @staticmethod
-    def full_load(stream: Any, Loader: Any = None) -> Any:  # pylint: disable=unused-argument
+    def full_load(stream: Any, Loader: Any = None) -> Any:  # pylint: disable=unused-argument,invalid-name
         """
         Mimics yaml interface for seamless injection
         """

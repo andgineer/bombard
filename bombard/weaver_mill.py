@@ -5,6 +5,7 @@ Override method worker in descendant to do a job.
 Add jobs with `put`.
 Start processing with `start`.
 """
+
 from abc import abstractmethod
 from copy import deepcopy
 from queue import Queue

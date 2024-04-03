@@ -3,6 +3,7 @@ Logger with thread storage to add to log information about request.
 
 Use main_thread/sending/receiving to switch logger modes.
 """
+
 import logging
 import threading
 from typing import Any, Callable, Optional
@@ -55,9 +56,7 @@ class RequestFormatter(logging.Formatter):
         record.colour = thread_data.colour
         record.requestname = thread_data.request_name
         record.dir = thread_data.dir
-        record.elapsed = (
-            pretty_ns(time_ns() - thread_data.start) if thread_data.start is not None else ""
-        )
+        record.elapsed = pretty_ns(time_ns() - thread_data.start) if thread_data.start is not None else ""
         return super().format(record)
 
 

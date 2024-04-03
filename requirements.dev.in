@@ -5,14 +5,12 @@ pylint
 mypy
 pytest
 pytest-asyncio
-pydocstyle
 twine
 setuptools
 wheel
 tqdm
 pre-commit
 pip-tools
-black
 requests
 pytest-cov
 coveralls

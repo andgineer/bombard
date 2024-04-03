@@ -19,6 +19,7 @@ True
 True
 
 """
+
 import time
 from typing import Any, Optional
 
@@ -57,6 +58,8 @@ except AttributeError:
 
 
 class Timer:
+    start: int
+
     def __init__(self) -> None:
         pass
 
