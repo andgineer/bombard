@@ -3,8 +3,8 @@
 # "Set-ups or/and activates development environment"
 #
 
-VENV_FOLDER="venv"
-PYTHON="python3.9"
+VENV_FOLDER=".venv"
+PYTHON="python3.12"
 
 RED='\033[1;31m'
 GREEN='\033[1;32m'
