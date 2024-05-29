@@ -1,3 +1,3 @@
 recursive-include bombard/examples *.py *.yaml *.md
-include bombard/LICENSE.txt
+include bombard/LICENSE.txt requirements.txt README.rst
 global-exclude __init__.py
