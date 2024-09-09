@@ -6,15 +6,15 @@
 #
 colorama==0.4.6
     # via -r requirements.in
-mypy==1.11.0
+mypy==1.11.2
     # via -r requirements.in
 mypy-extensions==1.0.0
     # via mypy
 pygments==2.18.0
     # via -r requirements.in
-pyyaml==6.0.1
+pyyaml==6.0.2
     # via -r requirements.in
-types-pyyaml==6.0.12.20240311
+types-pyyaml==6.0.12.20240808
     # via -r requirements.in
 typing-extensions==4.12.2
     # via mypy
