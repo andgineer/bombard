@@ -3,7 +3,7 @@ import setuptools
 with open("README.rst", "r", encoding="utf8") as fh:
     long_description = fh.read()
 
-with open("requirements.txt", encoding="utf8") as f:
+with open("requirements.in", encoding="utf8") as f:
     requirements = f.read().splitlines()
 
 import sys
@@ -28,6 +28,7 @@ setuptools.setup(
     url="https://bombard.readthedocs.io/en/latest/",
     packages=setuptools.find_packages(),
     include_package_data=True,
+    python_requires=">=3.10",
     install_requires=requirements,
     keywords="http load test parallel",
     classifiers=[
