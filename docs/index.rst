@@ -4,17 +4,21 @@ Translation: `Русский <https://bombard.sorokin.engineer/ru/latest/>`_
 Introduction
 ------------
 
-Bombard is a tool for stress test and benchmarking your HTTP server.
-Especially it's good to simulate a heavy load and initial burst of
+A flexible tool for stress testing servers with easily configurable requests.
+
+Bombard allows you to simulate high-load scenarios by sending customizable requests
+to your server, helping you assess its performance and stability under stress.
+
+It's especially good at simulating heavy loads and initial bursts of
 simultaneous HTTP requests with complex logic.
 
-It is designed to be extremely simple yet powerful tool to
-load test functional behavior.
+Bombard is designed to be an extremely simple yet powerful tool for
+load testing functional behavior.
 
-Thanks to optional Python inlines you can fast and easy describe
-complex logic for the tests.
+Thanks to optional Python inlines, you can quickly and easily describe
+complex logic for your tests.
 
-Test report shows you how many requests per second your server
+The test report shows you how many requests per second your server
 is capable of serving and with what latency.
 
 Requests description
