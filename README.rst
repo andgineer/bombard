@@ -105,9 +105,7 @@ If for some reason you want to publish from local machine:
 
 Documentation
 -------------
-`Bombard documentation <https://bombard.sorokin.engineer/en/latest/>`_
-
-Translation managed with `Transifex <https://www.transifex.com/masterAndrey/bombard/translate>`_
+`Bombard documentation <https://bombard.sorokin.engineer>`_
 
 Scripts
 -------
