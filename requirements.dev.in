@@ -1,16 +1,27 @@
-# dependencies list to build requirements.dev.txt with pip-compile (from pip-tools package)
-sphinx-intl
-python-levenshtein
+-r requirements.in
+
+# lint
+pre-commit
 pylint
 mypy
+
+# test
 pytest
 pytest-asyncio
+pytest-cov
+coveralls
+
+# build
 twine
 setuptools
 wheel
-tqdm
-pre-commit
 pip-tools
-requests
-pytest-cov
-coveralls
+
+# docs
+mkdocstrings[python]
+mkdocs-material
+pymdown-extensions
+mkdocs-awesome-pages-plugin
+
+# build & reqs management
+-e .

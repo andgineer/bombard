@@ -20,5 +20,5 @@ formats:
 
 # Explicitly declare the languages
 languages:
-  en: docs
-  ru: docs/ru
+   en: docs
+   ru: docs/ru
