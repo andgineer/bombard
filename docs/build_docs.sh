@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# Build source and translated docs in _build/html
+# Build source and translated docs in docs/_build/html
 #
-make html
-sphinx-build -b html -D language=ru_RU . _build/html/ru_RU
+sphinx-build -b html docs docs/_build/html -D language=en
+#sphinx-build -b html docs docs/_build/html/ru -D language=ru

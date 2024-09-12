@@ -1,5 +1,5 @@
 .. meta::
-   :lang: en
+   :lang: ru
 
 Introduction
 ------------
@@ -80,7 +80,7 @@ Example of report for the command::
 
     bombard --example simple --repeat 2 --threshold 100
 
-.. image:: _static/simple_stdout.png
+.. image:: ../_static/simple_stdout.png
 
 Source code
 -----------

@@ -25,7 +25,7 @@ reqs:
 	pip install -r requirements.txt
 	pip install -r requirements.dev.txt
 
-.HELP: docs  ## Build the documentation
+.HELP: uninstall  ## Uninstall bombard package to debug installation
 uninstall:
 	bash ./scripts/uninstall.sh
 
