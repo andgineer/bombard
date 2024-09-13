@@ -47,13 +47,13 @@ lint:
 .PHONY: docs
 .HELP: docs  ## Build the English documentation
 docs:
-	open -a 'Google Chrome' http://127.0.0.1:8000/bombard/
+	open -a 'Google Chrome' http://127.0.0.1:8000/
 	scripts/docs-render-config.sh en
 	mkdocs serve -f docs/_mkdocs.yml
 
 .HELP: docs-ru  ## Build the Russian documentation
 docs-ru:
-	open -a 'Google Chrome' http://127.0.0.1:8000/bombard/
+	open -a 'Google Chrome' http://127.0.0.1:8000/
 	scripts/docs-render-config.sh ru
 	rm -rf ./docs/src/ru/images
 	cp -r ./docs/src/en/images ./docs/src/ru/images

@@ -1,6 +1,6 @@
 # yaml-language-server: $schema=https://squidfunk.github.io/mkdocs-material/schema.json
 site_name: bombard
-site_url: https://andgineer.github.io/bombard
+site_url: https://bombard.sorokin.engineer/
 site_author: Andrey Sorokin
 
 # Repository
@@ -61,10 +61,10 @@ theme:
 extra:
   alternate:
     - name: English
-      link: /bombard/
+      link: /
       lang: en
     - name: Русский
-      link: /bombard/ru/
+      link: /ru/
       lang: ru
 
 nav:
