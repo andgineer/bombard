@@ -1,7 +1,7 @@
 Bombard
 =======
 
-|made_with_python| |build_status| |coverage| |upload_pip| |pypi_version| |pypi_license| |readthedocs|
+|made_with_python| |build_status| |coverage| |upload_pip| |pypi_version| |pypi_license|
 
 A flexible tool for stress testing servers with easily configurable requests.
 
