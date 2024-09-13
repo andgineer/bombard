@@ -61,7 +61,3 @@ bombard --example http_get --repeat 1000
 ## Исходный код
 
 [GitHub](https://github.com/masterandrey/bombard/)
-
-## Документация
-
-[Полная документация](https://bombard.sorokin.engineer/ru/latest/)

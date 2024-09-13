@@ -138,10 +138,6 @@ Coverage report
     :target: https://pypi.python.org/pypi/bombard
     :alt: MIT license
 
-.. |readthedocs| image:: https://readthedocs.org/projects/bombard/badge/?version=latest
-    :target: https://bombard.readthedocs.io/en/latest/?badge=latest
-    :alt: Documentation Status
-
 .. |made_with_python| image:: https://img.shields.io/badge/Made%20with-Python-1f425f.svg
     :target: https://www.python.org/
     :alt: Made with Python
