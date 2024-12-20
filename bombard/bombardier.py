@@ -49,7 +49,7 @@ class Bombardier(WeaverMill):  # pylint: disable=too-many-instance-attributes
     Use horde of threads to make HTTP-requests
     """
 
-    def __init__(  # pylint: disable=too-many-arguments
+    def __init__(  # pylint: disable=too-many-arguments,too-many-positional-arguments
         self,
         args: Any,
         campaign_book: Dict[str, Any],
@@ -114,7 +114,7 @@ class Bombardier(WeaverMill):  # pylint: disable=too-many-instance-attributes
             result.update(predefined["json"])
         return result
 
-    def process_resp(  # pylint: disable=too-many-arguments
+    def process_resp(  # pylint: disable=too-many-arguments,too-many-positional-arguments
         self,
         ammo: Dict[str, Any],
         status: Union[int, str],

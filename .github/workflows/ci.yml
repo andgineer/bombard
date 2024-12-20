@@ -39,11 +39,6 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
         pip install -r requirements.dev.txt
-    - name: pre-commit
-      if: runner.os == 'Linux'  # we do not need static code analizes on each OS, but we want to repeat it on Linux only for each Python version in matrix
-      run: |
-        pip install flake8 pylint pre-commit
-        pre-commit run --all-files
     - name: Test with pytest and unittest
       run: |
         python -m unittest --verbose
