@@ -142,7 +142,7 @@ class Bombardier(WeaverMill):  # pylint: disable=too-many-instance-attributes
                             self.supply[name] = data[extractor]
                 except Exception as e:
                     log.error(
-                        f'Cannot extract {request["extract"]} from {resp}:\n{e}',
+                        f"Cannot extract {request['extract']} from {resp}:\n{e}",
                         exc_info=True,
                     )
             if "script" in request:
@@ -163,7 +163,7 @@ class Bombardier(WeaverMill):  # pylint: disable=too-many-instance-attributes
                     exec(request["compiled"], context)  # pylint: disable=exec-used
                 except Exception as e:
                     log.error(
-                        f'Script fail\n{e}\n\n{request["script"]}\n\n{supply}\n',
+                        f"Script fail\n{e}\n\n{request['script']}\n\n{supply}\n",
                         exc_info=True,
                     )
 

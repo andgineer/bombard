@@ -95,8 +95,7 @@ def start_campaign(args: Any, campaign_book: Dict[str, Any]) -> None:
     log.debug(f'Loaded bombard campaign from "{args.file_name}": {len(campaign_book.get("ammo", {}))} ammo.')
     if PREPARE not in campaign_book and AMMO not in campaign_book:
         print(
-            f'You should have at least one of "{PREPARE}" and "{AMMO}" '
-            f"section in your campaign file {args.file_name}"
+            f'You should have at least one of "{PREPARE}" and "{AMMO}" section in your campaign file {args.file_name}'
         )
         return
 

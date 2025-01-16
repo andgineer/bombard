@@ -2,15 +2,15 @@
 #    uv pip compile requirements.in --output-file=requirements.txt
 colorama==0.4.6
     # via -r requirements.in
-mypy==1.13.0
+mypy==1.14.1
     # via -r requirements.in
 mypy-extensions==1.0.0
     # via mypy
-pygments==2.18.0
+pygments==2.19.1
     # via -r requirements.in
 pyyaml==6.0.2
     # via -r requirements.in
-types-pyyaml==6.0.12.20240917
+types-pyyaml==6.0.12.20241230
     # via -r requirements.in
 typing-extensions==4.12.2
     # via mypy
