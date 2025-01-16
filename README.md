@@ -11,7 +11,7 @@
 | bombard/campaign\_yaml.py     |       28 |        8 |     71% |30, 46-47, 50-54 |
 | bombard/expand\_file\_name.py |       33 |        7 |     79% |22, 28, 34, 36, 45-47 |
 | bombard/http\_request.py      |       18 |        3 |     83% | 32, 44-45 |
-| bombard/main.py               |       95 |       20 |     79% |32-40, 49-52, 85-86, 134, 136, 150, 157, 161 |
+| bombard/main.py               |       95 |       20 |     79% |32-40, 49-52, 85-86, 133, 135, 149, 156, 160 |
 | bombard/mock\_globals.py      |       28 |       28 |      0% |     10-59 |
 | bombard/pretty\_ns.py         |       36 |       14 |     61% |46, 51-57, 64, 67-68, 71, 75, 79, 83-85 |
 | bombard/pretty\_sz.py         |       10 |        1 |     90% |        18 |
