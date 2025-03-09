@@ -28,7 +28,7 @@ setuptools.setup(
     url="https://bombard.sorokin.engineer",
     packages=setuptools.find_packages(),
     include_package_data=True,
-    python_requires=">=3.10",
+    python_requires=">=3.11",
     install_requires=requirements,
     keywords="http load test parallel",
     classifiers=[
