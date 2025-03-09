@@ -2,7 +2,8 @@ exclude: |
     (?x)(
       .venv/|
       site/|
-      mock_globals.py
+      mock_globals.py|
+      meta.yaml
     )
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks

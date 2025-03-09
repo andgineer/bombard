@@ -41,8 +41,8 @@ jobs:
         python -m pip install -r requirements.dev.txt
     - name: Test with pytest and unittest
       run: |
-        python -m python -m unittest --verbose
-        python -m python -m pytest --junitxml=pytest.xml --cov-report=term-missing:skip-covered --cov=bombard tests/ | tee pytest-coverage.txt
+        python -m unittest --verbose
+        python -m pytest --junitxml=pytest.xml --cov-report=term-missing:skip-covered --cov=bombard tests/ | tee pytest-coverage.txt
 
     - name: Upload coverage data to coveralls.io
       if: ${{ matrix.python-version == 3.11 && matrix.platform == 'ubuntu-latest' }}
