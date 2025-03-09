@@ -12,4 +12,4 @@ class TestInit(unittest.TestCase):
         zero time => infinity numbers
         """
         report = self.reporter.report()
-        self.assertIn("\u221E", report)  # utf8 infinity char ∞
+        self.assertIn("\u221e", report)  # utf8 infinity char ∞

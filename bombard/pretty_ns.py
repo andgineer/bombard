@@ -28,6 +28,7 @@ def pretty_ns(elapsed_ns: int, fixed_units: Optional[str] = None) -> str:
     """
     for earlier Python versions this is emulation of the Python3.7 time_ns
     """
+    unit_threshold = 100  # Threshold to switch to next unit
     dividers = {
         "us": 1,
         "mks": 1000,
@@ -40,7 +41,7 @@ def pretty_ns(elapsed_ns: int, fixed_units: Optional[str] = None) -> str:
     result: float = elapsed_ns
     for unit, divider in dividers.items():
         result /= divider
-        if result < 100 or unit.lower() == fixed_units:
+        if result < unit_threshold or unit.lower() == fixed_units:
             return f"{result:.1f} {unit}"
         result = round(result)
     return f"{result:.1f} {dividers['days']}"

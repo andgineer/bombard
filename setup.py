@@ -1,6 +1,6 @@
 import setuptools
 
-with open("README.rst", "r", encoding="utf8") as fh:
+with open("README.rst", encoding="utf8") as fh:
     long_description = fh.read()
 
 with open("requirements.in", encoding="utf8") as f:

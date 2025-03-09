@@ -12,7 +12,9 @@ from bombard.terminal_colours import BROWN, OFF
 
 
 EXAMPLES_PREFIX = "bombard://"  # replaced with path to package folder
-DIR_DESC_FILE_NAME = "README.md"  # if directory as campaign file then show content of this file from the directory
+DIR_DESC_FILE_NAME = (
+    "README.md"  # if directory as campaign file then show content of this file from the directory
+)
 THREADS_NUM = 10
 CAMPAIGN_FILE_NAME = "bombard.yaml"
 INIT_EXAMPLE = "easy.yaml"
@@ -26,7 +28,7 @@ def get_args() -> Any:
         description=markdown_for_terminal(
             f"""bombard: utility to bombard with HTTP-requests.
 
-{BROWN}[GitHub](https://github.com/masterandrey/bombard){OFF}"""
+{BROWN}[GitHub](https://github.com/masterandrey/bombard){OFF}""",
         ),
         epilog=markdown_for_terminal("""To show available examples use `bombard --examples`"""),
     )
@@ -52,7 +54,10 @@ To use bombard examples prefix filename with "@".""",
         dest="supply",
         type=str,
         nargs="*",
-        help='supply as separate pairs "-s name=val" or many pairs at once "-s name1=val1,name2=val2,.."',
+        help=(
+            'supply as separate pairs "-s name=val" '
+            'or many pairs at once "-s name1=val1,name2=val2,.."'
+        ),
     )
     parser.add_argument(
         "--repeat",
@@ -92,7 +97,10 @@ To use bombard examples prefix filename with "@".""",
         dest="threshold",
         type=int,
         default=THRESHOLD,
-        help=f"threshold in ms. all times greater than that will be shown in red (default {THRESHOLD})",
+        help=(
+            f"threshold in ms. all times greater than that "
+            f"will be shown in red (default {THRESHOLD})"
+        ),
     )
     parser.add_argument(
         "--timeout",
@@ -132,7 +140,10 @@ to list all available examples use `--examples`.""",
         dest="dry",
         default=False,
         action="store_true",
-        help='run without actual HTTP requests. if there is "dry" parameter in an ammo use it as fake request result.',
+        help=(
+            "run without actual HTTP requests. "
+            'if there is "dry" parameter in an ammo use it as fake request result.'
+        ),
     )
     parser.add_argument(
         "--init",
@@ -141,8 +152,8 @@ to list all available examples use `--examples`.""",
         default=False,
         action="store_true",
         help=f"""copy `{INIT_EXAMPLE}` example to current folder with the name {CAMPAIGN_FILE_NAME}
-so it will be used as default with `bombard` command. If you want to copy different example add option
-`--example <the name you want>`. For full list of examples use `--examples` option.
+so it will be used as default with `bombard` command. If you want to copy different example
+add option `--example <the name you want>`. For full list of examples use `--examples` option.
 """,
     )
 

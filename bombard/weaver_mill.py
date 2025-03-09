@@ -10,7 +10,7 @@ from abc import abstractmethod
 from copy import deepcopy
 from queue import Queue
 from threading import Thread
-from typing import Any, Dict, Optional
+from typing import Any, Optional
 
 
 class WeaverMill:
@@ -20,7 +20,7 @@ class WeaverMill:
         """
         self.threads_num = threads_num
         self.threads = []
-        self.queue: Queue[Optional[Dict[str, Any]]] = Queue()
+        self.queue: Queue[Optional[dict[str, Any]]] = Queue()
         self.job_count = 0
         for thread_id in range(threads_num):
             t = Thread(target=self.thread_worker, args=[thread_id])
@@ -38,7 +38,7 @@ class WeaverMill:
         Job == None is a signal to stop work.
         """
         while True:
-            job: Optional[Dict[str, Any]] = deepcopy(self.queue.get())
+            job: Optional[dict[str, Any]] = deepcopy(self.queue.get())
             if job is None:
                 break
             try:
@@ -47,7 +47,7 @@ class WeaverMill:
                 self.queue.task_done()
 
     @abstractmethod
-    def worker(self, thread_id: int, job: Dict[str, Any]) -> None:
+    def worker(self, thread_id: int, job: dict[str, Any]) -> None:
         """
         Implement your job processor, runs in thread.
 
@@ -55,7 +55,7 @@ class WeaverMill:
         :param job: job from queue
         """
 
-    def put(self, job: Dict[str, Any]) -> None:
+    def put(self, job: dict[str, Any]) -> None:
         """
         Add job to queue.
         To start processing use `process`.

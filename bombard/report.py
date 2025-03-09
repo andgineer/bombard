@@ -8,8 +8,9 @@ Use:
 
 import statistics
 from array import array
+from collections.abc import MutableSequence
 from copy import deepcopy
-from typing import Any, Callable, Dict, MutableSequence, Optional, Set, Union
+from typing import Any, Callable, Optional, Union
 
 from bombard import pretty_ns
 from bombard.pretty_sz import pretty_sz
@@ -36,14 +37,14 @@ class Reporter:
         self,
         time_units: Optional[str] = "ms",
         time_threshold_ms: int = 1,
-        success_statuses: Optional[Set[int]] = None,
+        success_statuses: Optional[set[int]] = None,
     ):
         """
         :param time_units: time representation fixed in the units (see names in bombard.pretty_ns)
         :param time_threshold_ms: show times bigger than that in red
         :param success_statuses: set of statuses treated as success
         """
-        self.DIMENSIONS: Dict[str, Dict[str, Any]] = {  # pylint: disable=invalid-name
+        self.DIMENSIONS: dict[str, dict[str, Any]] = {  # pylint: disable=invalid-name
             TIME: {
                 "type": ARRAY_UINT64,
                 "pretty_func": self.pretty_time,
@@ -53,7 +54,7 @@ class Reporter:
                 "pretty_func": pretty_sz,
             },  # sizes up to 4 Gbytes
         }
-        self.STAT_DEFAULT: Dict[str, MutableSequence[Any]] = {  # pylint: disable=invalid-name
+        self.STAT_DEFAULT: dict[str, MutableSequence[Any]] = {  # pylint: disable=invalid-name
             name: array(params["type"]) for name, params in self.DIMENSIONS.items()
         }
 
@@ -63,8 +64,9 @@ class Reporter:
         self.time_threshold_ns = time_threshold_ms * 10**6
         self.ok = success_statuses or {200}
 
-        self.stat: Dict[
-            str, Dict[int, Dict[str, MutableSequence[Any]]]
+        self.stat: dict[
+            str,
+            dict[int, dict[str, MutableSequence[Any]]],
         ] = {}  # stat[request type][status]['time'|'size']
 
     def group_name_by_status(self, status: int) -> str:
@@ -102,8 +104,9 @@ class Reporter:
     def reduce(
         self,
         reduce_func: Callable[
-            [Any], Any
-        ],  # actually this is Sized (for len) or Iterable[int] (for sub) but I do not see how to express that for mypy
+            [Any],
+            Any,
+        ],  # todo: hot to tell mypy this is Sized (for len) or Iterable[int] (for sub)?
         dimension_name: str,
         status_group_filter: Optional[str] = None,
         request_name_filter: Optional[str] = None,
@@ -116,7 +119,10 @@ class Reporter:
         for request_name, statuses in self.stat.items():
             if request_name == request_name_filter or request_name_filter is None:
                 for status in statuses:
-                    if self.group_name_by_status(status) == status_group_filter or status_group_filter is None:
+                    if (
+                        self.group_name_by_status(status) == status_group_filter
+                        or status_group_filter is None
+                    ):
                         result += reduce_func(statuses[status][dimension_name])
         return result
 
@@ -134,7 +140,10 @@ class Reporter:
         for request_name, statuses in self.stat.items():
             if request_name == request_name_filter or request_name_filter is None:
                 for status_name, status in statuses.items():
-                    if self.group_name_by_status(status_name) == status_group_filter or status_group_filter is None:
+                    if (
+                        self.group_name_by_status(status_name) == status_group_filter
+                        or status_group_filter is None
+                    ):
                         dimension_values += status[dimension_name]
         return dimension_values
 
@@ -150,7 +159,7 @@ class Reporter:
                 f"Mean: {pretty_func(statistics.mean(dimension_values))}",
                 f"min: {pretty_func(min(dimension_values))}",
                 f"max: {pretty_func(max(dimension_values))}",
-            ]
+            ],
         )
 
     def filtered_report(
@@ -166,13 +175,17 @@ class Reporter:
         for dimension_name, dimention_descr in self.DIMENSIONS.items():
             dimension_values = self.filter(dimension_name, status_group_filter, request_name_filter)
             if dimension_values:
-                result.append(self.dimension_stat_report(dimension_values, dimention_descr["pretty_func"]))
+                result.append(
+                    self.dimension_stat_report(dimension_values, dimention_descr["pretty_func"]),
+                )
         if not result:
             return "No such requests"
         return "\n".join(result)
 
     def statuses_report(self, request_name_filter: Optional[str] = None) -> str:
-        return ", ".join(f"{group} {self.reduce(len, TIME, group, request_name_filter)}" for group in GROUPS)
+        return ", ".join(
+            f"{group} {self.reduce(len, TIME, group, request_name_filter)}" for group in GROUPS
+        )
 
     def pretty_time(self, elapsed: int, paint: bool = True) -> str:
         return self.pretty_ns(elapsed * TIME_DENOMINATOR, paint)
@@ -196,14 +209,14 @@ class Reporter:
                 f"`{round(total_num / elapsed_sec) if elapsed_sec > 0 else infinity} op/sec`,",
                 f"{pretty_sz(size_sum)},",
                 f"{pretty_sz(size_sum // elapsed_sec) if elapsed_sec > 0 else infinity}/sec",
-            ]
+            ],
         )
         by_group = []
         for status_group in GROUPS:
             by_group.append(
                 f"""#### {status_group}: {self.reduce(len, TIME, status_group)}
 {self.filtered_report(status_group)}
-"""
+""",
             )
         by_group_str = "\n".join(by_group)  # we cannot use "\n" inside f-string
         by_request = []
@@ -211,7 +224,7 @@ class Reporter:
             by_request.append(
                 f"""### {request_name}: {self.statuses_report(request_name)}
 {self.filtered_report(None, request_name)}
-"""
+""",
             )
         by_request_str = "\n".join(by_request)  # we cannot use "\n" inside f-string
         return f"""{total_line}

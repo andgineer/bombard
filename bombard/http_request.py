@@ -1,6 +1,6 @@
 import http.client
 import ssl
-from typing import Any, Dict, Optional, Tuple, Union
+from typing import Any, Optional, Union
 from urllib.parse import urlparse
 
 EXCEPTION_STATUS = "!!!"
@@ -9,10 +9,10 @@ EXCEPTION_STATUS = "!!!"
 def http_request(
     url: str,
     method: str = "GET",
-    headers: Optional[Dict[str, Any]] = None,
+    headers: Optional[dict[str, Any]] = None,
     body: Optional[str] = None,
     timeout: Optional[int] = None,
-) -> Tuple[Union[int, str], Any]:
+) -> tuple[Union[int, str], Any]:
     """
     Make HTTP request.
 
@@ -25,7 +25,7 @@ def http_request(
         if url_parsed.scheme.lower() == "https":
             conn = http.client.HTTPSConnection(
                 url_parsed.netloc,
-                context=ssl._create_unverified_context(),  # pylint: disable=protected-access
+                context=ssl._create_unverified_context(),  # noqa: S323,SLF001
                 **kwargs,  # type:ignore
             )
         else:
@@ -41,6 +41,6 @@ def http_request(
         )
         resp = conn.getresponse()
         resp_body = resp.read()
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         return EXCEPTION_STATUS, str(e)
     return resp.status, resp_body

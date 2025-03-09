@@ -15,7 +15,7 @@ from bombard.expand_file_name import expand_relative_file_name
 resp = {}
 
 
-def reload(requests, repeat=None, **kwargs):  # pylint: disable=unused-argument
+def reload(requests, repeat=None, **kwargs):
     pass
 
 

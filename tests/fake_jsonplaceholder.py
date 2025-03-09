@@ -1,5 +1,5 @@
 import json
-from typing import Any, Dict, Optional
+from typing import Any, Optional
 
 FAKE_RESP = {
     ("GET", "/posts"): [{"id": 1}, {"id": 2}, {"id": 3}],
@@ -26,7 +26,7 @@ class FakeJSONPlaceholder:
         method: str,
         path: str,
         body: Optional[str] = None,  # pylint: disable=unused-argument
-        headers: Optional[Dict[str, Any]] = None,  # pylint: disable=unused-argument
+        headers: Optional[dict[str, Any]] = None,  # pylint: disable=unused-argument
     ) -> None:
         self.method = method
         self.path = path

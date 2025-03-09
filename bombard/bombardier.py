@@ -1,6 +1,6 @@
 import json
 import logging
-from typing import Any, Dict, List, Optional, Set, Union
+from typing import Any, Optional, Union
 from urllib.parse import urlparse
 
 from bombard import request_logging
@@ -21,18 +21,18 @@ PREPARE = "prepare"
 AMMO = "ammo"
 
 
-def apply_supply(s: str, supply: Dict[str, Any]) -> str:
+def apply_supply(s: str, supply: dict[str, Any]) -> str:
     # todo: add args
     if not isinstance(s, str):
         return s
     try:
-        return str(eval(f'f"""{s}"""', supply))  # pylint: disable=eval-used
-    except Exception as e:
-        log.error(f'Cannot eval "{s}":\n{e}', exc_info=True)
+        return str(eval(f'f"""{s}"""', supply))  # noqa: S307
+    except Exception:  # noqa: BLE001
+        log.exception(f'Cannot eval "{s}"')
     return s
 
 
-def apply_supply_dict(request: Dict[str, Any], supply: Dict[str, Any]) -> Dict[str, Any]:
+def apply_supply_dict(request: dict[str, Any], supply: dict[str, Any]) -> dict[str, Any]:
     """
     Use supply to substitute all {name} in request strings.
     """
@@ -44,18 +44,18 @@ def apply_supply_dict(request: Dict[str, Any], supply: Dict[str, Any]) -> Dict[s
     return request
 
 
-class Bombardier(WeaverMill):  # pylint: disable=too-many-instance-attributes
+class Bombardier(WeaverMill):
     """
     Use horde of threads to make HTTP-requests
     """
 
-    def __init__(  # pylint: disable=too-many-arguments,too-many-positional-arguments
+    def __init__(
         self,
         args: Any,
-        campaign_book: Dict[str, Any],
-        supply: Optional[Dict[str, Any]] = None,
-        ok_statuses: Optional[Set[int]] = None,
-        overload_statuses: Optional[List[int]] = None,
+        campaign_book: dict[str, Any],
+        supply: Optional[dict[str, Any]] = None,
+        ok_statuses: Optional[set[int]] = None,
+        overload_statuses: Optional[list[int]] = None,
     ):
         self.supply = supply if supply is not None else {}
         self.supply["args"] = args
@@ -90,7 +90,7 @@ class Bombardier(WeaverMill):  # pylint: disable=too-many-instance-attributes
         return red(str(status))
 
     @staticmethod
-    def get_headers(request: Dict[str, Any], body_is_json: bool) -> Dict[str, Any]:
+    def get_headers(request: dict[str, Any], body_is_json: bool) -> dict[str, Any]:
         """
         Treat special value 'json' as Content-Type: application/json
         """
@@ -109,14 +109,14 @@ class Bombardier(WeaverMill):  # pylint: disable=too-many-instance-attributes
                     result.update(value)
                     break
             else:
-                result.update({name: val})
+                result[name] = val
         if body_is_json and "Content-Type" not in result:
             result.update(predefined["json"])
         return result
 
-    def process_resp(  # pylint: disable=too-many-arguments,too-many-positional-arguments
+    def process_resp(
         self,
-        ammo: Dict[str, Any],
+        ammo: dict[str, Any],
         status: Union[int, str],
         resp: str,
         elapsed: int,
@@ -124,64 +124,83 @@ class Bombardier(WeaverMill):  # pylint: disable=too-many-instance-attributes
     ) -> None:
         request = ammo["request"]
         self.reporter.log(status, elapsed, request.get("name"), size)
-        if status in self.ok:
-            log.debug(f"{status} reply\n{resp}")
-            if "extract" in request:
-                try:
-                    data = json.loads(resp)
-                    if not hasattr(request["extract"], "items"):
-                        request["extract"] = {request["extract"]: request["extract"]}
-                    for name, extractor in request["extract"].items():
-                        if not extractor:
-                            extractor = name
-                        if "[" in extractor:
-                            self.supply[name] = eval(  # pylint: disable=eval-used
-                                f"data{extractor}"
-                            )
-                        else:
-                            self.supply[name] = data[extractor]
-                except Exception as e:
-                    log.error(
-                        f"Cannot extract {request['extract']} from {resp}:\n{e}",
-                        exc_info=True,
-                    )
-            if "script" in request:
-                supply = None
-                try:
-                    # Supply immediately repeats all changes in the self.supply
-                    # so if the script spawns new requests they already get new values
-                    supply = AttrDict(self.supply, **ammo["supply"])
-                    context = {
-                        "reload": self.reload,
-                        "resp": json.loads(resp),
-                        "args": self.args,
-                        "supply": supply,
-                        "ammo": AttrDict(self.campaign[AMMO]),
-                    }
-                    if "compiled" not in request:
-                        request["compiled"] = compile(request["script"], "script", "exec")
-                    exec(request["compiled"], context)  # pylint: disable=exec-used
-                except Exception as e:
-                    log.error(
-                        f"Script fail\n{e}\n\n{request['script']}\n\n{supply}\n",
-                        exc_info=True,
-                    )
+
+        if status not in self.ok:
+            return
+
+        log.debug(f"{status} reply\n{resp}")
+
+        if "extract" in request:
+            self._handle_extraction(request, resp)
+
+        if "script" in request:
+            self._execute_script(request, ammo, resp)
+
+    def _handle_extraction(self, request, resp):
+        try:
+            data = json.loads(resp)
+            if not hasattr(request["extract"], "items"):
+                request["extract"] = {request["extract"]: request["extract"]}
+
+            for name, extract_key in request["extract"].items():
+                extractor = extract_key or name
+                self._extract_value(data, name, extractor)
+
+        except Exception:
+            log.exception(
+                f"Cannot extract {request['extract']} from {resp}",
+            )
+
+    def _extract_value(self, data, name, extractor):
+        if "[" in extractor:
+            self.supply[name] = eval(f"data{extractor}")  # noqa: S307
+        else:
+            self.supply[name] = data[extractor]
+
+    def _execute_script(self, request, ammo, resp):
+        supply = None
+        try:
+            # Supply immediately repeats all changes in the self.supply
+            # so if the script spawns new requests they already get new values
+            supply = AttrDict(self.supply, **ammo["supply"])
+            context = {
+                "reload": self.reload,
+                "resp": json.loads(resp),
+                "args": self.args,
+                "supply": supply,
+                "ammo": AttrDict(self.campaign[AMMO]),
+            }
+
+            if "compiled" not in request:
+                request["compiled"] = compile(request["script"], "script", "exec")
+
+            exec(request["compiled"], context)  # noqa: S102
+
+        except Exception:
+            log.exception(
+                f"Script fail\n{request['script']}\n\n{supply}\n",
+            )
 
     @staticmethod
     def beautify_url(
         url: str,
         method: str,
-        body: Optional[str],  # pylint: disable=unused-argument
-    ) -> str:  # pylint: disable=unused-argument
+        body: Optional[str],  # noqa: ARG004
+    ) -> str:
         urlparts = urlparse(url)
-        path = urlparts.path if len(urlparts.path) < 15 else f"...{urlparts.path[-15:]}"
+        max_display_length = 15
+        path = (
+            urlparts.path
+            if len(urlparts.path) < max_display_length
+            else f"...{urlparts.path[-max_display_length:]}"
+        )
         query = f"?{urlparts.query}" if urlparts.query else ""
         if urlparts.fragment:
             query += f"#{urlparts.fragment}"
-        query = query if len(query) < 15 else f"?...{query[-15:]}"
+        query = query if len(query) < max_display_length else f"?...{query[-max_display_length:]}"
         return f"""{method} {urlparts.netloc}{path}{query}"""
 
-    def worker(self, thread_id: int, job: Dict[str, Any]) -> None:
+    def worker(self, thread_id: int, job: dict[str, Any]) -> None:
         """
         Thread callable.
         Strike ammo from queue.
@@ -202,13 +221,14 @@ class Bombardier(WeaverMill):  # pylint: disable=too-many-instance-attributes
                 job = apply_supply_dict(job, dict(self.supply, **job["supply"]))
 
                 url = request.get("url", "")
-                method = request["method"] if "method" in request else "GET"
+                method = request.get("method", "GET")
                 body = json.dumps(request["body"]) if "body" in request else None
                 headers = self.get_headers(request, body is not None)
                 pretty_url = self.beautify_url(url, method, body)
 
-                log.debug(  # pylint: disable=logging-not-lazy
-                    f"Bomb to drop:\n{pretty_url}" + ("\n{body}" if body is not None else "")
+                log.debug(
+                    f"Bomb to drop:\n{pretty_url}"  # noqa: G003
+                    + ("\n{body}" if body is not None else ""),
                 )
                 if self.args.quiet and ammo_id in self.show_request:
                     print(f"{self.show_request[ammo_id].format(id=ammo_id):>15}\r", end="")
@@ -232,15 +252,16 @@ class Bombardier(WeaverMill):  # pylint: disable=too-many-instance-attributes
                         end="",
                     )
                 log.info(
-                    self.status_coloured(status)
+                    self.status_coloured(status)  # noqa: G003
                     + f" ({pretty_sz(len(resp))}) "
                     + pretty_url
                     + " "
-                    + (red(resp) if status == EXCEPTION_STATUS else "")
+                    + (red(resp) if status == EXCEPTION_STATUS else ""),
                 )
-            except Exception as e:
-                log.info(  # pylint: disable=logging-not-lazy
-                    f"{pretty_url} {red(str(e))}", exc_info=True
+            except Exception as e:  # noqa: BLE001
+                log.info(
+                    f"{pretty_url} {red(str(e))}",
+                    exc_info=True,
                 )
         finally:
             request_logging.main_thread()
@@ -285,6 +306,11 @@ class Bombardier(WeaverMill):  # pylint: disable=too-many-instance-attributes
                 self.put({"id": self.job_count, "request": request, "supply": kwargs})
 
     def report(self) -> None:
-        log.warning(  # pylint: disable=logging-not-lazy
-            "\n" + "=" * 100 + "\n" + markdown_for_terminal(self.reporter.report()) + "=" * 100 + "\n"
+        log.warning(
+            "\n"  # noqa: G003
+            + "=" * 100
+            + "\n"
+            + markdown_for_terminal(self.reporter.report())
+            + "=" * 100
+            + "\n",
         )

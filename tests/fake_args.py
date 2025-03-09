@@ -5,6 +5,7 @@ This is AttrDict so you can use something like that
 >>> args.init
 True
 """
+
 from bombard.args import CAMPAIGN_FILE_NAME, THREADS_NUM, THRESHOLD, TIMEOUT
 from bombard.attr_dict import AttrDict
 

@@ -14,6 +14,7 @@ Usage:
 ...     captured.output is None
 True
 """
+
 import sys
 from io import StringIO
 from typing import Optional

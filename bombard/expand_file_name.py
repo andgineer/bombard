@@ -9,7 +9,9 @@ from bombard.terminal_colours import red
 
 def expand_relative_file_name(file_name: str) -> str:
     """
-    Replace RELATIVE_PREFIX with package folder so bombard script can use internal examples without full path spec
+    Replace RELATIVE_PREFIX with package folder.
+
+    so bombard script can use internal examples without full path spec
     """
     if file_name.strip().startswith(EXAMPLES_PREFIX):
         # recommended use resource to be zipfile compatible. but this is a pain for !include
@@ -47,5 +49,5 @@ def show_folder(folder_path: str) -> None:
             print(name)
     else:
         print(f"\n{folder_path}:\n")
-        with open(file_name, "r", encoding="utf8") as desc:
+        with open(file_name, encoding="utf8") as desc:
             print(markdown_for_terminal(desc.read()))

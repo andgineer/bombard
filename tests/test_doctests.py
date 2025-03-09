@@ -6,6 +6,7 @@ So you will have one nice test report and one test result/exit code in CI.
 
 You should import below all your packages with doctests and list them in PACKAGES.
 """
+
 import doctest
 from glob import glob
 from importlib import import_module
@@ -29,7 +30,7 @@ def load_tests(loader, tests, ignore) -> None:  # pylint: disable=unused-argumen
             if isfile(module_file) and not module_file.endswith("__init__.py"):
                 tests.addTest(
                     doctest.DocTestSuite(
-                        import_module(f"{package.__name__}.{basename(module_file)[:-len(PY_EXT)]}")
+                        import_module(f"{package.__name__}.{basename(module_file)[: -len(PY_EXT)]}")
                     )
                 )
     return tests

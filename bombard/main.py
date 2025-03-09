@@ -5,7 +5,7 @@ Bombard's main
 import logging
 import os.path
 from shutil import copyfile
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Optional, Union
 
 import colorama
 
@@ -40,7 +40,7 @@ def guess_type(value: str) -> Union[str, int, float]:
     return value
 
 
-def get_supply_from_cli(supply: Optional[List[str]]) -> Dict[str, Any]:
+def get_supply_from_cli(supply: Optional[list[str]]) -> dict[str, Any]:
     """
     Extract key=value pairs from list of `supply` args
     """
@@ -53,7 +53,7 @@ def get_supply_from_cli(supply: Optional[List[str]]) -> Dict[str, Any]:
     return result
 
 
-def load_book_supply(cli_supply: Dict[str, Any], book_supply: Dict[str, Any]) -> None:
+def load_book_supply(cli_supply: dict[str, Any], book_supply: dict[str, Any]) -> None:
     """
     Updates CLI supply with supply from campaign book.
     But do not overwrite CLI supply with book supply - values from CLI have bigger priority.
@@ -63,7 +63,7 @@ def load_book_supply(cli_supply: Dict[str, Any], book_supply: Dict[str, Any]) ->
             cli_supply[var] = val.format(**cli_supply) if isinstance(val, str) else val
 
 
-def add_names_to_requests(campaign_book: Dict[str, Any]) -> None:
+def add_names_to_requests(campaign_book: dict[str, Any]) -> None:
     """
     Duplicate names inside requests so worker will see it and use in stat report
     """
@@ -88,14 +88,18 @@ def init(args: Any) -> None:
     # todo copy external python scripts if it is included into the example (create yaml CopyLoader)
 
 
-def start_campaign(args: Any, campaign_book: Dict[str, Any]) -> None:
+def start_campaign(args: Any, campaign_book: dict[str, Any]) -> None:
     log.debug(  # pylint: disable=logging-not-lazy
-        "Starting bombard campaign with args\n" + " " * 4 + f"{args.__dict__}"
+        "Starting bombard campaign with args\n" + " " * 4 + f"{args.__dict__}",
     )
-    log.debug(f'Loaded bombard campaign from "{args.file_name}": {len(campaign_book.get("ammo", {}))} ammo.')
+    log.debug(
+        f'Loaded bombard campaign from "{args.file_name}": '
+        f"{len(campaign_book.get('ammo', {}))} ammo.",
+    )
     if PREPARE not in campaign_book and AMMO not in campaign_book:
         print(
-            f'You should have at least one of "{PREPARE}" and "{AMMO}" section in your campaign file {args.file_name}'
+            f'You should have at least one of "{PREPARE}" '
+            f'and "{AMMO}" section in your campaign file {args.file_name}',
         )
         return
 
@@ -123,7 +127,6 @@ def campaign(args: Any) -> None:
         print(bombard.__name__, bombard.version())
         with open(
             os.path.join(os.path.dirname(bombard.__file__), "LICENSE.txt"),
-            "r",
             encoding="utf8",
         ) as file:
             print(file.readline())
@@ -148,7 +151,7 @@ def campaign(args: Any) -> None:
     elif not (os.path.isfile(campaign_file_name) or args.init):
         print(red(f'\nCannot find campaign file "{args.file_name}"\n'))
     else:
-        with open(campaign_file_name, "r", encoding="utf8") as file:
+        with open(campaign_file_name, encoding="utf8") as file:
             start_campaign(args, yaml.load(file))
 
 
