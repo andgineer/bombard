@@ -5,23 +5,23 @@
 | Name                          |    Stmts |     Miss |   Cover |   Missing |
 |------------------------------ | -------: | -------: | ------: | --------: |
 | bombard/\_\_main\_\_.py       |        2 |        2 |      0% |       1-3 |
-| bombard/args.py               |       32 |       19 |     41% |    25-152 |
-| bombard/attr\_dict.py         |       18 |        8 |     56% |42-43, 49, 54-56, 60-62 |
-| bombard/bombardier.py         |      162 |       33 |     80% |27, 30-32, 89, 109-110, 114, 133, 136, 142-144, 149-165, 180, 196-198, 214, 220, 230, 241-242, 270, 284 |
+| bombard/args.py               |       32 |       19 |     41% |    27-163 |
+| bombard/attr\_dict.py         |       18 |        8 |     56% |42-43, 49, 54-56, 63-65 |
+| bombard/bombardier.py         |      169 |       33 |     80% |27, 30-32, 89, 109-110, 114, 137, 143, 149-150, 158, 161-180, 199, 215-217, 234, 240, 250, 261-262, 291, 305 |
 | bombard/campaign\_yaml.py     |       28 |        8 |     71% |30, 46-47, 50-54 |
-| bombard/expand\_file\_name.py |       33 |        7 |     79% |22, 28, 34, 36, 45-47 |
+| bombard/expand\_file\_name.py |       33 |        7 |     79% |24, 30, 36, 38, 47-49 |
 | bombard/http\_request.py      |       18 |        3 |     83% | 32, 44-45 |
-| bombard/main.py               |       95 |       20 |     79% |32-40, 49-52, 85-86, 133, 135, 149, 156, 160 |
+| bombard/main.py               |       95 |       20 |     79% |32-40, 49-52, 85-86, 136, 138, 152, 159, 163 |
 | bombard/mock\_globals.py      |       28 |       28 |      0% |     10-59 |
-| bombard/pretty\_ns.py         |       36 |       14 |     61% |46, 51-57, 64, 67-68, 71, 75, 79, 83-85 |
-| bombard/pretty\_sz.py         |       10 |        1 |     90% |        18 |
-| bombard/report.py             |       91 |        4 |     96% |76, 100, 147, 183 |
-| bombard/request\_logging.py   |       49 |        4 |     92% |     78-81 |
+| bombard/pretty\_ns.py         |       37 |       14 |     62% |47, 52-58, 65, 68-69, 72, 76, 80, 84-86 |
+| bombard/pretty\_sz.py         |       11 |        1 |     91% |        19 |
+| bombard/report.py             |       92 |        4 |     96% |78, 102, 156, 196 |
+| bombard/request\_logging.py   |       49 |        4 |     92% |     80-83 |
 | bombard/show\_descr.py        |        5 |        0 |    100% |           |
 | bombard/terminal\_colours.py  |       27 |        8 |     70% |42, 46, 50, 54, 58-62 |
 | bombard/version.py            |        1 |        0 |    100% |           |
 | bombard/weaver\_mill.py       |       35 |        0 |    100% |           |
-|                     **TOTAL** |  **670** |  **159** | **76%** |           |
+|                     **TOTAL** |  **680** |  **159** | **77%** |           |
 
 
 ## Setup coverage badge
