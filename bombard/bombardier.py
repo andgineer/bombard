@@ -37,7 +37,7 @@ def apply_supply_dict(request: dict[str, Any], supply: dict[str, Any]) -> dict[s
     Use supply to substitute all {name} in request strings.
     """
     for name, value in request.items():
-        if isinstance(request[name], dict):
+        if isinstance(value, dict):
             request[name] = apply_supply_dict(request[name], supply)
         elif isinstance(value, str):
             request[name] = apply_supply(request[name], supply)
