@@ -27,16 +27,16 @@ Installation
 
     pip install bombard --upgrade
 
-After that use ``bombard`` (``bombard.exe`` in Windows) executable:
+After that, use the ``bombard`` (``bombard.exe`` on Windows) executable:
 
 .. code-block:: bash
 
     bombard --help
 
-Requests description
+Request Configuration
 --------------------
 
-Requests can be just URL or contain JSON described like this
+Requests can be a simple URL or contain JSON configuration like this:
 
 .. code-block:: yaml
 
@@ -52,9 +52,9 @@ Requests can be just URL or contain JSON described like this
         extract:  # get token for next requests
             token:
 
-In first request you can get security token as in example above.
+In the first request, you can get a security token as in the example above.
 
-And use it in next requests:
+Then use it in subsequent requests:
 
 .. code-block:: yaml
 
@@ -68,19 +68,19 @@ And use it in next requests:
                 # and provide it with id we got from the response
                 reload(ammo.getPost, id=post['id'])
 
-Included examples. To list examples
+Bombard includes examples. To list available examples:
 
 .. code-block:: bash
 
     bombard --examples
 
-Command line
-------------
+Command Line Options
+--------------------
 
-From command line you can change number of threads, loop count,
-supply vars, customize report and so on.
+From the command line, you can change the number of threads, loop count,
+supply variables, customize the report, and more.
 
-Also you can bootstrap your own ``bombard.yaml`` file from any example you
+You can also bootstrap your own ``bombard.yaml`` file from any example you
 like::
 
     bombard --init --example simple
@@ -97,11 +97,11 @@ Example of report for the command::
 Publishing
 ----------
 
-Automatically published on pypi on create release on github.
+Automatically published to PyPI when creating a release on GitHub.
 
-If for some reason you want to publish from local machine:
-1) Place pypi password into ~/.pypirc
-2) `make upload`
+If you want to publish from a local machine:
+1) Place PyPI password in ~/.pypirc
+2) Run `make upload`
 
 Documentation
 -------------
@@ -113,7 +113,7 @@ Scripts
 
     make help
 
-Coverage report
+Coverage Report
 ---------------
 * `Codecov <https://app.codecov.io/gh/andgineer/bombard/tree/master/bombard>`_
 * `Coveralls <https://coveralls.io/github/andgineer/bombard>`_
