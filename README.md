@@ -14,9 +14,9 @@
 | bombard/main.py               |       95 |       20 |     79% |32-40, 49-52, 85-86, 136, 138, 152, 159, 163 |
 | bombard/mock\_globals.py      |       28 |       28 |      0% |     10-59 |
 | bombard/pretty\_ns.py         |       37 |       14 |     62% |47, 52-58, 65, 68-69, 72, 76, 80, 84-86 |
-| bombard/pretty\_sz.py         |       11 |        1 |     91% |        19 |
+| bombard/pretty\_sz.py         |       10 |        1 |     90% |        16 |
 | bombard/report.py             |       92 |        4 |     96% |78, 102, 156, 196 |
-| bombard/request\_logging.py   |       49 |        4 |     92% |     80-83 |
+| bombard/request\_logging.py   |       50 |        4 |     92% |     81-84 |
 | bombard/show\_descr.py        |        5 |        0 |    100% |           |
 | bombard/terminal\_colours.py  |       27 |        8 |     70% |42, 46, 50, 54, 58-62 |
 | bombard/version.py            |        1 |        0 |    100% |           |
