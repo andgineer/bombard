@@ -8,30 +8,41 @@ Bombard is a Python load testing tool designed for stress testing HTTP servers w
 
 ## Development Commands
 
+### Environment Setup
+```bash
+# Set up or activate development environment
+source ./activate.sh
+```
+
+**IMPORTANT**: Always activate the virtual environment before running any commands. Use `source ./activate.sh` before each command.
+
 ### Testing
-- `make test` or `bash ./scripts/test.sh` - Run all tests (both unittest and pytest)
-- `python -m unittest --verbose` - Run unittest tests only
-- `python -m pytest --verbose` - Run pytest tests only
-- Filter tests with `-k <pattern>`: `bash ./scripts/test.sh -k <pattern>`
+- `source ./activate.sh && make test` or `source ./activate.sh && bash ./scripts/test.sh` - Run all tests (both unittest and pytest)
+- `source ./activate.sh && python -m unittest --verbose` - Run unittest tests only
+- `source ./activate.sh && python -m pytest --verbose` - Run pytest tests only
+- Filter tests with `-k <pattern>`: `source ./activate.sh && bash ./scripts/test.sh -k <pattern>`
 
 ### Linting and Code Quality
-- `make lint` or `bash ./scripts/lint.sh` - Run pre-commit hooks for linting
-- `pre-commit run --all-files` - Run all pre-commit hooks manually
+- `source ./activate.sh && make lint` or `source ./activate.sh && bash ./scripts/lint.sh` - Run pre-commit hooks for linting
+- `source ./activate.sh && pre-commit run --all-files` - Run all pre-commit hooks manually
+
+**IMPORTANT**: Always use `pre-commit run --all-files` for code quality checks. Never run ruff or mypy directly.
+
 - Code uses Ruff for linting with line length of 100 characters (120 in ruff.toml)
 - MyPy type checking is configured but excludes tests directory
 
 ### Documentation
-- `make docs` - Build and serve English documentation locally
-- `make docs-ru` - Build and serve Russian documentation locally
+- `source ./activate.sh && make docs` - Build and serve English documentation locally
+- `source ./activate.sh && make docs-ru` - Build and serve Russian documentation locally
 - Documentation is built with MkDocs and served at http://127.0.0.1:8000/
 
 ### Version Management
-- `make ver-bug` - Bump version for bug fixes
-- `make ver-feature` - Bump version for new features
-- `make ver-release` - Bump version for releases
+- `source ./activate.sh && make ver-bug` - Bump version for bug fixes
+- `source ./activate.sh && make ver-feature` - Bump version for new features
+- `source ./activate.sh && make ver-release` - Bump version for releases
 
 ### Package Management
-- `make reqs` - Update requirements and pre-commit hooks
+- `source ./activate.sh && make reqs` - Update requirements and pre-commit hooks
 - Uses `uv` for dependency management
 - `requirements.in` contains direct dependencies
 - `requirements.dev.txt` contains development dependencies

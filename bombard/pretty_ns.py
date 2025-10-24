@@ -21,10 +21,10 @@ True
 """
 
 import time
-from typing import Any, Optional
+from typing import Any
 
 
-def pretty_ns(elapsed_ns: int, fixed_units: Optional[str] = None) -> str:
+def pretty_ns(elapsed_ns: int, fixed_units: str | None = None) -> str:
     """
     for earlier Python versions this is emulation of the Python3.7 time_ns
     """

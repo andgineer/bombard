@@ -1,6 +1,6 @@
 import http.client
 import ssl
-from typing import Any, Optional, Union
+from typing import Any
 from urllib.parse import urlparse
 
 EXCEPTION_STATUS = "!!!"
@@ -9,10 +9,10 @@ EXCEPTION_STATUS = "!!!"
 def http_request(
     url: str,
     method: str = "GET",
-    headers: Optional[dict[str, Any]] = None,
-    body: Optional[str] = None,
-    timeout: Optional[int] = None,
-) -> tuple[Union[int, str], Any]:
+    headers: dict[str, Any] | None = None,
+    body: str | None = None,
+    timeout: int | None = None,
+) -> tuple[int | str, Any]:
     """
     Make HTTP request.
 

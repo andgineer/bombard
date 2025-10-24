@@ -1,6 +1,6 @@
 import json
 import logging
-from typing import Any, Optional, Union
+from typing import Any
 from urllib.parse import urlparse
 
 from bombard import request_logging
@@ -53,9 +53,9 @@ class Bombardier(WeaverMill):
         self,
         args: Any,
         campaign_book: dict[str, Any],
-        supply: Optional[dict[str, Any]] = None,
-        ok_statuses: Optional[set[int]] = None,
-        overload_statuses: Optional[list[int]] = None,
+        supply: dict[str, Any] | None = None,
+        ok_statuses: set[int] | None = None,
+        overload_statuses: list[int] | None = None,
     ):
         self.supply = supply if supply is not None else {}
         self.supply["args"] = args
@@ -77,7 +77,7 @@ class Bombardier(WeaverMill):
 
         super().__init__(args.threads)
 
-    def status_coloured(self, status: Union[str, int]) -> str:
+    def status_coloured(self, status: str | int) -> str:
         """
         Paint ok status as green and overload as red using terminal control codes.
 
@@ -117,7 +117,7 @@ class Bombardier(WeaverMill):
     def process_resp(
         self,
         ammo: dict[str, Any],
-        status: Union[int, str],
+        status: int | str,
         resp: str,
         elapsed: int,
         size: int,
@@ -185,7 +185,7 @@ class Bombardier(WeaverMill):
     def beautify_url(
         url: str,
         method: str,
-        body: Optional[str],  # noqa: ARG004
+        body: str | None,  # noqa: ARG004
     ) -> str:
         urlparts = urlparse(url)
         max_display_length = 15
@@ -235,7 +235,7 @@ class Bombardier(WeaverMill):
                 log.info(pretty_url)
 
                 start_ns = time_ns()
-                status: Union[str, int]
+                status: str | int
                 if self.args.dry:
                     status, resp = list(self.ok)[0], json.dumps(request.get("dry"))
                 else:
@@ -269,7 +269,7 @@ class Bombardier(WeaverMill):
     def reload(
         self,
         requests: Any,
-        repeat: Optional[int] = None,
+        repeat: int | None = None,
         prepare: bool = False,
         **kwargs: Any,
     ) -> None:

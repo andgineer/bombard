@@ -29,7 +29,7 @@ And it works without master
 
 """
 
-from typing import Any, Optional
+from typing import Any
 
 
 class AttrDict(dict[str, Any]):
@@ -42,7 +42,7 @@ class AttrDict(dict[str, Any]):
         for name, val in kwargs.items():
             self[name] = val
 
-    def __init__(self, master_dict: Optional[dict[str, Any]] = None, **kwargs: Any) -> None:
+    def __init__(self, master_dict: dict[str, Any] | None = None, **kwargs: Any) -> None:
         if master_dict is None:
             super().__init__(**kwargs)
         else:

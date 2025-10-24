@@ -6,7 +6,8 @@ Use main_thread/sending/receiving to switch logger modes.
 
 import logging
 import threading
-from typing import Any, Callable, Optional
+from collections.abc import Callable
+from typing import Any
 
 from bombard.pretty_ns import pretty_ns as plain_ns
 from bombard.pretty_ns import time_ns
@@ -62,7 +63,7 @@ class RequestFormatter(logging.Formatter):
         return super().format(record)
 
 
-def setup_logging(level: int, log_file_name: Optional[str] = None) -> None:
+def setup_logging(level: int, log_file_name: str | None = None) -> None:
     main_thread()
     handler = logging.StreamHandler()
     formatter = RequestFormatter(

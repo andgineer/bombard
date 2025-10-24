@@ -10,7 +10,7 @@ pathspec==0.12.1
     # via mypy
 pygments==2.19.2
     # via -r requirements.in
-pyyaml==6.0.2
+pyyaml==6.0.3
     # via -r requirements.in
 types-pyyaml==6.0.12.20250915
     # via -r requirements.in

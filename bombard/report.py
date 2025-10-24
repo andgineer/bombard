@@ -8,9 +8,9 @@ Use:
 
 import statistics
 from array import array
-from collections.abc import MutableSequence
+from collections.abc import Callable, MutableSequence
 from copy import deepcopy
-from typing import Any, Callable, Optional, Union
+from typing import Any
 
 from bombard import pretty_ns
 from bombard.pretty_sz import pretty_sz
@@ -35,9 +35,9 @@ class Reporter:
 
     def __init__(
         self,
-        time_units: Optional[str] = "ms",
+        time_units: str | None = "ms",
         time_threshold_ms: int = 1,
-        success_statuses: Optional[set[int]] = None,
+        success_statuses: set[int] | None = None,
     ):
         """
         :param time_units: time representation fixed in the units (see names in bombard.pretty_ns)
@@ -79,7 +79,7 @@ class Reporter:
 
     def log(
         self,
-        status: Union[int, str],
+        status: int | str,
         elapsed: int,
         request_name: str,
         response_size: int,
@@ -108,8 +108,8 @@ class Reporter:
             Any,
         ],  # todo: hot to tell mypy this is Sized (for len) or Iterable[int] (for sub)?
         dimension_name: str,
-        status_group_filter: Optional[str] = None,
-        request_name_filter: Optional[str] = None,
+        status_group_filter: str | None = None,
+        request_name_filter: str | None = None,
     ) -> int:
         """
         Reduce the dimension by group and/or request_name with the reduce_func
@@ -129,8 +129,8 @@ class Reporter:
     def filter(
         self,
         dimension_name: str,
-        status_group_filter: Optional[str] = None,
-        request_name_filter: Optional[str] = None,
+        status_group_filter: str | None = None,
+        request_name_filter: str | None = None,
     ) -> MutableSequence[Any]:
         """
         Filter the dimension by group and/or request_name,
@@ -149,8 +149,8 @@ class Reporter:
 
     @staticmethod
     def dimension_stat_report(
-        dimension_values: MutableSequence[Union[int, float]],
-        pretty_func: Callable[[Union[int, float]], str],
+        dimension_values: MutableSequence[int | float],
+        pretty_func: Callable[[int | float], str],
     ) -> str:
         if not dimension_values:
             return ""
@@ -164,8 +164,8 @@ class Reporter:
 
     def filtered_report(
         self,
-        status_group_filter: Optional[str] = None,
-        request_name_filter: Optional[str] = None,
+        status_group_filter: str | None = None,
+        request_name_filter: str | None = None,
     ) -> str:
         """
         Filter by group and/or request_name.
@@ -182,7 +182,7 @@ class Reporter:
             return "No such requests"
         return "\n".join(result)
 
-    def statuses_report(self, request_name_filter: Optional[str] = None) -> str:
+    def statuses_report(self, request_name_filter: str | None = None) -> str:
         return ", ".join(
             f"{group} {self.reduce(len, TIME, group, request_name_filter)}" for group in GROUPS
         )

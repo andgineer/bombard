@@ -10,7 +10,7 @@ from abc import abstractmethod
 from copy import deepcopy
 from queue import Queue
 from threading import Thread
-from typing import Any, Optional
+from typing import Any
 
 
 class WeaverMill:
@@ -20,7 +20,7 @@ class WeaverMill:
         """
         self.threads_num = threads_num
         self.threads = []
-        self.queue: Queue[Optional[dict[str, Any]]] = Queue()
+        self.queue: Queue[dict[str, Any] | None] = Queue()
         self.job_count = 0
         for thread_id in range(threads_num):
             t = Thread(target=self.thread_worker, args=[thread_id])
@@ -38,7 +38,7 @@ class WeaverMill:
         Job == None is a signal to stop work.
         """
         while True:
-            job: Optional[dict[str, Any]] = deepcopy(self.queue.get())
+            job: dict[str, Any] | None = deepcopy(self.queue.get())
             if job is None:
                 break
             try:

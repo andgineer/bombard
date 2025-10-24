@@ -1,7 +1,4 @@
-from typing import Union
-
-
-def pretty_sz(size: Union[int, float]) -> str:
+def pretty_sz(size: int | float) -> str:
     unit_threshold = 100  # Threshold to switch to next unit
     dividers = {
         "bytes": 1,
