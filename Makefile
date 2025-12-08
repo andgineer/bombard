@@ -2,6 +2,16 @@
 VERSION := $(shell cat bombard/version.py | cut -d= -f2 | sed 's/\"//g; s/ //')
 export VERSION
 
+# If the first argument is "docs" treat additional "targets" as parameters
+ifeq (docs,$(firstword $(MAKECMDGOALS)))
+  DOCS_LANGUAGE := $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
+  ifndef DOCS_LANGUAGE
+    DOCS_LANGUAGE := en
+  endif
+  # turn the parameters into do-nothing targets
+  $(eval $(RUN_ARGS):;@:)
+endif
+
 .HELP: version ## Show the current version
 version:
 	echo ${VERSION}
@@ -45,19 +55,15 @@ lint:
 	bash ./scripts/lint.sh
 
 .PHONY: docs
-.HELP: docs  ## Build the English documentation
+.HELP: docs  ## Docs preview for the language specified (en ru), like "make docs ru", by default build for English
 docs:
 	open -a 'Google Chrome' http://127.0.0.1:8000/
-	scripts/docs-render-config.sh en
-	mkdocs serve -f docs/_mkdocs.yml
-
-.HELP: docs-ru  ## Build the Russian documentation
-docs-ru:
-	open -a 'Google Chrome' http://127.0.0.1:8000/
-	scripts/docs-render-config.sh ru
-	rm -rf ./docs/src/ru/images
-	cp -r ./docs/src/en/images ./docs/src/ru/images
-	cp ./docs/src/en/reference.md ./docs/src/ru/reference.md
+	scripts/docs-render-config.sh $(DOCS_LANGUAGE)
+	if [ $(DOCS_LANGUAGE) != "en" ]; then \
+		rm -rf ./docs/src/$(DOCS_LANGUAGE)/images; \
+		cp -r ./docs/src/en/images ./docs/src/$(DOCS_LANGUAGE)/images; \
+		cp ./docs/src/en/reference.md ./docs/src/$(DOCS_LANGUAGE)/reference.md; \
+	fi
 	mkdocs serve -f docs/_mkdocs.yml
 
 .HELP: help  ## Display this message
