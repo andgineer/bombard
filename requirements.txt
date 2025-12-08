@@ -2,7 +2,9 @@
 #    uv pip compile requirements.in --output-file=requirements.txt
 colorama==0.4.6
     # via -r requirements.in
-mypy==1.18.2
+librt==0.7.3
+    # via mypy
+mypy==1.19.0
     # via -r requirements.in
 mypy-extensions==1.1.0
     # via mypy

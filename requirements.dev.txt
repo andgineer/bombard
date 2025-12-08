@@ -2,25 +2,25 @@
 #    uv pip compile requirements.dev.in --output-file=requirements.dev.txt
 -e .
     # via -r requirements.dev.in
-astroid==4.0.1
+astroid==4.0.2
     # via pylint
 babel==2.17.0
     # via mkdocs-material
-backrefs==5.9
+backrefs==6.1
     # via mkdocs-material
-black==25.9.0
+black==25.12.0
     # via -r requirements.dev.in
 bracex==2.6
     # via wcmatch
 build==1.3.0
     # via pip-tools
-certifi==2025.10.5
+certifi==2025.11.12
     # via requests
-cfgv==3.4.0
+cfgv==3.5.0
     # via pre-commit
 charset-normalizer==3.4.4
     # via requests
-click==8.3.0
+click==8.3.1
     # via
     #   black
     #   mkdocs
@@ -31,11 +31,11 @@ colorama==0.4.6
     #   bombard
     #   griffe
     #   mkdocs-material
-coverage==7.11.0
+coverage==7.12.0
     # via
     #   coveralls
     #   pytest-cov
-coveralls==4.0.1
+coveralls==4.0.2
     # via -r requirements.dev.in
 dill==0.4.0
     # via pylint
@@ -43,13 +43,13 @@ distlib==0.4.0
     # via virtualenv
 docopt==0.6.2
     # via coveralls
-docutils==0.22.2
+docutils==0.22.3
     # via readme-renderer
 filelock==3.20.0
     # via virtualenv
 ghp-import==2.1.0
     # via mkdocs
-griffe==1.14.0
+griffe==1.15.0
     # via mkdocstrings-python
 id==1.5.0
     # via twine
@@ -72,9 +72,11 @@ jinja2==3.1.6
     #   mkdocs
     #   mkdocs-material
     #   mkdocstrings
-keyring==25.6.0
+keyring==25.7.0
     # via twine
-markdown==3.9
+librt==0.7.3
+    # via mypy
+markdown==3.10
     # via
     #   mkdocs
     #   mkdocs-autorefs
@@ -111,21 +113,21 @@ mkdocs-awesome-pages-plugin==2.10.1
     # via -r requirements.dev.in
 mkdocs-get-deps==0.2.0
     # via mkdocs
-mkdocs-material==9.6.22
+mkdocs-material==9.7.0
     # via -r requirements.dev.in
 mkdocs-material-extensions==1.3.1
     # via mkdocs-material
-mkdocstrings==0.30.1
+mkdocstrings==1.0.0
     # via
     #   -r requirements.dev.in
     #   mkdocstrings-python
-mkdocstrings-python==1.18.2
+mkdocstrings-python==2.0.1
     # via mkdocstrings
 more-itertools==10.8.0
     # via
     #   jaraco-classes
     #   jaraco-functools
-mypy==1.18.2
+mypy==1.19.0
     # via
     #   -r requirements.dev.in
     #   -r requirements.in
@@ -156,9 +158,9 @@ pathspec==0.12.1
     #   mypy
 pip==25.3
     # via pip-tools
-pip-tools==7.5.1
+pip-tools==7.5.2
     # via -r requirements.dev.in
-platformdirs==4.5.0
+platformdirs==4.5.1
     # via
     #   black
     #   mkdocs-get-deps
@@ -168,7 +170,7 @@ pluggy==1.6.0
     # via
     #   pytest
     #   pytest-cov
-pre-commit==4.3.0
+pre-commit==4.5.0
     # via -r requirements.dev.in
 pygments==2.19.2
     # via
@@ -178,9 +180,9 @@ pygments==2.19.2
     #   pytest
     #   readme-renderer
     #   rich
-pylint==4.0.2
+pylint==4.0.4
     # via -r requirements.dev.in
-pymdown-extensions==10.16.1
+pymdown-extensions==10.18
     # via
     #   -r requirements.dev.in
     #   mkdocs-material
@@ -189,18 +191,18 @@ pyproject-hooks==1.2.0
     # via
     #   build
     #   pip-tools
-pytest==8.4.2
+pytest==9.0.2
     # via
     #   -r requirements.dev.in
     #   pytest-asyncio
     #   pytest-cov
-pytest-asyncio==1.2.0
+pytest-asyncio==1.3.0
     # via -r requirements.dev.in
 pytest-cov==7.0.0
     # via -r requirements.dev.in
 python-dateutil==2.9.0.post0
     # via ghp-import
-pytokens==0.2.0
+pytokens==0.3.0
     # via black
 pyyaml==6.0.3
     # via
@@ -246,7 +248,7 @@ typing-extensions==4.15.0
     # via
     #   mypy
     #   pytest-asyncio
-urllib3==2.5.0
+urllib3==2.6.0
     # via
     #   requests
     #   twine
