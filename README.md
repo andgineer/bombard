@@ -21,7 +21,7 @@
 | bombard/terminal\_colours.py  |       27 |        8 |     70% |42, 46, 50, 54, 58-62 |
 | bombard/version.py            |        1 |        0 |    100% |           |
 | bombard/weaver\_mill.py       |       35 |        0 |    100% |           |
-|                     **TOTAL** |  **679** |  **159** | **77%** |           |
+| **TOTAL**                     |  **679** |  **159** | **77%** |           |
 
 
 ## Setup coverage badge
