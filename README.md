@@ -12,7 +12,7 @@
 | bombard/expand\_file\_name.py |       33 |        7 |     79% |24, 30, 36, 38, 47-49 |
 | bombard/http\_request.py      |       18 |        3 |     83% | 32, 44-45 |
 | bombard/main.py               |       95 |       20 |     79% |32-40, 49-52, 85-86, 136, 138, 152, 159, 163 |
-| bombard/mock\_globals.py      |       28 |       28 |      0% |     10-59 |
+| bombard/mock\_globals.py      |       33 |       33 |      0% |     10-64 |
 | bombard/pretty\_ns.py         |       36 |       14 |     61% |47, 52-58, 65, 68-69, 72, 76, 80, 84-86 |
 | bombard/pretty\_sz.py         |       10 |        1 |     90% |        16 |
 | bombard/report.py             |       92 |        4 |     96% |78, 102, 156, 196 |
@@ -21,7 +21,7 @@
 | bombard/terminal\_colours.py  |       27 |        8 |     70% |42, 46, 50, 54, 58-62 |
 | bombard/version.py            |        1 |        0 |    100% |           |
 | bombard/weaver\_mill.py       |       35 |        0 |    100% |           |
-| **TOTAL**                     |  **679** |  **159** | **77%** |           |
+| **TOTAL**                     |  **684** |  **164** | **76%** |           |
 
 
 ## Setup coverage badge
