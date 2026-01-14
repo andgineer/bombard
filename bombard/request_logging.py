@@ -23,14 +23,14 @@ def main_thread() -> None:
     We are in main thread
     """
     thread_data.thread_id = "Main"
-    thread_data.request_id = ""
+    thread_data.request_id = 0
     thread_data.request_name = ""
     thread_data.dir = ""
     thread_data.start = None
     thread_data.colour = OFF
 
 
-def sending(thread_id: int, request_id: str, request_name: str) -> None:
+def sending(thread_id: int, request_id: int, request_name: str) -> None:
     """
     Start sending request
     """

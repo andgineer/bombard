@@ -2,8 +2,7 @@
 
 # lint
 pre-commit
-pylint
-mypy
+pyrefly
 black
 
 # test

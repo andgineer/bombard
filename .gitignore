@@ -3,6 +3,7 @@ build/
 dist/
 venv/
 bin/
+site/
 *.egg-info/
 *.egg
 *.py[cod]

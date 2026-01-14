@@ -24,7 +24,12 @@ class _Supply(dict):
 
 
 class _Args:
-    pass
+    file_name: str | None = None
+    repeat: int | None = None
+    verbose: bool | None = None
+    log: str | None = None
+    ms: bool | None = None
+    threshold: int | None = None
 
 
 class _Ammo(dict):

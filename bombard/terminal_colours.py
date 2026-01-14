@@ -14,16 +14,16 @@ Under the hood this is colorama.
 But I keep my wrapper in this module as legacy.
 """
 
-from colorama.ansi import AnsiFore, AnsiStyle, code_to_chars
+from colorama.ansi import CSI, AnsiFore, AnsiStyle
 
-GREEN = code_to_chars(f"{AnsiStyle.BRIGHT};{AnsiFore.GREEN}")
-RED = code_to_chars(f"{AnsiStyle.BRIGHT};{AnsiFore.RED}")
-DARK_RED = code_to_chars(f"{AnsiStyle.DIM};{AnsiFore.RED}")
-GRAY = code_to_chars(f"{AnsiStyle.BRIGHT};{AnsiFore.BLACK}")
-BROWN = code_to_chars(f"{AnsiStyle.DIM};{AnsiFore.YELLOW}")
-YELLOW = code_to_chars(f"{AnsiStyle.BRIGHT};{AnsiFore.YELLOW}")
+GREEN = f"{CSI}{AnsiStyle.BRIGHT};{AnsiFore.GREEN}m"
+RED = f"{CSI}{AnsiStyle.BRIGHT};{AnsiFore.RED}m"
+DARK_RED = f"{CSI}{AnsiStyle.DIM};{AnsiFore.RED}m"
+GRAY = f"{CSI}{AnsiStyle.BRIGHT};{AnsiFore.BLACK}m"
+BROWN = f"{CSI}{AnsiStyle.DIM};{AnsiFore.YELLOW}m"
+YELLOW = f"{CSI}{AnsiStyle.BRIGHT};{AnsiFore.YELLOW}m"
 
-OFF = code_to_chars(AnsiStyle.RESET_ALL)
+OFF = f"{CSI}{AnsiStyle.RESET_ALL}m"
 
 
 def paint_it(msg: str, colour: str) -> str:

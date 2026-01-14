@@ -211,7 +211,7 @@ class Reporter:
                 f"{pretty_sz(size_sum // elapsed_sec) if elapsed_sec > 0 else infinity}/sec",
             ],
         )
-        by_group = []
+        by_group: list[str] = []
         for status_group in GROUPS:
             by_group.append(
                 f"""#### {status_group}: {self.reduce(len, TIME, status_group)}
@@ -219,7 +219,7 @@ class Reporter:
 """,
             )
         by_group_str = "\n".join(by_group)  # we cannot use "\n" inside f-string
-        by_request = []
+        by_request: list[str] = []
         for request_name in self.stat:
             by_request.append(
                 f"""### {request_name}: {self.statuses_report(request_name)}

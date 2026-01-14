@@ -209,12 +209,12 @@ class Bombardier(WeaverMill):
             # setup logging ASAP and as safe as possible
             if isinstance(job, dict):
                 request = job.get("request", {})
-                ammo_id = job.get("id", "")
+                ammo_id = job.get("id", 0)
                 ammo_name = request.get("name", "")
             else:
                 request = {}
-                ammo_id = None
-                ammo_name = None
+                ammo_id = 0
+                ammo_name = ""
             request_logging.sending(thread_id, ammo_id, ammo_name)
             pretty_url = ""  # we use it in `except`
             try:
