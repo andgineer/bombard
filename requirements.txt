@@ -8,7 +8,7 @@ mypy==1.19.1
     # via -r requirements.in
 mypy-extensions==1.1.0
     # via mypy
-pathspec==1.0.3
+pathspec==1.0.4
     # via mypy
 pygments==2.19.2
     # via -r requirements.in
