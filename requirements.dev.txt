@@ -2,60 +2,56 @@
 #    uv pip compile requirements.dev.in --output-file=requirements.dev.txt
 -e .
     # via -r requirements.dev.in
+annotated-doc==0.0.4
+    # via typer
 babel==2.18.0
     # via mkdocs-material
-backrefs==6.1
+backrefs==6.2
     # via mkdocs-material
-black==26.1.0
+black==26.3.1
     # via -r requirements.dev.in
 bracex==2.6
     # via wcmatch
 build==1.4.0
     # via pip-tools
-certifi==2026.1.4
+certifi==2026.2.25
     # via requests
 cfgv==3.5.0
     # via pre-commit
-charset-normalizer==3.4.4
+charset-normalizer==3.4.6
     # via requests
 click==8.3.1
     # via
     #   black
     #   mkdocs
     #   pip-tools
+    #   typer
 colorama==0.4.6
     # via
     #   -r requirements.in
     #   bombard
-    #   griffecli
     #   mkdocs-material
-coverage==7.13.4
+coverage==7.13.5
     # via
     #   coveralls
     #   pytest-cov
-coveralls==4.0.2
+coveralls==4.1.0
     # via -r requirements.dev.in
 distlib==0.4.0
     # via virtualenv
-docopt==0.6.2
-    # via coveralls
 docutils==0.22.4
     # via readme-renderer
-filelock==3.20.3
-    # via virtualenv
+filelock==3.25.2
+    # via
+    #   python-discovery
+    #   virtualenv
 ghp-import==2.1.0
     # via mkdocs
-griffe==2.0.0
-    # via mkdocstrings-python
-griffecli==2.0.0
-    # via griffe
 griffelib==2.0.0
-    # via
-    #   griffe
-    #   griffecli
+    # via mkdocstrings-python
 id==1.6.1
     # via twine
-identify==2.6.16
+identify==2.6.18
     # via pre-commit
 idna==3.11
     # via requests
@@ -63,7 +59,7 @@ iniconfig==2.3.0
     # via pytest
 jaraco-classes==3.4.0
     # via keyring
-jaraco-context==6.1.0
+jaraco-context==6.1.1
     # via keyring
 jaraco-functools==4.4.0
     # via keyring
@@ -74,7 +70,7 @@ jinja2==3.1.6
     #   mkdocstrings
 keyring==25.7.0
     # via twine
-librt==0.7.8
+librt==0.8.1
     # via mypy
 markdown==3.10.2
     # via
@@ -109,9 +105,9 @@ mkdocs-autorefs==1.4.4
     #   mkdocstrings-python
 mkdocs-awesome-pages-plugin==2.10.1
     # via -r requirements.dev.in
-mkdocs-get-deps==0.2.0
+mkdocs-get-deps==0.2.2
     # via mkdocs
-mkdocs-material==9.7.1
+mkdocs-material==9.7.5
     # via -r requirements.dev.in
 mkdocs-material-extensions==1.3.1
     # via mkdocs-material
@@ -119,7 +115,7 @@ mkdocstrings==1.0.3
     # via
     #   -r requirements.dev.in
     #   mkdocstrings-python
-mkdocstrings-python==2.0.2
+mkdocstrings-python==2.0.3
     # via mkdocstrings
 more-itertools==10.8.0
     # via
@@ -135,7 +131,7 @@ mypy-extensions==1.1.0
     #   mypy
 natsort==8.4.0
     # via mkdocs-awesome-pages-plugin
-nh3==0.3.2
+nh3==0.3.3
     # via readme-renderer
 nodeenv==1.10.0
     # via pre-commit
@@ -156,12 +152,13 @@ pathspec==1.0.4
     #   mypy
 pip==26.0.1
     # via pip-tools
-pip-tools==7.5.2
+pip-tools==7.5.3
     # via -r requirements.dev.in
-platformdirs==4.5.1
+platformdirs==4.9.4
     # via
     #   black
     #   mkdocs-get-deps
+    #   python-discovery
     #   virtualenv
 pluggy==1.6.0
     # via
@@ -177,7 +174,7 @@ pygments==2.19.2
     #   pytest
     #   readme-renderer
     #   rich
-pymdown-extensions==10.20.1
+pymdown-extensions==10.21
     # via
     #   -r requirements.dev.in
     #   mkdocs-material
@@ -186,7 +183,7 @@ pyproject-hooks==1.2.0
     # via
     #   build
     #   pip-tools
-pyrefly==0.52.0
+pyrefly==0.57.1
     # via -r requirements.dev.in
 pytest==9.0.2
     # via
@@ -199,6 +196,8 @@ pytest-cov==7.0.0
     # via -r requirements.dev.in
 python-dateutil==2.9.0.post0
     # via ghp-import
+python-discovery==1.2.0
+    # via virtualenv
 pytokens==0.4.1
     # via black
 pyyaml==6.0.3
@@ -224,16 +223,22 @@ requests-toolbelt==1.0.0
     # via twine
 rfc3986==2.0.0
     # via twine
-rich==14.3.2
-    # via twine
-setuptools==82.0.0
+rich==14.3.3
+    # via
+    #   twine
+    #   typer
+setuptools==82.0.1
     # via
     #   -r requirements.dev.in
     #   pip-tools
+shellingham==1.5.4
+    # via typer
 six==1.17.0
     # via python-dateutil
 twine==6.2.0
     # via -r requirements.dev.in
+typer==0.24.1
+    # via coveralls
 types-pyyaml==6.0.12.20250915
     # via
     #   -r requirements.in
@@ -247,7 +252,7 @@ urllib3==2.6.3
     #   id
     #   requests
     #   twine
-virtualenv==20.36.1
+virtualenv==21.2.0
     # via pre-commit
 watchdog==6.0.0
     # via mkdocs
