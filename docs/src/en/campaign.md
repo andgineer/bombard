@@ -90,7 +90,7 @@ In example below we fire requests `getPost` from `ammo` section for
 
 ```python
 for post in resp[:3]:
-  reload(ammo.getPost, id=post['id'])
+    reload(ammo.getPost, id=post["id"])
 ```
 
 Also you can place Python code to separate file and use it like this:
@@ -103,7 +103,9 @@ If you add this line it mocks all necessary objects and
 you can use code autocomplete in your IDE:
 
 ```python
-from bombard.mock_globals import *; master('path/to/you/yaml')
+from bombard.mock_globals import *
+
+master("path/to/you/yaml")
 ```
 
 ### extract

@@ -17,7 +17,6 @@ True
 
 import sys
 from io import StringIO
-from typing import Optional
 
 
 class CaptureOutput:
@@ -33,19 +32,19 @@ class CaptureOutput:
         return self
 
     @property
-    def stdout(self) -> Optional[str]:
+    def stdout(self) -> str | None:
         if self.capture and self.out.getvalue():
             return self.out.getvalue()
         return None
 
     @property
-    def stderr(self) -> Optional[str]:
+    def stderr(self) -> str | None:
         if self.capture and self.err.getvalue():
             return self.err.getvalue()
         return None
 
     @property
-    def output(self) -> Optional[str]:
+    def output(self) -> str | None:
         """stdout and strerr separated by new line"""
         if self.stdout is not None:
             if self.stderr is not None:

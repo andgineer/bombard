@@ -84,7 +84,7 @@ Bombard автоматически добавляет `application/json` в head
 
 ```python
 for post in resp[:3]:
-  reload(ammo.getPost, id=post['id'])
+    reload(ammo.getPost, id=post["id"])
 ```
 
 Также вы можете поместить код Python в отдельный файл и использовать его следующим образом:
@@ -96,7 +96,9 @@ script: !include get_token.py
 Если вы добавите эту строку, она проверяет все необходимые объекты, и вы можете использовать автозаполнение кода в вашей IDE:
 
 ```python
-from bombard.mock_globals import *; master('path/to/you/yaml')
+from bombard.mock_globals import *
+
+master("path/to/you/yaml")
 ```
 
 ### extract
